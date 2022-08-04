@@ -217,5 +217,6 @@ class SuperAdminController extends CI_Controller {
 
     public function addToy(){
         echo "Add Tikka Toy";
+        echo "Done by ZMQ";
     }
 }
