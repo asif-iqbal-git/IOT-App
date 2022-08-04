@@ -214,4 +214,8 @@ class SuperAdminController extends CI_Controller {
 
         $this->load->view('Ug/universalfooter');
     }
+
+    public function addToy(){
+        
+    }
 }
