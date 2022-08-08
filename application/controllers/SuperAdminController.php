@@ -75,7 +75,6 @@ class SuperAdminController extends CI_Controller {
         $staff_data['isActive'] = "2";
         $staff_data['created_By'] = $this->session->userdata('current_logedIn');
 
-
          //$data_login['login_Token'] = $company_token;
          // print_r($data);
          // print_r($data_login);die();

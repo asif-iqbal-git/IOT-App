@@ -17,7 +17,7 @@
         <span aria-hidden="true">&times;</span>
     </button>
     </div>
- 
+
     <!-- <//?php print_r($user_session_details['username']); ?> -->
     
     <?php print_r($project_info); ?>
