@@ -213,7 +213,7 @@
             //company admin password
             var companyPassword = document.getElementById('companyPassword').value;
             var err_company_password = document.getElementById('err_company_password');
-            var regex_companyPassword = /([a-zA-Z0-9-+]){3,15}$/g;
+            var regex_companyPassword = /([a-zA-Z0-9-]){3,15}$/g;
 
             if(companyPassword.match(regex_companyPassword))
             {              
