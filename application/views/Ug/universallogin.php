@@ -36,17 +36,21 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome to IOT-App</h1>
                                     </div>
-                                    <form class="user" method="POST" action="<?= base_url('login') ?>"  name="Login_Form"  >
+                                    <form class="user" id="login_form_id" method="POST" action="<?= base_url('login') ?>"  name="Login_Form"  >
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user"
                                                 name="username"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
                                                 placeholder="Enter Username...">
+                                                <br>
+                                                <span id="usernameError" style="color:red;"></span>
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
                                                 name="password"
                                                 id="exampleInputPassword" placeholder="Password">
+                                                <br>
+                                                <span id="passwordError" style="color:red;"></span>
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
@@ -55,12 +59,8 @@
                                                     Me</label>
                                             </div>
                                         </div>
-                                        <button class="btn btn-primary btn-user btn-block" type="submit">
-                                         Login</button>
+                                        <input type="button" class="btn btn-primary btn-user btn-block" onclick="submit_login_form()" value="Login"/>
                 
-                                         
-                                        
-                                      
                                     </form>
                                     <hr>
                                     <div class="text-center">
@@ -80,6 +80,59 @@
         </div>
 
     </div>
+
+    <script>
+
+        function validate_login(){
+
+            var username = document.getElementById("exampleInputEmail").value;
+            var inputPassword = document.getElementById("exampleInputPassword").value;
+        
+            if(validateEmail(username)){
+
+                if(validatePassword(inputPassword)){
+
+                    return true;
+                }
+            }
+            else{
+                return false;
+            }
+        }
+
+        function validateEmail(username){
+            var emailFormat = /([a-zA-Z0-9-]){3,15}$/g;
+            if(username.match(emailFormat)){
+                return true;
+            }
+            else{
+                document.getElementById('usernameError').innerHTML = "Username is not valid!";
+                document.getElementById('exampleInputEmail').focus();
+                return false;
+            }
+        }
+
+        function validatePassword(inputPassword){
+            document.getElementById('usernameError').innerHTML = "";
+            var passwordFormat = /([a-zA-Z0-9-]){3,15}$/g;
+            if(inputPassword.match(passwordFormat)){
+                return true;
+            }
+            else{
+                document.getElementById('passwordError').innerHTML = "Password is not valid!";
+                document.getElementById('exampleInputPassword').focus();
+                return false;
+            }
+
+        }
+
+        function submit_login_form(){
+            if(validate_login()){
+                document.getElementById('login_form_id').submit();
+            }
+        }
+
+    </script>
 
     <!-- Bootstrap core JavaScript-->
     <!-- <script src="vendor/jquery/jquery.min.js"></script>
