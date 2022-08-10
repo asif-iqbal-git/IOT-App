@@ -88,22 +88,6 @@
     <script>
         function formValidation()
         {
-            var company_name = document.getElementById("company_name").value;
-            var err_company_name = document.getElementById("err_company_name");
-            var regex_company_name = /([a-zA-Z_-]){3,15}$/g;
-           
-            if(company_name.match(regex_company_name))
-            {
-                err_company_name.style.fontSize = "12px";
-                err_company_name.style.color = "green"; 
-                err_company_name.innerHTML = "Correct";                                
-            }else{           
-                document.getElementById("company_name").focus();      
-                err_company_name.style.color = "red";
-                err_company_name.style.fontSize = "12px";                                
-                err_company_name.innerHTML = "Error msg";  
-                return false;                
-            }
             
             // Dropdown validations
             

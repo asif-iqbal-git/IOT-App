@@ -652,14 +652,14 @@ where BlockId= ?",array($data['BlockId']));
        $q = $this->db->query($query);
       // print_r($q->result());
        if ($q->num_rows() > 0) {
-             return $q->result();        
+             return $q->result();      
         }   
         else {
              return FALSE;
         }   
     }
 
-    public  function getProjectInfoWithCompanies()
+    public function getProjectInfoWithCompanies()
     {
         // get project info only for login company admin ie show all project details which is under one company(login)
         
@@ -677,7 +677,11 @@ where BlockId= ?",array($data['BlockId']));
             }   
             else {
                 return FALSE;
-            }   
+            } 
+    }
+
+    public function get_project_admin(){
+        
     }
 }
 

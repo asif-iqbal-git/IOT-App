@@ -19,7 +19,7 @@ class loginmodel extends CI_Model {
           $this->load->database();
     }
 
-   function validateDootLogin($data = NULL) {
+    function validateDootLogin($data = NULL) {
         $query = $this->db->select('*')
                         ->from('master_login')
                         ->where($data)->get();
