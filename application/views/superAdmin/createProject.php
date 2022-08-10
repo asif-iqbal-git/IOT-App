@@ -1,6 +1,10 @@
 <html>
     <head>
- 
+ <style>
+    #credentials_section_show{
+    display:block;
+}
+ </style>
     </head>
     <body>
         <div class="container"> <h3>Create Project</h3>
@@ -85,7 +89,8 @@
                                     </select>
                                     <span id="err_proj_admin_name"></span>
                             </div>
-
+                            <hr>
+                        <div id="credentials_section_show">
                             <div class="form-group">
                                 <label for="">Project Admin Name</label>
                                     <input type="text" class="form-control" id="id_proj_admin_name" name="userId" placeholder="">
@@ -97,7 +102,7 @@
                                     <input type="password" class="form-control" id="id_proj_admin_pswd" name="password" placeholder="">
                                     <span id="err_admin_pswd"></span>
                             </div>
-
+                        </div>
                             <div class="col-auto float-right">
                                 <button type="submit" class="btn btn-primary mb-2" name="submit" onclick="return create_project_validation();">Submit</button>
                             </div>
@@ -109,6 +114,14 @@
     </body>
     
     <script>
+        // 
+        var elem = document.getElementById("id_proj_admin_name");
+        alert(elem);
+        elem.onchange = function(){
+            var hiddenDiv = document.getElementById("credentials_section_show");
+            hiddenDiv.style.display = (this.value == "") ? "block":"none";
+        };
+
 
         function create_project_validation(){
           
