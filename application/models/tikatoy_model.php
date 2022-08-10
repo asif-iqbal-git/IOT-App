@@ -652,21 +652,21 @@ where BlockId= ?",array($data['BlockId']));
        $q = $this->db->query($query);
       // print_r($q->result());
        if ($q->num_rows() > 0) {
-             return $q->result();        
+             return $q->result();      
         }   
         else {
              return FALSE;
         }   
     }
 
-    public  function getProjectInfoWithCompanies()
+    public function getProjectInfoWithCompanies()
     {
         // get project info only for login company admin ie show all project details which is under one company(login)
         
         $query = "SELECT P.project_id, P.company_Token,P.project_name,P.location,C.company_name,C.comapny_email,M.company_Token,M.userId
         FROM tblProjectName As P
         INNER JOIN master_login As M 
-        ON M.company_Token = P.company_Token        
+        ON M.company_Token = P.company_Token      
         INNER JOIN master_company As C
         ON C.company_Token = P.company_Token";
 
@@ -677,7 +677,11 @@ where BlockId= ?",array($data['BlockId']));
             }   
             else {
                 return FALSE;
-            }   
+            } 
+    }
+
+    public function get_project_admin(){
+        
     }
 }
 
