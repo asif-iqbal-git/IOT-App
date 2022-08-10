@@ -26,6 +26,7 @@ class SuperAdminController extends CI_Controller {
         // $this->load->view('Ug/universalmainbody');
         $data['companyInfo'] = $this->tikatoy_model->getCompanyName();
         $data['companyUserId'] = $this->tikatoy_model->getCompanyUserId();
+        $data['projectAdminByCompany'] =  $this->tikatoy_model->getProjectAdminNameByCompany();
         
         $proj_admin = $this->tikatoy_model->get_project_admin();
 

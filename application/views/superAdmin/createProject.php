@@ -7,6 +7,8 @@
  </style>
     </head>
     <body>
+        
+        <!-- <pre><//?php print_r($projectAdminByCompany); ?></pre> -->
         <div class="container"> <h3>Create Project</h3>
             <div class="col-md-9 mx-auto">
             <?php
@@ -75,11 +77,11 @@
                                     <select id="id_proj_admin_name" name="userId" class="form-control">
                                         <option value='0'>Select project admin</option>
                                         <?php
-                                            if(isset($companyInfo) && !empty($companyInfo)){
-                                                for($i = 0 ; $i < count($companyInfo); $i++) { ?>
+                                            if(isset($projectAdminByCompany) && !empty($projectAdminByCompany)){
+                                                for($i = 0 ; $i < count($projectAdminByCompany); $i++) { ?>
                                                     <!-- <//?php if(isset($companyInfo[$i]->company_Token)){ ?> -->
-                                                    <option value="<?= $companyInfo[$i]->comp_adm_log_id; ?>"> 
-                                                        <?= $companyInfo[$i]->company_name; ?>
+                                                    <option value="<?= $projectAdminByCompany[$i]->unique_login_id; ?>"> 
+                                                        <?= $projectAdminByCompany[$i]->userId; ?>
                                                         <!-- <//?php }?> -->
                                                     </option>
                                                     <?php
