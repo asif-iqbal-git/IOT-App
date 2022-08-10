@@ -118,7 +118,7 @@
     <script>
         // 
         var elem = document.getElementById("id_proj_admin_name");
-        alert(elem);
+        //alert(elem);
         elem.onchange = function(){
             var hiddenDiv = document.getElementById("credentials_section_show");
             hiddenDiv.style.display = (this.value == "") ? "block":"none";
