@@ -10,7 +10,7 @@ class SuperAdminController extends CI_Controller {
         $this->load->helper('url');
         $this->load->model('loginmodel');
         $this->load->model('tikatoy_model');
-      if (NULL === $this->session->userdata('dootLoginDetails')) {
+        if (NULL === $this->session->userdata('dootLoginDetails')) {
             $this->data['base'] = $this->base;
             header('Location: ' . $this->base . "universallogin");
         }
@@ -26,6 +26,10 @@ class SuperAdminController extends CI_Controller {
         // $this->load->view('Ug/universalmainbody');
         $data['companyInfo'] = $this->tikatoy_model->getCompanyName();
         $data['companyUserId'] = $this->tikatoy_model->getCompanyUserId();
+        $data['projectAdminByCompany'] =  $this->tikatoy_model->getProjectAdminNameByCompany();
+        
+        $proj_admin = $this->tikatoy_model->get_project_admin();
+
         $this->load->view('superAdmin/createProject', $data);        
         $this->load->view('Ug/universalfooter');
     }
@@ -68,17 +72,15 @@ class SuperAdminController extends CI_Controller {
          $data_login['created_By'] = $this->session->userdata('current_logedIn');
          $data_login['unique_login_id'] = $proj_adm_log_id;
          
-
         //For master_staff table
         $staff_data['username'] = $this->input->post('userId');
         $staff_data['unique_login_id'] = $proj_adm_log_id;
         $staff_data['isActive'] = "2";
         $staff_data['created_By'] = $this->session->userdata('current_logedIn');
 
-
          //$data_login['login_Token'] = $company_token;
          // print_r($data);
-         // print_r($data_login);die();
+        //  print_r($data_login);die();
         
         //print_r($data);die();
         $this->tikatoy_model->storeProjectInfo($data, $data_login, $staff_data);
@@ -92,10 +94,14 @@ class SuperAdminController extends CI_Controller {
     {
         return uniqid();
     }
+
     public function saveProjectAdminInfo()
     {
         $data['userId'] = $this->input->post('userId');
         $data['password'] = $this->input->post('password');
+                
+        $check_userId = $this->loginmodel->check_proj_admin($data['userId']);
+
         $data['level'] = "2";        
 
         $data['MakId'] = "2RF7F101297E";
