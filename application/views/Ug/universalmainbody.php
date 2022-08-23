@@ -42,7 +42,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard--</span></a>
+                    <span>Dashboard</span></a>
             </li>
 
             <!-- Divider -->
@@ -290,7 +290,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"> Super Admin   
-                                | <?php print_r($user_details['username']); ?> </span>
+                                | <?php print_r($user_details['login_id']); ?> </span>
                                 <!-- <img class="img-profile rounded-circle"
                                     src=<//?= base_url('assets/Admin_assets/vendor/img/undraw_profile.svg'); ?>"> -->
                             </a>

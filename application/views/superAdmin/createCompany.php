@@ -60,6 +60,18 @@
             <div id="err_contact_number"></div>
         </div>
 
+        <div class="form-group">
+        <label for="">Set Company Status</label><br>
+        <div class="custom-control custom-radio custom-control-inline">
+  <input type="radio" id="customRadioInline1" name="customRadioInline" class="custom-control-input">
+  <label class="custom-control-label" for="customRadioInline1">Active</label>
+</div>
+<div class="custom-control custom-radio custom-control-inline">
+  <input type="radio" id="customRadioInline2" name="customRadioInline" class="custom-control-input">
+  <label class="custom-control-label" for="customRadioInline2">Inactive</label>
+</div>
+        </div>
+
             <hr>
             <div class="alert alert-primary" role="alert">
                 Create Credentials For Company Admin
@@ -72,7 +84,7 @@
 
         <div class="form-group">
             <label for="">Company Admin Password</label>
-            <input type="password" class="form-control" id="companyPassword" name="password" placeholder="">
+            <input type="text" class="form-control" id="companyPassword" name="password" placeholder="" value="<?= ($virtualPassword); ?>" disabled>
             <div id="err_company_password"></div>
         </div>
 
@@ -91,7 +103,7 @@
               //Company Name
             var company_name = document.getElementById('company_name').value;
             var err_company_name = document.getElementById('err_company_name');
-            var regex_company_name = /([a-zA-Z0-9_-]){10,45}$/g;
+            var regex_company_name = /([a-zA-Z0-9_-]){3,25}$/g;
 
             if(company_name.match(regex_company_name))
             {

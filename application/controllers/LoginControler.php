@@ -25,19 +25,24 @@ function __construct() {
 
     function Login() {
 
-        $this->username = trim($this->input->post('username'));
+        $this->login_id = $this->input->post('login_id');
         $this->password = $this->input->post('password');
-
-        $this->data = array('userId' => $this->username, 'password' => $this->password);
+        
+        $this->data = array(
+                            'login_id' => $this->login_id, 
+                            'password' => $this->password
+                            );
+        
         $this->dootLoginDetails = $this->loginmodel->validateDootLogin($this->data);
 
         if ($this->dootLoginDetails['success']) {
-            //print_r($this->dootLoginDetails);
-            //die();
-
-            $this->session->set_userdata('current_logedIn', $this->data['userId']);
+          //  print_r($this->dootLoginDetails);
+          //  die();
+            
+            
+            $this->session->set_userdata('current_logedIn', $this->data['login_id']);
             $this->session->set_userdata('dootLoginDetails', $this->dootLoginDetails);
-//////////////************************** District Officer!***************************/////        
+        //////////////************ District Officer!***************************/////        
             // $this->data['loginData'] =  $this->dootLoginDetails;
             $this->load->view('welcome_message', $this->data);
         } else {

@@ -21,8 +21,9 @@ class loginmodel extends CI_Model {
 
     function validateDootLogin($data = NULL) {
         $query = $this->db->select('*')
-                        ->from('master_login')
+                        ->from('tblLogin')   //->from('master_login')
                         ->where($data)->get();
+                        
         if ($query->num_rows() > 0) {
             $this->result = $query->result();
             $this->result = $this->result[0];
@@ -30,14 +31,13 @@ class loginmodel extends CI_Model {
             $this->data = [
                 'loginActive' => $this->result->isActive,
             ];
+            
             if ($this->data['loginActive']) {
                 $this->data = [
                     'loginActive' => $this->result->isActive,
-                    'empid' => $this->result->auto_loginId,
-                    'username' => $this->result->userId,
-//                    'tbcenterId'=> $this->result->tbcenterId,
+                    'staff_uuid' => $this->result->staff_uuid, //empid
+                    'login_id' => $this->result->login_id, //username
                     'level'=>$this->result->level,
-//                    'districtTbId'=>$this->result->districtTbId
                 ];
                 $this->data['success'] = TRUE;
             } else {

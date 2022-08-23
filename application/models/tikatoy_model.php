@@ -718,6 +718,12 @@ where BlockId= ?",array($data['BlockId']));
     public function get_project_admin(){
         
     }
+
+    function generateVirtualPassword($chars)
+    {
+	    $data = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@#%-';
+        return substr(str_shuffle($data), 0, $chars);
+    }
 }
 
 ?>

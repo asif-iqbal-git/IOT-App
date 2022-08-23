@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 29, 2022 at 11:43 AM
+-- Generation Time: Aug 23, 2022 at 01:44 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.22
 
@@ -20,6 +20,19 @@ SET time_zone = "+00:00";
 --
 -- Database: `connectm_IOT`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `company_companyAdmin_mapping`
+--
+
+CREATE TABLE `company_companyAdmin_mapping` (
+  `company_uuid` varchar(255) NOT NULL,
+  `company_admin_uuid` varchar(255) NOT NULL,
+  `isActive` int(2) NOT NULL,
+  `mapping_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -3750,6 +3763,27 @@ INSERT INTO `deviceInputHistory` (`auto_Id`, `sensorTypeId`, `Temp`, `activity_I
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `log_staff`
+--
+
+CREATE TABLE `log_staff` (
+  `staff_uuid` varchar(255) NOT NULL,
+  `login_id` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `isActive` int(2) NOT NULL,
+  `created_At` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `log_staff`
+--
+
+INSERT INTO `log_staff` (`staff_uuid`, `login_id`, `password`, `isActive`, `created_At`) VALUES
+('753165ff-22d5-11ed-ac5b-f44d304ae155', 'Super123', 'Super123', 1, '2022-08-23 11:23:11');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `master_activityType`
 --
 
@@ -3774,25 +3808,24 @@ INSERT INTO `master_activityType` (`activity_Id`, `activity_Name`) VALUES
 --
 
 CREATE TABLE `master_company` (
-  `company_id` int(11) NOT NULL,
+  `company_uuid` varchar(255) NOT NULL,
   `company_name` varchar(255) NOT NULL,
   `company_type` varchar(255) NOT NULL,
-  `comapny_email` varchar(255) NOT NULL,
   `company_location` varchar(255) NOT NULL,
-  `company_contact` varchar(15) NOT NULL,
-  `created_At` timestamp(6) NOT NULL DEFAULT current_timestamp(6),
-  `created_By` varchar(255) NOT NULL,
-  `comp_adm_log_id` varchar(255) NOT NULL
+  `company_email` varchar(255) NOT NULL,
+  `company_contact` varchar(255) NOT NULL,
+  `isActive` int(2) NOT NULL,
+  `created_by` varchar(255) NOT NULL,
+  `created_datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `master_company`
+-- Triggers `master_company`
 --
-
-INSERT INTO `master_company` (`company_id`, `company_name`, `company_type`, `comapny_email`, `company_location`, `company_contact`, `created_At`, `created_By`, `comp_adm_log_id`) VALUES
-(10, 'ZMQ Development', 'Public', 'zmq@dev11.com', 'Delhi', '9898001122', '2022-07-07 06:19:31.055134', '', 'AVMo3B4p'),
-(11, 'Qaff Techno', 'Public', 'qaff@techno.in', 'Canada', '9021210011', '2022-07-07 07:23:13.992600', '', 'IGcIFftV'),
-(12, 'ZMQ ', 'Public', 'zmq@gmail.com', 'Delhi', '90902222', '2022-07-18 09:42:39.640075', '', 'mDXBKCrV');
+DELIMITER $$
+CREATE TRIGGER `company_uuid_before_insert_company_details` BEFORE INSERT ON `master_company` FOR EACH ROW SET new.company_uuid=uuid()
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -3809,27 +3842,58 @@ CREATE TABLE `master_login` (
   `isActive` int(11) NOT NULL,
   `CreatedDate` timestamp NOT NULL DEFAULT current_timestamp(),
   `created_By` varchar(255) NOT NULL,
-  `unique_login_id` varchar(255) NOT NULL
+  `unique_login_id` varchar(255) NOT NULL,
+  `staff_uuid` varchar(255) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `master_login`
 --
 
-INSERT INTO `master_login` (`auto_loginId`, `userId`, `password`, `level`, `MakId`, `isActive`, `CreatedDate`, `created_By`, `unique_login_id`) VALUES
-(1, 'Super', 'super123', 0, '2CF7F101297D', 1, '2016-04-29 06:49:16', '', ''),
-(2, 'Admin', 'admin123', 2, '2RF7F101297E', 1, '2022-05-30 07:11:14', '', ''),
-(6, 'abc', '123456', 2, '2RF7F101297E', 1, '2022-06-10 10:03:11', '', ''),
-(5, 'PAdmin', '12345', 2, '2RF7F101297E', 1, '2022-06-01 09:15:53', '', ''),
-(7, 'zmq1', 'zmq123', 2, '2RF7F101297E', 1, '2022-06-20 10:16:56', '', ''),
-(8, 'zmq99', 'zmq88', 2, '2RF7F101297E', 1, '2022-06-20 10:43:25', '', ''),
-(9, 'subhiq', '181170', 2, '2RF7F101297E', 1, '2022-06-21 06:47:25', '', ''),
-(18, 'ProAdmin', '12345', 2, '2RF7F101297E', 1, '2022-07-18 07:44:50', '', 'nN5Co4jl'),
-(17, 'Sarfaraz ', 'sfz111', 1, '2RF7F101297E', 1, '2022-07-07 07:23:14', '', 'IGcIFftV'),
-(16, 'Ayaz Ahmed', '123456', 1, '2RF7F101297E', 1, '2022-07-07 06:19:31', '', 'AVMo3B4p'),
-(19, 'ZMQAdmin', '12345', 1, '2RF7F101297E', 1, '2022-07-18 09:42:39', '', 'mDXBKCrV'),
-(20, 'arif', '12345', 2, '2RF7F101297E', 1, '2022-07-18 09:48:37', '', 'yZ2tgtMA'),
-(21, 'Ayaz Ahmed3', '123456', 2, '2RF7F101297E', 1, '2022-07-27 09:43:33', '', '62e108c50226f');
+INSERT INTO `master_login` (`auto_loginId`, `userId`, `password`, `level`, `MakId`, `isActive`, `CreatedDate`, `created_By`, `unique_login_id`, `staff_uuid`) VALUES
+(1, 'Super', 'super123', 0, '2CF7F101297D', 1, '2016-04-29 06:49:16', '', '', ''),
+(2, 'Admin', 'admin123', 2, '2RF7F101297E', 1, '2022-05-30 07:11:14', '', '', ''),
+(6, 'abc', '123456', 2, '2RF7F101297E', 1, '2022-06-10 10:03:11', '', '', ''),
+(5, 'PAdmin', '12345', 2, '2RF7F101297E', 1, '2022-06-01 09:15:53', '', '', ''),
+(7, 'zmq1', 'zmq123', 2, '2RF7F101297E', 1, '2022-06-20 10:16:56', '', '', ''),
+(8, 'zmq99', 'zmq88', 2, '2RF7F101297E', 1, '2022-06-20 10:43:25', '', '', ''),
+(9, 'subhiq', '181170', 2, '2RF7F101297E', 1, '2022-06-21 06:47:25', '', '', ''),
+(18, 'ProAdmin', '12345', 2, '2RF7F101297E', 1, '2022-07-18 07:44:50', '', 'nN5Co4jl', ''),
+(17, 'Sarfaraz ', 'sfz111', 1, '2RF7F101297E', 1, '2022-07-07 07:23:14', '', 'IGcIFftV', ''),
+(16, 'Ayaz Ahmed', '123456', 1, '2RF7F101297E', 1, '2022-07-07 06:19:31', '', 'AVMo3B4p', ''),
+(19, 'ZMQAdmin', '12345', 1, '2RF7F101297E', 1, '2022-07-18 09:42:39', '', 'mDXBKCrV', ''),
+(20, 'arif', '12345', 2, '2RF7F101297E', 1, '2022-07-18 09:48:37', '', 'yZ2tgtMA', ''),
+(21, 'Ayaz Ahmed3', '123456', 2, '2RF7F101297E', 1, '2022-07-27 09:43:33', '', '62e108c50226f', ''),
+(22, 'comp121', 'super123', 1, '2RF7F101297E', 1, '2022-08-08 05:20:05', 'Ayaz Ahmed', 'L1-62f09d05639cc', ''),
+(27, 'HelloAdm', '12345', 1, '2RF7F101297E', 1, '2022-08-10 11:43:32', 'ZMQAdmin', 'L1-62f399e4e4529', ''),
+(24, 'asd11', '123123', 1, '2RF7F101297E', 1, '2022-08-08 10:59:54', 'Ayaz Ahmed', 'L1-62f0ecaa61a47', ''),
+(25, ' s', '', 2, '2RF7F101297E', 1, '2022-08-10 06:07:37', 'Ayaz Ahmed', 'L2-62f34b290db05', ''),
+(26, '11', '123456', 2, '2RF7F101297E', 1, '2022-08-10 06:43:52', 'Ayaz Ahmed', 'L2-62f353a8b0aaf', '');
+
+--
+-- Triggers `master_login`
+--
+DELIMITER $$
+CREATE TRIGGER `staff_trigger` BEFORE INSERT ON `master_login` FOR EACH ROW set new.staff_uuid=uuid()
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `master_project`
+--
+
+CREATE TABLE `master_project` (
+  `project_uuid` varchar(255) NOT NULL,
+  `company_uuid` varchar(255) NOT NULL,
+  `project_name` varchar(255) NOT NULL,
+  `project_location` varchar(255) NOT NULL,
+  `isActive` int(2) NOT NULL,
+  `assign_to` varchar(255) NOT NULL,
+  `created_By` varchar(255) NOT NULL,
+  `created_datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -3866,12 +3930,45 @@ INSERT INTO `master_sensorType` (`sensorTypeId`, `sensorName`) VALUES
 --
 
 CREATE TABLE `master_staff` (
-  `master_staff_id` int(11) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `unique_login_id` varchar(255) NOT NULL,
+  `staff_uuid` varchar(255) NOT NULL,
+  `emp_name` varchar(255) NOT NULL,
+  `emp_age` int(15) NOT NULL,
+  `emp_phone` varchar(255) NOT NULL,
+  `emp_email` varchar(255) NOT NULL,
+  `emp_address` varchar(255) NOT NULL,
+  `level` int(4) NOT NULL,
+  `designation_id` varchar(255) NOT NULL,
   `isActive` int(2) NOT NULL,
-  `created_At` timestamp NOT NULL DEFAULT current_timestamp(),
-  `created_By` varchar(20) NOT NULL
+  `created_by` varchar(255) NOT NULL,
+  `created_datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `master_staff`
+--
+
+INSERT INTO `master_staff` (`staff_uuid`, `emp_name`, `emp_age`, `emp_phone`, `emp_email`, `emp_address`, `level`, `designation_id`, `isActive`, `created_by`, `created_datetime`) VALUES
+('753165ff-22d5-11ed-ac5b-f44d304ae155', 'SuperAdmin', 25, '9090119999', 'sadmin@zmq.in', 'New Delhi', 0, '0', 1, '', '2022-08-23 11:19:30');
+
+--
+-- Triggers `master_staff`
+--
+DELIMITER $$
+CREATE TRIGGER `staff_uuid_before_insert_staff_details` BEFORE INSERT ON `master_staff` FOR EACH ROW SET new.staff_uuid=uuid()
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `project_projectAdmin_mapping`
+--
+
+CREATE TABLE `project_projectAdmin_mapping` (
+  `project_uuid` varchar(255) NOT NULL,
+  `project_admin_uuid` varchar(255) NOT NULL,
+  `isActive` int(2) NOT NULL,
+  `mapping_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -4447,6 +4544,28 @@ INSERT INTO `tblIotInteraction` (`communication_id`, `toy_id`, `token_id`, `visi
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tblLogin`
+--
+
+CREATE TABLE `tblLogin` (
+  `staff_uuid` varchar(255) NOT NULL,
+  `login_id` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `level` int(4) NOT NULL,
+  `isActive` int(2) NOT NULL,
+  `created_datetime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tblLogin`
+--
+
+INSERT INTO `tblLogin` (`staff_uuid`, `login_id`, `password`, `level`, `isActive`, `created_datetime`) VALUES
+('753165ff-22d5-11ed-ac5b-f44d304ae155\r\n', 'Super123', 'Super123', 0, 1, '2022-08-23 11:21:29');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tblMessageText`
 --
 
@@ -4489,39 +4608,6 @@ INSERT INTO `tblPhcRegister` (`PhcId`, `PhcName`, `isActive`) VALUES
 (1, 'ZMQ Phc', 1),
 (2, 'Odisa Phc', 1),
 (3, 'Monetra Phc', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblProjectName`
---
-
-CREATE TABLE `tblProjectName` (
-  `project_id` int(5) NOT NULL,
-  `comp_adm_log_id` varchar(255) NOT NULL,
-  `project_name` varchar(255) NOT NULL,
-  `proj_adm_log_id` varchar(255) NOT NULL,
-  `project_status` int(11) NOT NULL,
-  `location` varchar(255) NOT NULL,
-  `contact_no` varchar(255) NOT NULL,
-  `created_At` timestamp NOT NULL DEFAULT current_timestamp(),
-  `created_By` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tblProjectName`
---
-
-INSERT INTO `tblProjectName` (`project_id`, `comp_adm_log_id`, `project_name`, `proj_adm_log_id`, `project_status`, `location`, `contact_no`, `created_At`, `created_By`) VALUES
-(25, 'IGcIFftV', 'IOT', '', 1, 'www', 'qqq', '2022-07-07 06:46:37', ''),
-(26, 'AVMo3B4p', 'Tikka Toy', '', 1, 'India', '3211112211', '2022-07-07 07:23:55', ''),
-(27, 'IGcIFftV', 'PNME 2.0', '', 1, 'Noida', '1212112211', '2022-07-07 09:25:04', ''),
-(29, 'AVMo3B4p', 'Hello World', '', 1, 'dsa', '121', '2022-07-07 09:35:05', ''),
-(30, 'AVMo3B4p', 'Alpha ', '', 1, 'bihar', '9090110022', '2022-07-18 06:43:48', ''),
-(31, 'IGcIFftV', 'bita', 'nN5Co4jl', 1, 'mumbai', '9898113344', '2022-07-18 07:44:50', ''),
-(32, 'mDXBKCrV', 'Beta ', 'yZ2tgtMA', 1, 'delhi', '9090111111', '2022-07-18 09:48:37', ''),
-(33, 'AVMo3B4p', 'test1111111', '62e108b5b6e51', 1, 'asd', '123', '2022-07-27 09:43:17', ''),
-(34, 'AVMo3B4p', 'test1111111', '62e108c50226f', 1, 'asd', '123', '2022-07-27 09:43:33', '');
 
 -- --------------------------------------------------------
 
@@ -4680,15 +4766,16 @@ INSERT INTO `tblRegisterProvider` (`ProviderId`, `HandmadeProviderId`, `UserId`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tblStaff`
+-- Table structure for table `tblStaffDesignation`
 --
 
-CREATE TABLE `tblStaff` (
-  `staff_id` int(11) NOT NULL,
-  `staff_name` varchar(255) NOT NULL,
-  `staff_email_id` varchar(255) NOT NULL,
-  `staff_contact_no` int(11) NOT NULL,
-  `staff_address` varchar(255) NOT NULL
+CREATE TABLE `tblStaffDesignation` (
+  `designation_uuid` varchar(255) NOT NULL,
+  `designation_name` varchar(255) NOT NULL,
+  `level` int(4) NOT NULL,
+  `isActive` int(2) NOT NULL,
+  `created_By` varchar(255) NOT NULL,
+  `created_At` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -5588,12 +5675,6 @@ ALTER TABLE `master_activityType`
   ADD PRIMARY KEY (`activity_Id`);
 
 --
--- Indexes for table `master_company`
---
-ALTER TABLE `master_company`
-  ADD PRIMARY KEY (`company_id`);
-
---
 -- Indexes for table `master_login`
 --
 ALTER TABLE `master_login`
@@ -5601,16 +5682,16 @@ ALTER TABLE `master_login`
   ADD UNIQUE KEY `userId` (`userId`);
 
 --
+-- Indexes for table `master_project`
+--
+ALTER TABLE `master_project`
+  ADD PRIMARY KEY (`project_uuid`);
+
+--
 -- Indexes for table `master_sensorType`
 --
 ALTER TABLE `master_sensorType`
   ADD PRIMARY KEY (`sensorTypeId`);
-
---
--- Indexes for table `master_staff`
---
-ALTER TABLE `master_staff`
-  ADD PRIMARY KEY (`master_staff_id`);
 
 --
 -- Indexes for table `QuestionAnswer`
@@ -5679,12 +5760,6 @@ ALTER TABLE `tblPhcRegister`
   ADD PRIMARY KEY (`PhcId`);
 
 --
--- Indexes for table `tblProjectName`
---
-ALTER TABLE `tblProjectName`
-  ADD PRIMARY KEY (`project_id`);
-
---
 -- Indexes for table `tblQuestionDownload`
 --
 ALTER TABLE `tblQuestionDownload`
@@ -5701,12 +5776,6 @@ ALTER TABLE `tblQuestionText`
 --
 ALTER TABLE `tblRegisterProvider`
   ADD PRIMARY KEY (`ProviderId`);
-
---
--- Indexes for table `tblStaff`
---
-ALTER TABLE `tblStaff`
-  ADD PRIMARY KEY (`staff_id`);
 
 --
 -- Indexes for table `tblStateMaster`
@@ -5761,28 +5830,16 @@ ALTER TABLE `master_activityType`
   MODIFY `activity_Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `master_company`
---
-ALTER TABLE `master_company`
-  MODIFY `company_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
 -- AUTO_INCREMENT for table `master_login`
 --
 ALTER TABLE `master_login`
-  MODIFY `auto_loginId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `auto_loginId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `master_sensorType`
 --
 ALTER TABLE `master_sensorType`
   MODIFY `sensorTypeId` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
--- AUTO_INCREMENT for table `master_staff`
---
-ALTER TABLE `master_staff`
-  MODIFY `master_staff_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `QuestionAnswer`
@@ -5851,12 +5908,6 @@ ALTER TABLE `tblPhcRegister`
   MODIFY `PhcId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `tblProjectName`
---
-ALTER TABLE `tblProjectName`
-  MODIFY `project_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
-
---
 -- AUTO_INCREMENT for table `tblQuestionDownload`
 --
 ALTER TABLE `tblQuestionDownload`
@@ -5873,12 +5924,6 @@ ALTER TABLE `tblQuestionText`
 --
 ALTER TABLE `tblRegisterProvider`
   MODIFY `ProviderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
-
---
--- AUTO_INCREMENT for table `tblStaff`
---
-ALTER TABLE `tblStaff`
-  MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tblStateMaster`

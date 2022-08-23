@@ -140,7 +140,8 @@ class SuperAdminController extends CI_Controller {
     {   
         $this->load->view('welcome_message');    
         // $this->load->view('Ug/universalmainbody');
-        $this->load->view('superAdmin/createCompany');
+        $data['virtualPassword'] = $this->tikatoy_model->generateVirtualPassword(8);
+        $this->load->view('superAdmin/createCompany', $data);
         $this->load->view('Ug/universalfooter');
     }
 
@@ -157,13 +158,12 @@ class SuperAdminController extends CI_Controller {
         //For master_company
         $data['company_name'] = $this->input->post('company_name');
         $data['company_type'] = $this->input->post('company_type');
-        $data['comapny_email'] = $this->input->post('comapny_email');
+        $data['company_email'] = $this->input->post('company_email');
         $data['company_location'] = $this->input->post('company_location');
-        $data['company_contact'] = $this->input->post('company_contact');
-        // $data['company_Token'] = $this->generateRandomString();
+        $data['company_contact'] = $this->input->post('company_contact');     
         $data['created_By'] = $this->session->userdata('current_logedIn');
-        $data['comp_adm_log_id'] = "L1-".$this->unique_id();
-        $comp_adm_log_id = $data['comp_adm_log_id'];
+       
+      
         //For Master Login
         $data_login['userId'] = $this->input->post('userId');
         $data_login['password'] = $this->input->post('password');         
@@ -171,7 +171,7 @@ class SuperAdminController extends CI_Controller {
         $data_login['MakId'] = "2RF7F101297E";
         $data_login['isActive'] = "1";
         $data_login['created_By'] = $this->session->userdata('current_logedIn');
-        $data_login['unique_login_id'] = $comp_adm_log_id;
+        //$data_login['unique_login_id'] = $comp_adm_log_id;
 
         //master_staff
         $staff_data['username'] = $this->input->post('userId');

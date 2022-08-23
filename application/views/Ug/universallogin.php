@@ -39,7 +39,7 @@
                                     <form class="user" id="login_form_id" method="POST" action="<?= base_url('login') ?>"  name="Login_Form"  >
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user"
-                                                name="username"
+                                                name="login_id"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
                                                 placeholder="Enter Username...">
                                                 <br>
