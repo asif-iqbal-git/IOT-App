@@ -131,6 +131,8 @@ class SuperAdminController extends CI_Controller {
     // -------------------------------- Company Admin ------------------------------------
     public function createCompany()
     {   
+        var_dump($this->session->userdata('dootLoginDetails'));
+
         $this->load->view('welcome_message');    
         // $this->load->view('Ug/universalmainbody');
         $this->load->view('superAdmin/createCompany');
