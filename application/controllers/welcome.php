@@ -18,10 +18,10 @@ class Welcome extends CI_Controller {
         
         
          public function index() {
-       if (TRUE || NULL === $this->session->userdata('dootLoginDetails')) {
-            $this->data['base'] = $this->base;
-            $this->session->unset_userdata('body_page_name');
-            $this->load->view('welcome_message');
+            if (TRUE || NULL === $this->session->userdata('dootLoginDetails')) {
+                $this->data['base'] = $this->base;
+                $this->session->unset_userdata('body_page_name');
+                $this->load->view('welcome_message');
         }
 
     }

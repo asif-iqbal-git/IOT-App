@@ -10,8 +10,10 @@
     <meta name="author" content="">
 
     <title>IOT App</title>
-<?php $user_details = $this->session->userdata('dootLoginDetails');
-
+<?php 
+$user_details = $this->session->userdata('dootLoginDetails');
+$loginData=$this->session->userdata('current_logedIn');
+var_dump($loginData);
 //print_r($user_details);
 
 ?>

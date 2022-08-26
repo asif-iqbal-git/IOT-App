@@ -4,8 +4,7 @@ class SuperAdminController extends CI_Controller {
 
     var $base;
     function __construct() {
-        parent::__construct();
-        $this->load->library('session');
+        parent::__construct(); 
         $this->base = $this->config->item('base_url');
         $this->load->helper('url');
         $this->load->model('loginmodel');
@@ -131,12 +130,20 @@ class SuperAdminController extends CI_Controller {
     // -------------------------------- Company Admin ------------------------------------
     public function createCompany()
     {   
-        var_dump($this->session->userdata('dootLoginDetails'));
-
-        $this->load->view('welcome_message');    
-        // $this->load->view('Ug/universalmainbody');
-        $this->load->view('superAdmin/createCompany');
-        $this->load->view('Ug/universalfooter');
+        $is_login = $this->session->userdata('dootLoginDetails');
+        var_dump($is_login);
+        
+        if($is_login){
+            $this->load->view('libs');
+            $this->load->view('welcome_message');    
+            $this->load->view('Ug/universalmainbody');
+            $this->load->view('superAdmin/createCompany');
+            $this->load->view('Ug/universalfooter');
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message');    
+        }
+        
     }
 
     public function createCompanyAdmin()

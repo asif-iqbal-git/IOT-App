@@ -11,7 +11,7 @@
  * @author zmq
  */
 class loginmodel extends CI_Model {
- var $data, $query;
+    var $data, $query;
     var $result;
 
     function __construct() {
@@ -21,8 +21,9 @@ class loginmodel extends CI_Model {
 
    function validateDootLogin($data = NULL) {
         $query = $this->db->select('*')
-                        ->from('master_login')
+                        ->from('tblLogin')  //->from('master_login')
                         ->where($data)->get();
+
         if ($query->num_rows() > 0) {
             $this->result = $query->result();
             $this->result = $this->result[0];
@@ -31,14 +32,23 @@ class loginmodel extends CI_Model {
                 'loginActive' => $this->result->isActive,
             ];
             if ($this->data['loginActive']) {
+                //new data for tblLogin
                 $this->data = [
+                    'loginActive' => $this->result->isActive,
+                    'empid' => $this->result->staff_uuid,
+                    'username' => $this->result->login_id,                    
+                    'level'=> $this->result->level,
+                ];
+
+                //old data for master_login
+                /*$this->data = [
                     'loginActive' => $this->result->isActive,
                     'empid' => $this->result->auto_loginId,
                     'username' => $this->result->userId,
 //                    'tbcenterId'=> $this->result->tbcenterId,
                     'level'=>$this->result->level,
 //                    'districtTbId'=>$this->result->districtTbId
-                ];
+                ];*/
                 $this->data['success'] = TRUE;
             } else {
                 $this->data['success'] = FALSE;
