@@ -10,7 +10,7 @@
  *
  * @author zmq
  */
-class LoginControler extends CI_Controller {
+class LoginController extends CI_Controller {
     //put your code here
 function __construct() {
         parent::__construct();

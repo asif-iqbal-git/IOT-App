@@ -6,13 +6,13 @@
   
 
     <body> 
-         <?php echo CI_VERSION; ?><br/>
+         <!-- <//?php echo CI_VERSION; ?><br/> -->
         <?php
         // print_r($loginData);
-        $loginData=$this->session->userdata('dootLoginDetails');
-        var_dump($loginData);
-
-       if(!isset($loginData['loginActive'])){
+        // $loginData=$this->session->userdata('dootLoginDetails');
+        //var_dump($isActive);
+        $this->load->view('libs');
+       if(!isset($isActive)){
             $this->load->view('Ug/universallogin');
         }
         else{                   

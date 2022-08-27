@@ -19,6 +19,30 @@ class loginmodel extends CI_Model {
           $this->load->database();
     }
 
+    public function validateLoginUser($login_data)
+    {
+        $query = $this->db->select('*')->from('tblLogin')->where($login_data)->get(); 
+        
+        if($query->num_rows() > 0)
+        {
+           $result = $query->result();
+           
+        //   var_dump(($result));
+        //    var_dump($result[0]->isActive);
+
+           if($result[0]->isActive)
+           {
+            return $data = [
+                "isActive" => $result[0]->isActive,
+                "staff_uuid" => $result[0]->staff_uuid,
+                "login_id" => $result[0]->login_id,
+                "password" => $result[0]->password,
+                "level"=> $result[0]->level
+             ];
+           }
+        }
+    }
+
    function validateDootLogin($data = NULL) {
         $query = $this->db->select('*')
                         ->from('tblLogin')  //->from('master_login')

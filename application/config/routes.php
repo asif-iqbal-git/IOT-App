@@ -39,8 +39,10 @@
 */
 
 $route['default_controller'] = "Welcome";
-$route['login'] = 'LoginControler/Login';
-$route['logout'] = 'LoginControler/Logout';
+
+$route['login'] = 'LoginController2/login';
+$route['logout'] = 'LoginController2/Logout';
+
 $route['404_override'] = '';
 $route['cardregister'] ='TikaToy/cardregister';
 $route['gettoyid'] ='TikaToy/getToyid';     

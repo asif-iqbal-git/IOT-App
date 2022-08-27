@@ -11,10 +11,12 @@
 
     <title>IOT App</title>
 <?php 
-$user_details = $this->session->userdata('dootLoginDetails');
-$loginData=$this->session->userdata('current_logedIn');
-var_dump($loginData);
-//print_r($user_details);
+ $userData = $this->session->userdata('userData');
+ var_dump($userData)
+
+// $loginData=$this->session->userdata('current_logedIn');
+// var_dump($loginData);
+//print_r($userData);
 
 ?>
     <!-- Custom fonts for this template-->
@@ -57,9 +59,9 @@ var_dump($loginData);
 
              <!-- Nav Item - SuperAdmin Menu - Company Setup -->
              <?php
-                $user_details = $this->session->userdata('dootLoginDetails');
-                if (isset($user_details['level'])){
-                    if($user_details['level'] == '0' || $user_details['level'] == '1') {
+         
+                if (isset($userData['level'])){
+                    if($userData['level'] == '0' || $userData['level'] == '1') {
                     ?>
                 <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse_company"
@@ -81,9 +83,9 @@ var_dump($loginData);
             
               <!-- Nav Item - Company Menu - Project Setup -->
               <?php
-                $user_details = $this->session->userdata('dootLoginDetails');
-                if (isset($user_details['level'])){
-                    if($user_details['level'] == '1') {
+                $userData = $this->session->userdata('dootLoginDetails');
+                if (isset($userData['level'])){
+                    if($userData['level'] == '1') {
                     ?>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse_company_admin"
@@ -105,9 +107,9 @@ var_dump($loginData);
 
             <!-- Nav Item - SuperAdmin Menu - Project Setup -->
                <?php
-                $user_details = $this->session->userdata('dootLoginDetails');
-                if (isset($user_details['level'])){
-                    if($user_details['level'] == '1') {
+                $userData = $this->session->userdata('dootLoginDetails');
+                if (isset($userData['level'])){
+                    if($userData['level'] == '1') {
                     ?>
                 <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse_S_admin1"
@@ -130,9 +132,9 @@ var_dump($loginData);
 
   <!-- Nav Item - Company Menu - Project Setup -->
             <?php
-                $user_details = $this->session->userdata('dootLoginDetails');
-                if (isset($user_details['level'])){
-                    if($user_details['level'] == '1') {
+                $userData = $this->session->userdata('dootLoginDetails');
+                if (isset($userData['level'])){
+                    if($userData['level'] == '1') {
                     ?>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse_c_admin"
@@ -155,9 +157,9 @@ var_dump($loginData);
 
             <!-- Nav Item - Pages Collapse Menu -->
             <?php
-                $user_details = $this->session->userdata('dootLoginDetails');
-                if (isset($user_details['level'])){
-                    if($user_details['level'] == '1') {
+                $userData = $this->session->userdata('dootLoginDetails');
+                if (isset($userData['level'])){
+                    if($userData['level'] == '1') {
                     ?>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
@@ -216,9 +218,9 @@ var_dump($loginData);
             </li>
            
             <!-- Nav Item - Provider -->
-            <?php $user_details = $this->session->userdata('dootLoginDetails');
-                if (isset($user_details['level'])){
-                    if($user_details['level'] == '1') {
+            <?php $userData = $this->session->userdata('dootLoginDetails');
+                if (isset($userData['level'])){
+                    if($userData['level'] == '1') {
                     ?>
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('providerregister'); ?>">
@@ -285,41 +287,43 @@ var_dump($loginData);
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                        <?php if(isset($user_details['level'])){
-                                if ($user_details['level'] == '0') {
+                        <?php 
+                         $userData = $this->session->userdata('userData');
+                        if(isset($userData['level'])){
+                                if ($userData['level'] == '0') {
                         ?>
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"> Super Admin   
-                                | <?php print_r($user_details['username']); ?> </span>
+                                | <?php print_r($userData['login_id']); ?> </span>
                                 <!-- <img class="img-profile rounded-circle"
                                     src=<//?= base_url('assets/Admin_assets/vendor/img/undraw_profile.svg'); ?>"> -->
                             </a>
                             <? }} ?>
 
-                            <?php if(isset($user_details['level'])){
-                                if ($user_details['level'] == '1') {
+                            <?php if(isset($userData['level'])){
+                                if ($userData['level'] == '1') {
                         ?>
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"> 
                                 Company Admin 
-                                | <?php print_r($user_details['username']); ?> </span>
+                                | <?php print_r($userData['login_id']); ?> </span>
                                 <!-- <img class="img-profile rounded-circle"
                                     src=<//?= base_url('assets/Admin_assets/vendor/img/undraw_profile.svg'); ?>"> -->
                             </a>
                             <? }} ?>
 
-                            <?php if(isset($user_details['level'])){
-                                if ($user_details['level'] == '2') {
+                            <?php if(isset($userData['level'])){
+                                if ($userData['level'] == '2') {
                         ?>
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"> Project  Admin   
-                                | <?php print_r($user_details['username']); ?> </span>
+                                | <?php print_r($userData['login_id']); ?> </span>
                                 <!-- <img class="img-profile rounded-circle"
                                     src=<//?= base_url('assets/Admin_assets/vendor/img/undraw_profile.svg'); ?>"> -->
                             </a>
@@ -343,10 +347,10 @@ var_dump($loginData);
                              
                                 
                                 <?php 
-                                $user_details = $this->session->userdata('dootLoginDetails');
-                                // print_r($user_details);
-                                if(isset($user_details['level'])){
-                                if ( $user_details['level'] == '0' || $user_details['level'] == '1' || $user_details['level'] == '2' || $user_details['level'] == '3') {
+                             $userData = $this->session->userdata('userData');
+                                // print_r($userData);
+                                if(isset($userData['level'])){
+                                if ( $userData['level'] == '0' || $userData['level'] == '1' || $userData['level'] == '2' || $userData['level'] == '3') {
                                     ?>
                                     <a class="dropdown-item" href="<?= base_url('logout') ?>"  >
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
