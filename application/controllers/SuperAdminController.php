@@ -9,10 +9,8 @@ class SuperAdminController extends CI_Controller {
         $this->load->helper('url');
         $this->load->model('loginmodel');
         $this->load->model('tikatoy_model');
-      if (NULL === $this->session->userdata('dootLoginDetails')) {
-            $this->data['base'] = $this->base;
-            header('Location: ' . $this->base . "universallogin");
-        }
+        //session data
+       // $userData = $this->session->userdata('userData');
     }
 
     public function index(){
@@ -36,6 +34,8 @@ class SuperAdminController extends CI_Controller {
         $this->load->view('superAdmin/createProjectAdmin');
         $this->load->view('Ug/universalfooter');
     }
+   
+    
 
     public function saveProjectInfo()
     {  
@@ -131,21 +131,23 @@ class SuperAdminController extends CI_Controller {
     public function createCompany()
     {   
         $userData = $this->session->userdata('userData');
-        var_dump($userData);
-        
+     
+         $staff_data = $this->loginmodel->fetchStaffUUID($userData['login_id']);      
+      //   var_dump($staff_data);die();
+        $virtualPassword['virtualPassword'] = $this->generateRandomString();
+          var_dump($staff_data);
         if($userData){
-            $this->load->view('libs');
-             
+            $this->load->view('libs');             
             $this->load->view('Ug/universalmainbody');
-            $this->load->view('superAdmin/createCompany');
+            $this->load->view('superAdmin/createCompany', $virtualPassword);
             $this->load->view('Ug/universalfooter');
         }else{
             $this->load->view('libs');
             $this->load->view('welcome_message');    
-        }
-        
+        }        
     }
 
+    
     public function createCompanyAdmin()
     {
         $this->load->view('welcome_message');    
@@ -156,40 +158,43 @@ class SuperAdminController extends CI_Controller {
 
     public function saveCompanyInfo()
     {
+         //session data
+       $userData = $this->session->userdata('userData');
+     
+       $staff_data = $this->loginmodel->fetchStaffUUID($userData['login_id']);      
+    
+        
+        var_dump($staff_data);
         //For master_company
         $data['company_name'] = $this->input->post('company_name');
         $data['company_type'] = $this->input->post('company_type');
-        $data['comapny_email'] = $this->input->post('comapny_email');
+        $data['company_location'] = $this->input->post('company_location');
+        $data['company_email'] = $this->input->post('company_email');
         $data['company_location'] = $this->input->post('company_location');
         $data['company_contact'] = $this->input->post('company_contact');
-        // $data['company_Token'] = $this->generateRandomString();
-        $data['created_By'] = $this->session->userdata('current_logedIn');
-        $data['comp_adm_log_id'] = "L1-".$this->unique_id();
-        $comp_adm_log_id = $data['comp_adm_log_id'];
-        //For Master Login
-        $data_login['userId'] = $this->input->post('userId');
+        $data['isActive'] = 1;
+        $data['created_By'] = $staff_data;
+        
+       
+        //For tblLogin
+        $data_login['login_id'] = $this->input->post('login_id');
         $data_login['password'] = $this->input->post('password');         
-        $data_login['level'] = "1";
-        $data_login['MakId'] = "2RF7F101297E";
+        $data_login['level'] = "1";       
         $data_login['isActive'] = "1";
-        $data_login['created_By'] = $this->session->userdata('current_logedIn');
-        $data_login['unique_login_id'] = $comp_adm_log_id;
+        
 
         //master_staff
+        /*
         $staff_data['username'] = $this->input->post('userId');
         $staff_data['unique_login_id'] = $comp_adm_log_id;
         $staff_data['isActive'] = "1";
         $staff_data['created_By'] = $this->session->userdata('current_logedIn');
+        */
+          
 
-        //print_r($this->data['created_By']);
-        //print_r($this->data_login['created_By']);
+         
 
-        //for Created By - "Company ADmin"
-        //$data_login['login_Token'] = $company_token;
-        // print_r($data);
-        //print_r($data_login);die();
-
-        $this->tikatoy_model->storeCompanyAdminInfo($data, $data_login, $staff_data);
+        $this->tikatoy_model->storeCompanyAdminInfo($data, $data_login);
         $this->session->set_flashdata('add_company_admin', 'Company & Company Admin has been Created');
 
         redirect(base_url('createCompany')); 

@@ -37,7 +37,12 @@
     <!-- <script type="text/javascript" src=<//?= base_url("assets/js/bootstrap.min.js"); ?> ></script> -->
     <!-- <script type="text/javascript" src="<//?=  base_url("assets/js/bootstrap-datepicker.js"); ?>"></script> -->
 
-     
+<?php
+// echo"asd=========================";
+// var_dump($staff_uuid);
+
+
+?>     
 
     <!-- Admin -->
  <!-- Bootstrap core JavaScript-->
@@ -50,6 +55,11 @@
 
     <!-- Custom scripts for all pages-->
     <script src=<?= base_url("assets/Admin_assets/js/sb-admin-2.min.js"); ?>></script>
+    <script>
+        // var id = "<//?php echo($staff_uuid); ?>";
+        // localStorage.setItem("staff_uuid", id);
+        // localStorage.getItem("staff_uuid");
+    </script>
 </html>
 
 

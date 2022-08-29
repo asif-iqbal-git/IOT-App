@@ -13,6 +13,7 @@
 class loginmodel extends CI_Model {
     var $data, $query;
     var $result;
+    // var $staff_uuid;
 
     function __construct() {
         parent::__construct();
@@ -58,6 +59,7 @@ class loginmodel extends CI_Model {
             if ($this->data['loginActive']) {
                 //new data for tblLogin
                 $this->data = [
+                    'staff_uuid'=> $this->result->staff_uuid,
                     'loginActive' => $this->result->isActive,
                     'empid' => $this->result->staff_uuid,
                     'username' => $this->result->login_id,                    
@@ -85,6 +87,22 @@ class loginmodel extends CI_Model {
         return $this->data;
     }
 
+    public function fetchStaffUUID($data)
+    {
+        //var_dump(trim($data));die();
+        $query = $this->db->select('staff_uuid')
+                        ->from('tblLogin')  
+                        ->where('login_id', $data)->get();
+
+        if ($query->num_rows() > 0) {
+            $this->result = $query->result();
+            $this->result = $this->result[0];
+        }
+        $data = $this->result;
+        return $data->staff_uuid; 
+    }
+
+     
     public function getQuestionAnswerAudioData($LangId = NULL) {
           $this->load->database();
            $question_data = $this->getQuestionData($LangId);

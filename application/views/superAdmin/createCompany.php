@@ -43,7 +43,7 @@
 
         <div class="form-group">
             <label for="">Email Address</label>
-            <input type="email" class="form-control" id="company_email" name="comapny_email" placeholder="Eg. Example@companyname.com">
+            <input type="email" class="form-control" id="company_email" name="company_email" placeholder="Eg. Example@companyname.com">
             <div id="err_email_addres"></div>
         </div>
 
@@ -66,13 +66,13 @@
             </div>
         <div class="form-group">
             <label for="">Company Admin Name</label>
-            <input type="text" class="form-control" id="companyAdmin" name="userId" placeholder="">
+            <input type="text" class="form-control" id="companyAdmin" name="login_id" placeholder="">
             <div id="err_companyAdmin"></div>
         </div>
 
         <div class="form-group">
             <label for="">Company Admin Password</label>
-            <input type="password" class="form-control" id="companyPassword" name="password" placeholder="">
+            <input type="text" class="form-control" id="companyPassword" name="password" placeholder="" value="<?php echo($virtualPassword); ?>" readonly>
             <div id="err_company_password"></div>
         </div>
 

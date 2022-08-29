@@ -604,14 +604,18 @@ where BlockId= ?",array($data['BlockId']));
         $this->db->insert('master_login', $data);
     }
 
-    public function storeCompanyAdminInfo($data, $data_login, $staff_data)
+    public function storeCompanyAdminInfo($data, $data_login)
     {
         // print_r($data);
-        // print_r($data_login);die();
+     //   print_r($data_login);die();
         
+     //set id column value as UUID        
+        $this->db->set('company_uuid', 'UUID()', FALSE);
         $this->db->insert('master_company', $data);
-        $this->db->insert('master_login', $data_login);
-        $this->db->insert('master_staff', $staff_data);
+
+        $this->db->set('staff_uuid', 'UUID()', FALSE);
+        $this->db->insert('tblLogin', $data_login);
+       // $this->db->insert('master_staff', $staff_data);
     }
 
 

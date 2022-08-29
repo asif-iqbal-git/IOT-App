@@ -12,11 +12,7 @@
     <title>IOT App</title>
 <?php 
  $userData = $this->session->userdata('userData');
- var_dump($userData)
-
-// $loginData=$this->session->userdata('current_logedIn');
-// var_dump($loginData);
-//print_r($userData);
+//  var_dump($userData)
 
 ?>
     <!-- Custom fonts for this template-->
@@ -46,7 +42,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard--</span></a>
+                    <span>Dashboard</span></a>
             </li>
 
             <!-- Divider -->
