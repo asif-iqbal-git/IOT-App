@@ -118,6 +118,21 @@ class SuperAdminController extends CI_Controller {
         $this->load->view('Ug/universalfooter');
     }
 
+    public function staff_details()
+    {  
+        $userData = $this->session->userdata('userData');
+        if($userData){
+            $this->load->view('libs');                                     
+            $this->load->view('Ug/universalmainbody');
+            $this->load->view('superAdmin/staff_details'); 
+            $this->load->view('Ug/universalfooter');
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message'); 
+        }
+        
+    }
+
     // -------------------------------- Project Admin ------------------------------------
     public function viewAssignToys()
     {

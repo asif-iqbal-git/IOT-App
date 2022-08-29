@@ -26,6 +26,8 @@
     <!-- Custom styles for this template-->
     <link href="<?= base_url('assets/Admin_assets/css/sb-admin-2.min.css'); ?>" 
     rel="stylesheet">
+    <link href="<?= base_url('assets/Admin_assets/css/datatable.css'); ?>" 
+    rel="stylesheet">
     </head>
 
     <style type="text/css">
@@ -52,6 +54,11 @@
 
     <!-- Core plugin JavaScript-->
     <script src=<?= base_url("assets/Admin_assets/vendor/jquery-easing/jquery.easing.min.js"); ?>></script>
+
+     <!-- Core jquery.dataTables.min-->
+     <script src=<?= base_url("assets/Admin_assets/js/jquery.dataTables.min.js"); ?>></script>
+     <script src=<?= base_url("assets/Admin_assets/js/dataTables.bootstrap4.min.js"); ?>></script>
+
 
     <!-- Custom scripts for all pages-->
     <script src=<?= base_url("assets/Admin_assets/js/sb-admin-2.min.js"); ?>></script>

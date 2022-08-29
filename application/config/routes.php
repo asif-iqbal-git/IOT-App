@@ -63,6 +63,9 @@ $route['childvaccination']  ='TikaToy_Controller/ChildVaccination';
 $route['childvaccine_card']  ='TikaToy_Controller/Child_Vaccine_Status';
 $route['childCommunication']  ='Welcome/childCommunication';
 
+
+
+$route['staff_details'] = 'SuperAdminController/staff_details';
 $route['createCompany'] = 'SuperAdminController/createCompany';
 $route['createCompanyAdmin'] = 'SuperAdminController/createCompanyAdmin';
 
