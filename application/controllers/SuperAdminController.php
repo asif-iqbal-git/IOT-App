@@ -19,12 +19,23 @@ class SuperAdminController extends CI_Controller {
 
     public function createProject()
     {   
-        $this->load->view('welcome_message');
-        // $this->load->view('Ug/universalmainbody');
-        $data['companyInfo'] = $this->tikatoy_model->getCompanyName();
-        $data['companyUserId'] = $this->tikatoy_model->getCompanyUserId();
-        $this->load->view('superAdmin/createProject', $data);        
-        $this->load->view('Ug/universalfooter');
+        $userData = $this->session->userdata('userData');
+        
+       // var_dump($userData);
+
+        if($userData){
+            $this->load->view('libs');                                     
+            $this->load->view('Ug/universalmainbody');
+            $data['companyInfo'] = $this->tikatoy_model->getCompanyName();
+            $data['companyUserId'] = $this->tikatoy_model->getCompanyUserId();
+            $this->load->view('superAdmin/createProject', $data);  
+            $this->load->view('Ug/universalfooter');
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message'); 
+        }
+
+        
     }
 
     public function createProjectAdmin()
@@ -175,45 +186,56 @@ class SuperAdminController extends CI_Controller {
     {
          //session data
        $userData = $this->session->userdata('userData');
-     
-       $staff_data = $this->loginmodel->fetchStaffUUID($userData['login_id']);      
-    
         
-        var_dump($staff_data);
+       //current_logedIn staff_uuid
+       $current_logedIn_staffUuid = $this->loginmodel->fetchStaffUUID($userData['login_id']);      
+        
+        
         //For master_company
-        $data['company_name'] = $this->input->post('company_name');
-        $data['company_type'] = $this->input->post('company_type');
-        $data['company_location'] = $this->input->post('company_location');
-        $data['company_email'] = $this->input->post('company_email');
-        $data['company_location'] = $this->input->post('company_location');
-        $data['company_contact'] = $this->input->post('company_contact');
-        $data['isActive'] = 1;
-        $data['created_By'] = $staff_data;
+        $data_company['company_name'] = $this->input->post('company_name');
+        $data_company['company_type'] = $this->input->post('company_type');
+        $data_company['company_location'] = $this->input->post('company_location');
+        $data_company['company_email'] = $this->input->post('company_email');
+        $data_company['company_location'] = $this->input->post('company_location');
+        $data_company['company_contact'] = $this->input->post('company_contact');
+        $data_company['isActive'] = 1;
+        $data_company['created_By'] = $current_logedIn_staffUuid;
         
        
-        //For tblLogin
+        //For tblLogin - for Company Admin
         $data_login['login_id'] = $this->input->post('login_id');
         $data_login['password'] = $this->input->post('password');         
         $data_login['level'] = "1";       
         $data_login['isActive'] = "1";
-        
-
+        $company_admin_level = $data_login['level'];  
+        $company_adm_log_id =  $data_login['login_id'];
         //master_staff
-        /*
-        $staff_data['username'] = $this->input->post('userId');
-        $staff_data['unique_login_id'] = $comp_adm_log_id;
-        $staff_data['isActive'] = "1";
-        $staff_data['created_By'] = $this->session->userdata('current_logedIn');
-        */
-          
+      //  $this->updateMasterStaff($current_logedIn_staffUuid);
 
-         
 
-        $this->tikatoy_model->storeCompanyAdminInfo($data, $data_login);
+            $data_master_staff['staff_uuid'] = "";
+            $data_master_staff['login_id'] = $company_adm_log_id;           
+            $data_master_staff['emp_name'] = "";
+            $data_master_staff['emp_age'] =  0;
+            $data_master_staff['emp_phone'] = "";
+            $data_master_staff['emp_email'] = "";
+            $data_master_staff['emp_address'] = "";
+            $data_master_staff['level'] = $company_admin_level;
+            $data_master_staff['designation_id'] = "";
+            $data_master_staff['isActive'] = "1";
+            $data_master_staff['created_By'] = $current_logedIn_staffUuid;
+       
+        $this->tikatoy_model->storeCompanyAdminInfo($data_company, $data_login,$data_master_staff);
         $this->session->set_flashdata('add_company_admin', 'Company & Company Admin has been Created');
 
         redirect(base_url('createCompany')); 
     }
+
+    // public function updateMasterStaff($current_logedIn_staffUuid)
+    // {
+    //     $staff_uuid = $this->loginmodel->fetchStaffUUID($userData['login_id']);
+    //     $master_staff_data['staff_uuid'] = 
+    // }
 
     public function generateRandomString($length = 8) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

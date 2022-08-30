@@ -604,10 +604,11 @@ where BlockId= ?",array($data['BlockId']));
         $this->db->insert('master_login', $data);
     }
 
-    public function storeCompanyAdminInfo($data, $data_login)
+    public function storeCompanyAdminInfo($data, $data_login, $data_master_staff)
     {
         // print_r($data);
      //   print_r($data_login);die();
+     
         
      //set id column value as UUID        
         $this->db->set('company_uuid', 'UUID()', FALSE);
@@ -615,7 +616,8 @@ where BlockId= ?",array($data['BlockId']));
 
         $this->db->set('staff_uuid', 'UUID()', FALSE);
         $this->db->insert('tblLogin', $data_login);
-       // $this->db->insert('master_staff', $staff_data);
+     
+        $this->db->insert('master_staff', $data_master_staff);
     }
 
 
@@ -639,7 +641,8 @@ where BlockId= ?",array($data['BlockId']));
 
     public  function getCompanyName()
     {
-       $query = "SELECT DISTINCT company_id, company_name, comp_adm_log_id FROM master_company";
+       $query = "SELECT DISTINCT company_uuid, company_name, created_by FROM master_company";
+      
        $q = $this->db->query($query);
       // print_r($q->result());
        if ($q->num_rows() > 0) {
@@ -652,7 +655,7 @@ where BlockId= ?",array($data['BlockId']));
 
     public function getCompanyUserId()
     {
-       $query = "SELECT DISTINCT auto_loginId,userId FROM master_login WHERE level = '1'";
+       $query = "SELECT DISTINCT staff_uuid,login_id FROM tblLogin WHERE level = '1'";
        $q = $this->db->query($query);
       // print_r($q->result());
        if ($q->num_rows() > 0) {

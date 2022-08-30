@@ -31,7 +31,7 @@ class loginmodel extends CI_Model {
         //   var_dump(($result));
         //    var_dump($result[0]->isActive);
 
-           if($result[0]->isActive)
+           if(isset($result[0]->isActive))
            {
             return $data = [
                 "isActive" => $result[0]->isActive,
@@ -40,7 +40,11 @@ class loginmodel extends CI_Model {
                 "password" => $result[0]->password,
                 "level"=> $result[0]->level
              ];
+           }else{
+            echo "Error1";
            }
+        }else{
+            echo "Error2";
         }
     }
 

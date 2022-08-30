@@ -13,7 +13,7 @@ class LoginController2 extends CI_Controller {
 
     public  function login()
     {
-        $login_data['login_id'] = $this->input->post('username');       
+        $login_data['login_id'] = $this->input->post('login_Id');       
         $login_data['password'] = $this->input->post('password');
         
         $isValid = $this->loginmodel->validateLoginUser($login_data);
@@ -28,7 +28,10 @@ class LoginController2 extends CI_Controller {
         // Set Session For login User
          $this->session->set_userdata('userData', $userData);
          
-        
+       
+        if(isset($login_data) && !empty($login_data)){
+
+     
         if($login_data['login_id'] === $isValid['login_id'] &&
            $login_data['password'] === $isValid['password'] )
         {
@@ -37,12 +40,16 @@ class LoginController2 extends CI_Controller {
                $this->load->view('welcome_message', $userData);
             }else{
                //var_dump($isValid);
-               echo "False";
+               echo "User is Not Active";
             }                        
           //  echo "True-ps is ok";
+            }else{
+                echo "Error login id & Password";
+            } 
         }else{
-            echo "False";
-        }                  
+                 echo "empty string";
+             }
+                        
     }
    
     public function logout()

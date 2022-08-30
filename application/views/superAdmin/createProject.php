@@ -19,19 +19,19 @@
     <!-- form -->
     <form method="POST" action="SuperAdminController/saveProjectInfo">
 
-       <!-- <//?php print_r($companyInfo); ?> -->
+        <!-- <//?php print_r($companyInfo); ?>   -->
         <div class="form-group">
             <label for="">Company Name</label>
             <select id="" name="comp_adm_log_id" class="form-control">
                 <option selected>Choose Company Name</option>
 
                 <?php 
-                if(isset($companyInfo) && !empty($companyInfo)){
-                for($i = 0 ; $i < count($companyInfo); $i++) { ?>
-                <!-- <//?php if(isset($companyInfo[$i]->company_Token)){ ?> -->
-                    <option value="<?= $companyInfo[$i]->comp_adm_log_id; ?>"> 
+               if(isset($companyInfo) && !empty($companyInfo)){
+               for($i = 0 ; $i < count($companyInfo); $i++) { ?>
+                <?php if(isset($companyInfo[$i]->company_uuid)){ ?>
+                    <option value="<?= $companyInfo[$i]->created_by; ?>"> 
                         <?= $companyInfo[$i]->company_name; ?>
-                        <!-- <//?php }?> -->
+                        <?php }?>
                     </option>
                 <?php }} ?>
             </select>
@@ -54,6 +54,7 @@
             <label for="">Project Name</label>
             <input type="text" class="form-control" id="" name="project_name" placeholder="Eg. Tika Toy">
         </div>
+  <!--      
         <p>&nbsp;</p>
         <div class="custom-control custom-radio custom-control-inline">
             <input type="radio" id="customRadioInline1" name="customRadioInline" class="custom-control-input">
@@ -63,7 +64,8 @@
             <input type="radio" id="customRadioInline2" name="customRadioInline" class="custom-control-input">
             <label class="custom-control-label" for="customRadioInline2">Create Pregnancy Toy</label>
         </div>
-<p>&nbsp;</p>
+        <p>&nbsp;</p>
+                -->
         <div class="form-group">
             <label for="">Location</label>
             <textarea class="form-control" name="location"></textarea>
