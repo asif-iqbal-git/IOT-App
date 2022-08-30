@@ -121,10 +121,11 @@ class SuperAdminController extends CI_Controller {
     public function staff_details()
     {  
         $userData = $this->session->userdata('userData');
+        $data['staff'] = $this->loginmodel->get_staff_info();
         if($userData){
             $this->load->view('libs');                                     
             $this->load->view('Ug/universalmainbody');
-            $this->load->view('superAdmin/staff_details'); 
+            $this->load->view('superAdmin/staff_details', $data);
             $this->load->view('Ug/universalfooter');
         }else{
             $this->load->view('libs');
@@ -242,4 +243,5 @@ class SuperAdminController extends CI_Controller {
 
         $this->load->view('Ug/universalfooter');
     }
+
 }

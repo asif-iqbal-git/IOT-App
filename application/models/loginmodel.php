@@ -422,7 +422,7 @@ class loginmodel extends CI_Model {
          }         
     }
 
-
+    
     //This method is use for pagination for particular table
      public function total_rows(){
         try{
@@ -434,6 +434,14 @@ class loginmodel extends CI_Model {
             catch(Exception $ee){
                 return 0;
             }
+
+    }
+
+    // It is to fetch all data from 'master_staff' table
+    public function get_staff_info(){
+
+        $staff_info = $this->db->get('master_staff');
+        return $staff_info->result();
 
     }
 

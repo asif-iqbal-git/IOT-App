@@ -13,11 +13,11 @@ class LoginController2 extends CI_Controller {
 
     public  function login()
     {
-        $login_data['login_id'] = $this->input->post('username');       
+        $login_data['login_id'] = $this->input->post('login_id');       
         $login_data['password'] = $this->input->post('password');
         
         $isValid = $this->loginmodel->validateLoginUser($login_data);
-     //  var_dump($isValid);
+      //var_dump($isValid);
       
        $userData = [                   
                     'login_id' => $isValid['login_id'],
@@ -27,7 +27,7 @@ class LoginController2 extends CI_Controller {
       
         // Set Session For login User
          $this->session->set_userdata('userData', $userData);
-         
+         var_dump($login_data);
         
         if($login_data['login_id'] === $isValid['login_id'] &&
            $login_data['password'] === $isValid['password'] )
