@@ -445,4 +445,11 @@ class loginmodel extends CI_Model {
 
     }
 
+    public function save_updated_staff_info($updated_data, $emp_uuid){
+
+        $this->db->where('staff_uuid', $emp_uuid);
+        $this->db->update('master_staff', $updated_data);
+
+    }
+
 }
