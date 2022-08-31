@@ -590,13 +590,17 @@ where BlockId= ?",array($data['BlockId']));
       // return "Arif khan";
     }
     
-    public function storeProjectInfo($data, $data_login, $staff_data)
+    public function storeProjectInfo($data_project, $data_login, $data_master_staff)
     {
         // print_r($data);
         // print_r($data_login);die();
-        $this->db->insert('tblProjectName', $data);
-        $this->db->insert('master_login', $data_login);
-        $this->db->insert('master_staff', $staff_data);
+        $this->db->set('project_uuid', 'UUID()', FALSE);
+        $this->db->insert('master_project', $data_project);
+        
+        $this->db->set('staff_uuid', 'UUID()', FALSE);
+        $this->db->insert('tblLogin', $data_login);
+
+        $this->db->insert('master_staff', $data_master_staff);
     }
     
     public function storeProjectAdminInfo($data)
@@ -685,6 +689,37 @@ where BlockId= ?",array($data['BlockId']));
             else {
                 return FALSE;
             }   
+    }
+
+       public function getProjectAdminNameByCompany()
+    {
+        // get project info only for login company admin ie show all project details which is under one company(login)
+        //   P.created_By, --company admin uuid
+        // C.created_by, --company admin or super admin
+
+        $query = "SELECT DISTINCT P.project_uuid, 
+                         P.created_By, 
+                         P.project_name,
+                         P.project_location,
+                         C.created_by,  
+                         C.company_name,
+                         C.company_email,
+                         L.staff_uuid,
+                         L.login_id
+        FROM master_project As P
+        INNER JOIN tblLogin As L 
+        ON L.staff_uuid = P.created_By        
+        INNER JOIN master_company As C
+        ON C.created_by = P.created_By";
+
+        $q = $this->db->query($query);
+        // print_r($q->result());
+        if ($q->num_rows() > 0) {
+            return $q->result();        
+            }   
+            else {
+                return FALSE;
+            } 
     }
 }
 

@@ -22,7 +22,7 @@
         <!-- <//?php print_r($companyInfo); ?>   -->
         <div class="form-group">
             <label for="">Company Name</label>
-            <select id="" name="comp_adm_log_id" class="form-control">
+            <select id="" name="company_uuid" class="form-control">
                 <option selected>Choose Company Name</option>
 
                 <?php 
@@ -68,21 +68,40 @@
                 -->
         <div class="form-group">
             <label for="">Location</label>
-            <textarea class="form-control" name="location"></textarea>
-         </div>
-
-        <div class="form-group">
-            <label for="">Contact No.</label>
-            <input type="text" class="form-control" id="" name="contact_no" placeholder="Eg. 9919910000">
+            <textarea class="form-control" name="project_location"></textarea>
         </div>
+
+       
      
         <hr>
         <div class="alert alert-primary" role="alert">
                 Create Credentials For Project Admin
             </div>
+               <!------------ Project admin dropdown ------------>
+ 
+               <div class="form-group">
+                                <label for="">Project Admin Name</label>
+                                    <select id="id_proj_admin_name" name="project_admin_uuid" class="form-control">
+                                        <option value='0'>Select project admin</option>
+                                        <?php
+                                            if(isset($projectAdminByCompany) && !empty($projectAdminByCompany)){
+                                                for($i = 0 ; $i < count($projectAdminByCompany); $i++) { ?>
+                                                    <!-- <//?php if(isset($companyInfo[$i]->company_Token)){ ?> -->
+                                                    <option value="<?= $projectAdminByCompany[$i]->staff_uuid; ?>"> 
+                                                        <?= $projectAdminByCompany[$i]->login_id; ?>
+                                                        <!-- <//?php }?> -->
+                                                    </option>
+                                                    <?php
+                                                }
+                                            }
+                                        ?>
+                                    </select>
+                                    <span id="err_proj_admin_name"></span>
+                            </div>
+                            <hr>
         <div class="form-group">
             <label for="">Project Admin Name</label>
-            <input type="text" class="form-control" id="" name="userId" placeholder="">
+            <input type="text" class="form-control" id="" name="project_admin_uuid" placeholder="">
         </div>
 
         <div class="form-group">
