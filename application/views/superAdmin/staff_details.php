@@ -9,7 +9,7 @@
             <thead>
                 <tr>
                     <th>Sr.No.</th>
-                    <th>Login_ID<th>
+                    <th>Login_ID</th>
                     <th>Name</th>
                     <th>Age</th>
                     <th>Phone</th>
@@ -30,7 +30,7 @@
                     foreach($staff as $row){
                         echo "<tr>";
                         echo "<td>".$i."</td>";
-                        echo "<td>".$row->login_id."<td>";
+                        echo "<td>".$row->login_id."</td>";
                         echo "<td>".$row->emp_name."</td>";
                         echo "<td>".$row->emp_age."</td>";
                         echo "<td>".$row->emp_phone."</td>";
