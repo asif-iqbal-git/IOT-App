@@ -1,6 +1,10 @@
 <html>
     <head>
- 
+ <style>
+    /* #credentials_section_show{
+        display: none;
+    } */
+ </style>
     </head>
     <body>
         <div class="container"> <h3>Create Project</h3>
@@ -67,7 +71,7 @@
         <p>&nbsp;</p>
                 -->
         <div class="form-group">
-            <label for="">Location</label>
+            <label for="">Project Location</label>
             <textarea class="form-control" name="project_location"></textarea>
         </div>
 
@@ -99,16 +103,24 @@
                                     <span id="err_proj_admin_name"></span>
                             </div>
                             <hr>
-        <div class="form-group">
-            <label for="">Project Admin Name</label>
-            <input type="text" class="form-control" id="" name="project_admin_uuid" placeholder="">
-        </div>
+                            
+                            <button type="button" class="btn btn-primary" onclick="show_hide_projectAdmin()">Add New Project Admin</button>
+                            
+                            
+                            
+                            
+      <div id="credentials_section_show">
+                            <div class="form-group">
+                <label for="">Project Admin Name</label>
+                <input type="text" class="form-control" id="" name="project_admin_uuid" placeholder="">
+            </div>
 
-        <div class="form-group">
-            <label for="">Project Admin Password</label>
-            <input type="password" class="form-control" id="" name="password" placeholder="">
-        </div>
-
+            <div class="form-group">
+                <label for="">Project Admin Password</label>
+                <input type="password" class="form-control" id="" name="password" placeholder="">
+            </div>
+     </div>
+        
         <div class="col-auto float-right">
             <button type="submit" class="btn btn-primary mb-2" name="submit">Submit</button>
             </div>
@@ -120,6 +132,146 @@
 </div>
     </body>
     <script>
-         
+        var proAdminDiv = document.getElementById("credentials_section_show");
+        //var dropDown = document.getElementById("id_proj_admin_name"); 
+
+        window.onload = function() {
+            proAdminDiv.style.display = 'none';
+        };
+
+ 
+        function show_hide_projectAdmin()
+        {
+            if (proAdminDiv.style.display === "none") {
+                proAdminDiv.style.display = "block";
+                document.getElementById("id_proj_admin_name").disabled = true;
+            } else {
+                proAdminDiv.style.display = "none";
+                document.getElementById("id_proj_admin_name").disabled = false;
+            }
+            Reset();
+        }
+        
+        function Reset() {  
+           var dropDown = document.getElementById("id_proj_admin_name");  
+           //alert(dropDown);
+            dropDown.selectedIndex = 0;  
+        }  
+
+        function create_project_validation(){
+          
+            //Validate compny Name
+            
+            var e = document.getElementById("id_comp_name");
+            var err_company_name = document.getElementById('err_cmpny_name');
+            var optionSelIndex = e.options[e.selectedIndex].value;
+            var optionSelectedText = e.options[e.selectedIndex].text;
+            if (optionSelIndex == 0) {
+                document.getElementById("id_comp_name").focus();     
+                err_company_name.style.color = "red";
+                err_company_name.style.fontSize = "12px";
+                err_company_name.innerHTML = "Please select a Company Type.";
+                return false;
+            }
+            else{
+                //alert("Success !! You have selected Category : " + optionSelectedText); ;  
+                        
+                err_company_name.style.color = "green"; 
+                err_company_name.style.fontSize = "12px";
+                err_company_name.innerHTML = "Correct";  
+            }
+
+            //Validate Project name
+
+            var proj_name = document.getElementById('id_proj_name').value;
+            var err_proj_name = document.getElementById("err_proj_name");
+            var regex_proj_name = /([a-zA-Z_-]){3,15}$/g;
+            if(proj_name.match(regex_proj_name  ))
+            {
+                err_proj_name.style.fontSize = "12px";
+                err_proj_name.style.color = "green"; 
+                err_proj_name.innerHTML = "Correct";                                
+            }else{           
+                document.getElementById("id_proj_name").focus();      
+                err_proj_name.style.color = "red";
+                err_proj_name.style.fontSize = "12px";                                
+                err_proj_name.innerHTML = "Error msg";  
+                return false;                
+            }
+
+            //validate location
+
+            var location = document.getElementById('id_location').value;
+            var err_loation = document.getElementById("err_loation");
+            var regex_location = /([a-zA-Z ]){4,20}$/g;
+            if(location.match(regex_location)){
+                err_loation.style.fontSize = "12px";
+                err_loation.style.color = "green"; 
+                err_loation.innerHTML = "Correct"; 
+            }
+            else{
+                document.getElementById("id_location").focus();      
+                err_loation.style.color = "red";
+                err_loation.style.fontSize = "12px";                                
+                err_loation.innerHTML = "Error msg";  
+                return false;            
+            }
+            
+            //validate contact number
+
+            var contact_no = document.getElementById('id_contact').value;
+            var err_contact = document.getElementById("err_contact");
+            var regex_contact = /([0-9]){8,12}$/g;
+            if(contact_no.match(regex_contact)){
+                err_contact.style.fontSize = "12px";
+                err_contact.style.color = "green"; 
+                err_contact.innerHTML = "Correct";
+                alert("***************");
+            }
+            else{
+                document.getElementById("id_contact").focus();      
+                err_contact.style.color = "red";
+                err_contact.style.fontSize = "12px";                               
+                err_contact.innerHTML = "Error msg";  
+                return false;            
+            }
+
+            //Credentials----
+            //validate admin name
+
+            var admin_name = document.getElementById('id_proj_admin_name').value;
+            var err_admin_name = document.getElementById("err_admin_name");
+            var regex_admin_name = /([a-zA-Z0-9-]){3,15}$/g;
+            if(contact_no.match(regex_admin_name)){
+                err_admin_name.style.fontSize = "12px";
+                err_admin_name.style.color = "green"; 
+                err_admin_name.innerHTML = "Correct"; 
+            }
+            else{
+                document.getElementById("id_proj_admin_name").focus();      
+                err_admin_name.style.color = "red";
+                err_admin_name.style.fontSize = "12px";                                
+                err_admin_name.innerHTML = "Error msg";  
+                return false;            
+            }
+
+            //validate password
+
+            var admin_pswd = document.getElementById('id_proj_admin_pswd').value;
+            var err_admin_pswd = document.getElementById("err_admin_pswd");
+            var regex_pswd = /([a-zA-Z0-9-]){3,15}$/g;
+            if(contact_no.match(regex_pswd)){
+                err_admin_pswd.style.fontSize = "12px";
+                err_admin_pswd.style.color = "green"; 
+                err_admin_pswd.innerHTML = "Correct"; 
+            }
+            else{
+                document.getElementById("id_proj_admin_pswd").focus();      
+                err_admin_pswd.style.color = "red";
+                err_admin_pswd.style.fontSize = "12px";                                
+                err_admin_pswd.innerHTML = "Error msg";  
+                return false;            
+            }
+        }
     </script>
 </html>

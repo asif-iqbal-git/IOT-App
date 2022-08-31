@@ -63,7 +63,9 @@ class SuperAdminController extends CI_Controller {
            
             $data['companyInfo'] = $this->tikatoy_model->getCompanyName();
             $data['companyUserId'] = $this->tikatoy_model->getCompanyUserId();
-            $data['projectAdminByCompany'] =  $this->tikatoy_model->getProjectAdminNameByCompany();
+            $data['projectAdminByCompany'] =  
+            $this->tikatoy_model->getProjectAdminNameforSelect();
+            //$this->tikatoy_model->getProjectAdminNameByCompany();
             
             //  var_dump($data);
 

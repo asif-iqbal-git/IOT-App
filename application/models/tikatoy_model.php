@@ -691,7 +691,7 @@ where BlockId= ?",array($data['BlockId']));
             }   
     }
 
-       public function getProjectAdminNameByCompany()
+    public function getProjectAdminNameByCompany()
     {
         // get project info only for login company admin ie show all project details which is under one company(login)
         //   P.created_By, --company admin uuid
@@ -712,6 +712,21 @@ where BlockId= ?",array($data['BlockId']));
         INNER JOIN master_company As C
         ON C.created_by = P.created_By";
 
+        $q = $this->db->query($query);
+        // print_r($q->result());
+        if ($q->num_rows() > 0) {
+            return $q->result();        
+            }   
+            else {
+                return FALSE;
+            } 
+    }
+
+    public function getProjectAdminNameforSelect()
+    {
+        $query = "SELECT staff_uuid,login_id,level,isActive 
+                    From tblLogin 
+                    WHERE level = 2";
         $q = $this->db->query($query);
         // print_r($q->result());
         if ($q->num_rows() > 0) {
