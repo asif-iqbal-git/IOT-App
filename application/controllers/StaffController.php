@@ -34,6 +34,16 @@ class StaffController extends CI_Controller {
 
     }
 
+   /* public function get_single_emp_id(){
+
+        $id = $this->input->post('staff_uuid');
+
+        $this->loginmodel->get_staff_info_using_id($id);
+
+        echo json_encode();
+
+    }*/
+
 }
 
 ?>

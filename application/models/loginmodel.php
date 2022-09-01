@@ -452,4 +452,20 @@ class loginmodel extends CI_Model {
 
     }
 
+    /*public function get_staff_info_using_id($id){
+        
+        $this->db->select('*');
+        $this->db->from('master_staff');
+        $this->db->where('staff_uuuid', $id);
+        
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0){
+           return $query->result();
+        }else{
+            return false;
+        }   
+
+    }*/
+
 }
