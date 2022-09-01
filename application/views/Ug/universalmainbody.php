@@ -20,7 +20,7 @@
 </head>
 
 <body id="page-top">
-
+<?php var_dump($userData);?>
     <!-- Page Wrapper -->
     <div id="wrapper">
         
@@ -95,7 +95,7 @@
             
               <!-- Nav Item - Company Menu - Project Setup -->
               <?php
-                $userData = $this->session->userdata('dootLoginDetails');
+                 
                 if (isset($userData['level'])){
                     if($userData['level'] == '1') {
                     ?>
@@ -119,7 +119,7 @@
 
             <!-- Nav Item - SuperAdmin Menu - Project Setup -->
                <?php
-                $userData = $this->session->userdata('dootLoginDetails');
+              
                 if (isset($userData['level'])){
                     if($userData['level'] == '1') {
                     ?>
@@ -144,7 +144,7 @@
 
   <!-- Nav Item - Company Menu - Project Setup -->
             <?php
-                $userData = $this->session->userdata('dootLoginDetails');
+                
                 if (isset($userData['level'])){
                     if($userData['level'] == '1') {
                     ?>
@@ -169,7 +169,7 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <?php
-                $userData = $this->session->userdata('dootLoginDetails');
+                
                 if (isset($userData['level'])){
                     if($userData['level'] == '1') {
                     ?>
@@ -230,7 +230,8 @@
             </li>
            
             <!-- Nav Item - Provider -->
-            <?php $userData = $this->session->userdata('dootLoginDetails');
+            <?php 
+          
                 if (isset($userData['level'])){
                     if($userData['level'] == '1') {
                     ?>
@@ -301,6 +302,7 @@
                         <li class="nav-item dropdown no-arrow">
                         <?php 
                          $userData = $this->session->userdata('userData');
+                     
                         if(isset($userData['level'])){
                                 if ($userData['level'] == '0') {
                         ?>

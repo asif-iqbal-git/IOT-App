@@ -31,7 +31,7 @@ class loginmodel extends CI_Model {
         //   var_dump(($result));
         //    var_dump($result[0]->isActive);
 
-           if($result[0]->isActive)
+           if(isset($result[0]->isActive))
            {
             return $data = [
                 "isActive" => $result[0]->isActive,
@@ -40,7 +40,11 @@ class loginmodel extends CI_Model {
                 "password" => $result[0]->password,
                 "level"=> $result[0]->level
              ];
+           }else{
+           // echo "Error1";
            }
+        }else{
+            //echo "Error2";
         }
     }
 
@@ -114,10 +118,25 @@ class loginmodel extends CI_Model {
         
     }
     
-    
+    public function checkProjectAdmin($uuid)
+    {//ChildId='".$childid."'";   
+        $query = "SELECT staff_uuid,login_id,level FROM tblLogin WHERE staff_uuid = '".$uuid."' ";
+         
+        $q = $this->db->query($query);
+         
+        // print_r($q);die();
+        if ($q->num_rows() > 0) {
+            return $q->result();        
+            }   
+            else {
+                return FALSE;
+            } 
+       
+    }
     
     public function getQuestionData($LangId = NULL) {
-          $this->load->database();
+        
+        $this->load->database();
         $this->db->select('*');
         $this->db->from('tblQuestionText');
         $this->db->where('LangType', $LangId);

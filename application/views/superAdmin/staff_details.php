@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
     <h3>Staff Details List</h3>
-    <!-- <pre><//?php var_dump($staff);?></pre> -->
-    <link href="<?= base_url('assets/Admin_assets/css/bootstrap_for_table.css'); ?>"
-    rel="stylesheet">
+ 
+    <!-- <link href="<//?= base_url('assets/Admin_assets/css/bootstrap_for_table.css'); ?>"   rel="stylesheet">-->
+   
+ 
     <div class="container">
-        <table id="example" class="table table-striped table-bordered" style="width:100%">
+        <table id="example" class="table table-sm table-responsive table-striped table-bordered" style="width:100%">
             <thead>
                 <tr>
                     <th>Sr.No.</th>

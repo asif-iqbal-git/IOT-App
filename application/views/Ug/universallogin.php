@@ -10,7 +10,18 @@
     <meta name="author" content="">
 
     <title>Login</title>
+<style type="text/css">
+.error {
+    position: relative;
+    animation: shake .1s linear;
+    animation-iteration-count: 3;
+}
 
+@keyframes shake {
+    0% { left: -5px; }
+    100% { right: -5px; }
+}
+</style>
     
 
 </head>
@@ -26,12 +37,27 @@
 
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
+                      
                         <!-- Nested Row within Card Body -->
                         <div class="row">
                             <!-- <div class="col-lg-6 d-none d-lg-block bg-login-image"><img src="pic_trulli.jpg" alt="Italian Trulli"></div> -->
                             <div class="col-lg-6 d-none d-lg-block"><img src="<?php echo base_url('assets/Admin_assets/img/smp.png');?>" alt="Italian Trulli"></div>
                             <div class="col-lg-6">
                                 <p>&nbsp;</p><p>&nbsp;</p>
+                                <?php
+                           if(isset($ErrorLogin))
+                           {
+                               echo ("<h3>".$ErrorLogin."</h3>");
+                           }
+                           if(isset($EmptyString))
+                           {
+                               echo $EmptyString;
+                           }
+                           if(isset($userInactive))
+                           {
+                               echo $userInactive;
+                           }
+                        ?>
                                 <div class="p-5">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome to IOT-App</h1>
@@ -39,7 +65,11 @@
                                     <form class="user" id="login_form_id" method="POST" action="<?= base_url('login') ?>"  name="Login_Form"  >
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user"
+<<<<<<< HEAD
                                                 name="login_id"
+=======
+                                                name="login_Id"
+>>>>>>> Asif_staffD
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
                                                 placeholder="Enter Username...">
                                                 <br>
@@ -132,17 +162,46 @@
             }
         }
 
+        window.onload = function () {
+
+function validate(e) {
+    var username = document.getElementById('username');
+    if (username.value.trim() == '') {
+        username.style.backgroundColor = '#ff4c4c';
+
+        // Add a class that defines an animation
+        username.classList.add('error');
+      
+        // remove the class after the animation completes
+        setTimeout(function() {
+            username.classList.remove('error');
+        }, 300);
+      
+        e.preventDefault();
+    } else {
+        username.style.backgroundColor = null;
+    }
+    var password = document.getElementById('password');
+    if (password.value.trim() == '') {
+        password.style.backgroundColor = '#ff4c4c';
+        
+        // Add a class that defines an animation
+        password.classList.add('error');
+      
+        // remove the class after the animation completes
+        setTimeout(function() {
+            password.classList.remove('error');
+        }, 300);
+        e.preventDefault();
+        } else {
+            password.style.backgroundColor = null;
+        }
+    }
+    //document.getElementById('login').addEventListener('submit', validate);
+}
     </script>
 
-    <!-- Bootstrap core JavaScript-->
-    <!-- <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
-
-    <!-- Core plugin JavaScript-->
-    <!-- <script src="vendor/jquery-easing/jquery.easing.min.js"></script> -->
-
-    <!-- Custom scripts for all pages-->
-    <!-- <script src="js/sb-admin-2.min.js"></script> -->
+<!-- https://www.thecodehubs.com/shake-on-the-invalid-input/ -->
 
 </body>
 

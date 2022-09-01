@@ -54,11 +54,11 @@
             <div id="err_company_location"></div>
          </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="">Contact Person No.</label>
             <input type="text" class="form-control" id="company_contact" name="company_contact" placeholder="Eg. 9919910000">
             <div id="err_contact_number"></div>
-        </div>
+        </div> -->
 
             <hr>
             <div class="alert alert-primary" role="alert">
