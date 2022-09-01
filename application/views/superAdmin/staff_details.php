@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
     <h3>Staff Details List</h3>
- 
- 
-    <!-- <link href="<//?= base_url('assets/Admin_assets/css/bootstrap_for_table.css'); ?>"   rel="stylesheet">-->
- 
-
     <!-- <pre><//?php var_dump($staff)?></pre> -->
     
-    <link href="<?= base_url('assets/Admin_assets/css/bootstrap_for_table.css'); ?>"
-    rel="stylesheet">
+    <!-- <link href="<//?= base_url('assets/Admin_assets/css/bootstrap_for_table.css'); ?>" -->
+    <!-- rel="stylesheet"> -->
  
     <div class="container">
         <table id="example" class="table table-sm table-responsive table-striped table-bordered" style="width:100%">
             <thead>
                 <tr>
+                   <th>S.No</th>
                     <th>Login_ID</th>
                     <th>Name</th>
                     <th>Age</th>
@@ -32,10 +28,12 @@
             <tbody>
             
             <?php
-
-              foreach($staff as $row){
-              
+         //   var_dump(($staff[0]->staff_uuid));die();
+          $count = 1;
+             foreach($staff as $row){
+          //   for(var $i=0; $i < count($staff); $i++ ) {  
                 echo "<tr>";
+                echo "<td>".$count."</td>";
                 echo "<td>".$row->login_id."</td>";
                 echo "<td>".$row->emp_name."</td>";
                 echo "<td>".$row->emp_age."</td>";
@@ -48,8 +46,10 @@
                 echo "<td>".$row->created_by."</td>";
                 echo "<td>".$row->created_datetime."</td>";
                 echo "<td>"."<input type='button' class='btn btn-success' data-toggle='modal' data-target='#exampleModal' value='Update' onclick='update_details();'>"."</td>";                        
-                echo "</tr>";
-              }                
+                echo "</tr>"; 
+                $count++;
+        }
+      
             ?>
             </tbody>
         </table>
@@ -69,85 +69,104 @@
       <div class="modal-body">
 
        <!-- Start From to update staff details -->
-
-        <form id="updateFormId" method="post" action="<?php echo base_url('update_staff');?>" enctype="multipart/form-data">
+       <?php 
+            //  var_dump(($staff[0]->login_id)); 
+          //  foreach($staff as $row){
+          //  var_dump($staff);
+                for ($i = 0 ; $i < count($staff); $i++) {  
+         
+          ?>
+        <!-- <form id="updateFormId" method="post" action="<//?php echo base_url('update_staff');?>" enctype="multipart/form-data"> -->
        
-        <?php foreach($staff as $row){?>
+        <form id="updateFormId" method="post" action=" " enctype="multipart/form-data">
        
           <div class="form-group row">
             <label for="login_id" class="col-sm-2 col-form-label">Login_ID</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="login_id" value="<?php echo $row->login_id; ?>">
+              <input type="text" class="form-control" name="login_id" 
+              value="<?php echo  $staff[$i]->login_id ?>">
             </div>
           </div>
         <div class="form-group row">
             <label for="emp_name" class="col-sm-2 col-form-label">Name</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="emp_name" value="<?php echo $row->emp_name; ?>">
+              <input type="text" class="form-control" name="emp_name" 
+              value="<?php echo  $staff[$i]->login_id ?>">
             </div>
           </div>
           <div class="form-group row">
             <label for="emp_age" class="col-sm-2 col-form-label">Age</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="emp_age" value="<?php echo $row->emp_age; ?>">
+              <input type="text" class="form-control" name="emp_age" 
+             value="<?php echo  $staff[$i]->login_id ?>">
             </div>
           </div>
           <div class="form-group row">
             <label for="emp_phone" class="col-sm-2 col-form-label">Phone</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="emp_phone" value="<?php echo $row->emp_phone; ?>">
+              <input type="text" class="form-control" name="emp_phone" 
+              value="<?php echo  $staff[$i]->login_id ?>">
             </div>
           </div>
           <div class="form-group row">
             <label for="emp_email" class="col-sm-2 col-form-label">Email</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="emp_email" value="<?php echo $row->emp_email; ?>">
+              <input type="text" class="form-control" name="emp_email" 
+              value="<?php echo  $staff[$i]->login_id ?>">
             </div>
           </div>
           <div class="form-group row">
             <label for="emp_address" class="col-sm-2 col-form-label">Address</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="emp_address" value="<?php echo $row->emp_address; ?>">
+              <input type="text" class="form-control" name="emp_address" 
+              value="<?php echo  $staff[$i]->login_id ?>">
             </div>
           </div>
           <div class="form-group row">
             <label for="level" class="col-sm-2 col-form-label">Level</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="level" value="<?php echo $row->level; ?>">
+              <input type="text" class="form-control" name="level" 
+              value="<?php echo  $staff[$i]->login_id ?>">
             </div>
           </div>
           <div class="form-group row">
             <label for="desig_id" class="col-sm-2 col-form-label">Desig_ID</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="desig_id" value="<?php echo $row->designation_id; ?>">
+              <input type="text" class="form-control" name="desig_id" 
+              value="<?php echo  $staff[$i]->login_id ?>">
             </div>
           </div>
           <div class="form-group row">
             <label for="isActive" class="col-sm-2 col-form-label">isActive</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="isActive" value="<?php echo $row->isActive; ?>">
+              <input type="text" class="form-control" name="isActive" 
+              value="<?php echo  $staff[$i]->login_id ?>">
             </div>
           </div>
           <div class="form-group row">
             <label for="created_by" class="col-sm-2 col-form-label">Created_By</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="created_by" value="<?php echo $row->created_by; ?>">
+              <input type="text" class="form-control" name="created_by" 
+             value="<?php echo  $staff[$i]->login_id ?>">
             </div>
           </div>
           <div class="form-group row">
             <label for="created_at" class="col-sm-2 col-form-label">Created_At</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="created_at" value="<?php echo $row->created_datetime; ?>">
+              <input type="text" class="form-control" name="created_at" 
+              value="<?php echo  $staff[$i]->login_id ?>">
             </div>
           </div>
           
-          <?php }?>
+        
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <input type="button" class="btn btn-success" value="Submit" onclick="submitForm();"/>
           </div>
         </form>
+        
+        <?php }  ?>
       </div>
     </div>
   </div>
@@ -157,13 +176,9 @@
 
 
 // Submitting the form after update staff information
+ 
 
-  function submitForm(){
-
-    document.getElementById('updateFormId').submit();
-
-  }
-
+  //load bootstrap table
   $(document).ready(function () {
     $('#example').DataTable();
   });
@@ -173,7 +188,36 @@
   $('#myModal').on('shown.bs.modal', function () {
     $('#myInput').trigger('focus')
   })
+  
+  function update_details(){
+    //after update button click, it will send single staff id to controller,and controller will return all information about staff according to id, that will edit 
+    
+    //without ajax
 
+
+    //get single staff uuid
+    var value = document.getElementById('updateFormId').value;
+    
+    alert(value)
+ $.ajax({
+         async: false,
+         url: "<?= base_url('StaffController/updateStaffInfo') ?>",
+         type: 'POST',
+         data: {id: 1},
+          
+         success: function(data, textStatus, jqXHR) {
+             alert(data);  //data return false if no data
+             var json_data = $.parseJSON(data);
+             
+             
+             
+         },
+         error: function(jqXHR, textStatus, errorThrown) {
+           console.log(textStatus, errorThrown);
+         },
+         
+     });        
+}
 </script>
 
 </html>

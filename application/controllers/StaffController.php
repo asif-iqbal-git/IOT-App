@@ -33,7 +33,12 @@ class StaffController extends CI_Controller {
         redirect('staff_details');
 
     }
-
+    public function updateStaffInfo()
+    {    
+         $id = $this->input->post('staff_uuid');
+         $val= "hy";
+         echo json_encode($val);
+    }
    /* public function get_single_emp_id(){
 
         $id = $this->input->post('staff_uuid');
