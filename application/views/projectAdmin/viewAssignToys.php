@@ -81,7 +81,7 @@
             });
         });
     
-    
+        
         // 
         function json_table_template(json_data_obj)
         {

@@ -198,7 +198,7 @@ class SuperAdminController extends CI_Controller {
     public function viewAssignToys()
     {
         $this->load->view('welcome_message');    
-        $data['projectAdminInfo'] = $this->tikatoy_model->getProjectAdminName();
+        $data['projectAdminI$data'] = $this->tikatoy_model->getProjectAdminName();
         $this->load->view('projectAdmin/viewAssignToys', $data);
         $this->load->view('Ug/universalfooter');
     }
