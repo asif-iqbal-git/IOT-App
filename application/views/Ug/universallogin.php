@@ -37,12 +37,27 @@
 
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
+                      
                         <!-- Nested Row within Card Body -->
                         <div class="row">
                             <!-- <div class="col-lg-6 d-none d-lg-block bg-login-image"><img src="pic_trulli.jpg" alt="Italian Trulli"></div> -->
                             <div class="col-lg-6 d-none d-lg-block"><img src="<?php echo base_url('assets/Admin_assets/img/smp.png');?>" alt="Italian Trulli"></div>
                             <div class="col-lg-6">
                                 <p>&nbsp;</p><p>&nbsp;</p>
+                                <?php
+                           if(isset($ErrorLogin))
+                           {
+                               echo ("<h3>".$ErrorLogin."</h3>");
+                           }
+                           if(isset($EmptyString))
+                           {
+                               echo $EmptyString;
+                           }
+                           if(isset($userInactive))
+                           {
+                               echo $userInactive;
+                           }
+                        ?>
                                 <div class="p-5">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome to IOT-App</h1>

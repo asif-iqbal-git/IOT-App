@@ -82,26 +82,26 @@
                 Create Credentials For Project Admin
             </div>
                <!------------ Project admin dropdown ------------>
- 
-               <div class="form-group">
-                                <label for="">Project Admin Name</label>
-                                    <select id="id_proj_admin_name" name="project_admin_uuid" class="form-control">
-                                        <option value='0'>Select project admin</option>
-                                        <?php
-                                            if(isset($projectAdminByCompany) && !empty($projectAdminByCompany)){
-                                                for($i = 0 ; $i < count($projectAdminByCompany); $i++) { ?>
-                                                    <!-- <//?php if(isset($companyInfo[$i]->company_Token)){ ?> -->
-                                                    <option value="<?= $projectAdminByCompany[$i]->staff_uuid; ?>"> 
-                                                        <?= $projectAdminByCompany[$i]->login_id; ?>
-                                                        <!-- <//?php }?> -->
-                                                    </option>
-                                                    <?php
-                                                }
-                                            }
-                                        ?>
-                                    </select>
-                                    <span id="err_proj_admin_name"></span>
-                            </div>
+ <!-- <//?php    var_dump($projectAdminByCompany[0]->staff_uuid); ?> -->
+        <div class="form-group">
+            <label for="">Project Admin Name</label>
+                <select id="id_proj_admin_name" name="staff_uuid" class="form-control">
+                    <option value='0'>Select project admin</option>
+                    <?php                             
+                        if(isset($projectAdminByCompany) && !empty($projectAdminByCompany)){
+                            for($i = 0 ; $i < count($projectAdminByCompany); $i++) { ?>
+                                
+                            <option value="<?= $projectAdminByCompany[$i]->staff_uuid; ?>"> 
+                                    <?= $projectAdminByCompany[$i]->login_id; ?>
+                                    
+                                </option>
+                                <?php
+                            }
+                        }
+                    ?>
+                </select>
+            <span id="err_proj_admin_name"></span>
+        </div>
                             <hr>
                             
                             <button type="button" class="btn btn-primary" onclick="show_hide_projectAdmin()">Add New Project Admin</button>
@@ -143,9 +143,11 @@
         function show_hide_projectAdmin()
         {
             if (proAdminDiv.style.display === "none") {
+                //Show
                 proAdminDiv.style.display = "block";
                 document.getElementById("id_proj_admin_name").disabled = true;
             } else {
+                //Hide
                 proAdminDiv.style.display = "none";
                 document.getElementById("id_proj_admin_name").disabled = false;
             }

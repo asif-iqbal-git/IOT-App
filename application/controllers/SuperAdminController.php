@@ -62,12 +62,12 @@ class SuperAdminController extends CI_Controller {
             $this->load->view('Ug/universalmainbody');
            
             $data['companyInfo'] = $this->tikatoy_model->getCompanyName();
-            $data['companyUserId'] = $this->tikatoy_model->getCompanyUserId();
+            $data['companyUserId'] = $this->tikatoy_model->getCompanyUserId();            
             $data['projectAdminByCompany'] =  
             $this->tikatoy_model->getProjectAdminNameforSelect();
             //$this->tikatoy_model->getProjectAdminNameByCompany();
-            
-            //  var_dump($data);
+            // echo"<pre>";
+            //  var_dump($data['projectAdminByCompany']);
 
             $this->load->view('superAdmin/createProject', $data);  
             $this->load->view('Ug/universalfooter');
@@ -104,17 +104,32 @@ class SuperAdminController extends CI_Controller {
         $data_project['project_name']     = $this->input->post('project_name');
         $data_project['project_location'] = $this->input->post('project_location');
         $data_project['isActive']         = 1;
-        $data_project['assign_to']        = $this->input->post('project_admin_uuid'); //staff_uuid for project admin
+        $data_project['assign_to']        = $this->input->post('staff_uuid'); //staff_uuid for project admin
         $data_project['created_By']       = $current_logedIn_staffUuid; //get name of login user by session 
+        //var_dump($data_project);die();
 
-          //For tblLogin - for Project Admin
-        $data_login['login_id'] = $this->input->post('login_id');
-        $data_login['password'] = $this->input->post('password');         
-        $data_login['level'] = "2";       
-        $data_login['isActive'] = "1";
-        $project_admin_level = $data_login['level'];  
-        $project_adm_log_id =  $data_login['login_id'];
-        
+        //if cAdmin is selected Padmin from dropdown then it will not save it again to database.
+        $isExistProAdmin = $this->isExistProjectAdmin($data_project['assign_to']);
+        if($isExistProAdmin){
+           
+            echo "True";            
+            // var_dump($isExistProAdmin);die();
+
+                $project_adm_log_id = $isExistProAdmin[0]->login_id;
+                $project_admin_level = $isExistProAdmin[0]->level;
+            // return true;
+        }else{
+            echo "False";
+            //For tblLogin - for Project Admin
+            $data_login['login_id'] = $this->input->post('project_admin_uuid');
+            $data_login['password'] = $this->input->post('password');         
+            $data_login['level'] = "2";       
+            $data_login['isActive'] = "1";
+            $project_admin_level = $data_login['level'];  
+            $project_adm_log_id =  $data_login['login_id'];
+           // var_dump($data_login);die();
+        }
+
         //For Master_staff
        
         //  $this->updateMasterStaff($current_logedIn_staffUuid);
@@ -130,12 +145,24 @@ class SuperAdminController extends CI_Controller {
             $data_master_staff['isActive'] = "1";
             $data_master_staff['created_By'] = $current_logedIn_staffUuid;
         
-         
-        $this->tikatoy_model->storeProjectInfo($data_project, $data_login, $data_master_staff);
+        if($isExistProAdmin){
+            $this->tikatoy_model->storeProjectInfo2($data_project, $data_master_staff);
+        }else{
+            $this->tikatoy_model->storeProjectInfo($data_project, $data_login, $data_master_staff);
+        }
+            
+        
 
         $this->session->set_flashdata('add_project_name', 'Project Name has been added');
 
         redirect(base_url('createProject')); 
+    }
+
+    public function isExistProjectAdmin($uuid)
+    {
+        $existingProAdmin =  $this->loginmodel->checkProjectAdmin($uuid);
+      //  var_dump($existingProAdmin);die();
+        return $existingProAdmin;
     }
 
     public function unique_id()
@@ -211,7 +238,7 @@ class SuperAdminController extends CI_Controller {
         $data_company['company_location'] = $this->input->post('company_location');
         $data_company['company_email'] = $this->input->post('company_email');
         $data_company['company_location'] = $this->input->post('company_location');
-        $data_company['company_contact'] = $this->input->post('company_contact');
+        // $data_company['company_contact'] = $this->input->post('company_contact');
         $data_company['isActive'] = 1;
         $data_company['created_By'] = $current_logedIn_staffUuid;
         

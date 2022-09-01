@@ -20,7 +20,7 @@
 </head>
 
 <body id="page-top">
-
+<?php var_dump($userData);?>
     <!-- Page Wrapper -->
     <div id="wrapper">
         
@@ -302,6 +302,7 @@
                         <li class="nav-item dropdown no-arrow">
                         <?php 
                          $userData = $this->session->userdata('userData');
+                     
                         if(isset($userData['level'])){
                                 if ($userData['level'] == '0') {
                         ?>
