@@ -653,13 +653,21 @@ where BlockId= ?",array($data['BlockId']));
         }     
     }
 
-    public  function getCompanyName()
+    public  function getCompanyNameByCAdmin($company_admin_login_id)
     {
-       $query = "SELECT DISTINCT company_uuid, company_name, created_by FROM master_company";
+    //    $query = "SELECT  C.company_uuid, C.company_name, C.created_by,L.login_id 
+    //              FROM master_company As C INNER JOIN tblLogin As L ON 
+    //              C.company_uuid = L.staff_uuid WHERE C.company_uuid='$company_login_id'" ;
       
+    $query = "SELECT company_uuid,company_name, created_by
+     FROM master_company 
+     WHERE company_admin_loginId ='$company_admin_login_id'" ;
+
        $q = $this->db->query($query);
-      // print_r($q->result());
-       if ($q->num_rows() > 0) {
+       
+      //  print_r($q->result());die();
+     
+      if ($q->num_rows() > 0) {
              return $q->result();       
         }   
         else {

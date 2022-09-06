@@ -38,17 +38,16 @@ class SuperAdminController extends CI_Controller {
     public function createProject()
     {   
         $userData = $this->session->userdata('userData');
-        
-       // var_dump($userData);
-      
-  
-
+        $current_logedIn_staffUuid = $this->loginmodel->fetchStaffUUID($userData['login_id']);  
+      // var_dump($userData);
        
         if($userData){
             $this->load->view('libs');                                     
             $this->load->view('Ug/universalmainbody');
-           
-            $data['companyInfo'] = $this->tikatoy_model->getCompanyName();
+            
+            //getCompanyNameByCAdmin()
+
+            $data['companyInfo'] = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
             $data['companyUserId'] = $this->tikatoy_model->getCompanyUserId();            
             $data['projectAdminByCompany'] =  
             $this->tikatoy_model->getProjectAdminNameforSelect();
@@ -238,9 +237,7 @@ class SuperAdminController extends CI_Controller {
        $userData = $this->session->userdata('userData');
         
        //current_logedIn staff_uuid
-       $current_logedIn_staffUuid = $this->loginmodel->fetchStaffUUID($userData['login_id']);      
-        
-        
+       $current_logedIn_staffUuid = $this->loginmodel->fetchStaffUUID($userData['login_id']);                      
         //For master_company
         $data_company['company_name'] = $this->input->post('company_name');
         $data_company['company_type'] = $this->input->post('company_type');
@@ -250,7 +247,7 @@ class SuperAdminController extends CI_Controller {
         // $data_company['company_contact'] = $this->input->post('company_contact');
         $data_company['isActive'] = 1;
         $data_company['created_By'] = $current_logedIn_staffUuid;
-        
+      
        
         //For tblLogin - for Company Admin
         $data_login['login_id'] = $this->input->post('login_id');
@@ -259,7 +256,10 @@ class SuperAdminController extends CI_Controller {
         $data_login['isActive'] = "1";
         $company_admin_level = $data_login['level'];  
         $company_adm_log_id =  $data_login['login_id'];
-    
+      
+        //For master_company
+        $data_company['company_admin_loginId'] = $company_adm_log_id;
+        
         //For master_staff
      
         //  $this->updateMasterStaff($current_logedIn_staffUuid);

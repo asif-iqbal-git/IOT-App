@@ -14,14 +14,14 @@ class LoginController2 extends CI_Controller {
     public  function login()
     {
  
-        $login_data['login_id'] = $this->input->post('login_Id');       
+        $login_data['login_id'] = $this->input->post('login_id');       
         $login_data['password'] = $this->input->post('password');
         
         $isValid = $this->loginmodel->validateLoginUser($login_data);
-     //  var_dump($isValid);
+   // var_dump($login_data);
       if(isset($isValid)){
  
-        
+    
         $userData = [                   
             'login_id' => ($isValid['login_id']),
             'level'	=> ($isValid['level']),
@@ -31,14 +31,14 @@ class LoginController2 extends CI_Controller {
             $this->session->set_userdata('userData', $userData);    
            
         if(isset($login_data) && !empty($login_data)){
-
-    
+           
+        
      
         if($login_data['login_id'] === $isValid['login_id']&&
            $login_data['password'] === $isValid['password'])
         {
-                    if(isset($isValid['isActive']) == 1){               
-                    $this->load->view('welcome_message', $userData);
+                    if(isset($isValid['isActive']) == "1"){               
+                         $this->load->view('welcome_message', $userData);
                     }else{                            
                         $errArr['userInactive'] = 'User is Not Active';
                     // $this->load->view('welcome_message', $errArr);               

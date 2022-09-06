@@ -184,7 +184,7 @@
                  
             }
         }
-       // let lastname = localStorage.getItem(key);
+      
         function nextPage()
         {
          // console.log("nxt",json_data_obj);

@@ -64,7 +64,7 @@ $route['childvaccine_card']  ='TikaToy_Controller/Child_Vaccine_Status';
 $route['childCommunication']  ='Welcome/childCommunication';
 
 
-
+$route['addStaff'] = 'StaffController/addStaff';
 $route['staff_details'] = 'SuperAdminController/staff_details';
 $route['update_staff'] = 'StaffController/update_staff_details';
 

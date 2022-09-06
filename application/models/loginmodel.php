@@ -471,6 +471,34 @@ class loginmodel extends CI_Model {
 
     }
 
+    public function getSingleStaffInfo($id){
+        
+       
+        $query = "SELECT * FROM master_staff WHERE login_id ='$id'";
+    
+        $q = $this->db->query($query);
+        //print_r($q->result());die();
+         if ($q->num_rows() > 0) {
+               return $q->result();        
+          }   
+          else {
+               return FALSE;
+          }   
+    }
+
+    public function getDesignation()
+    {
+        $query = "SELECT * FROM tblDesignation";
+
+        $q = $this->db->query($query);
+        //print_r($q->result());die();
+         if ($q->num_rows() > 0) {
+               return $q->result();        
+          }   
+          else {
+               return FALSE;
+          }   
+    }
     /*public function get_staff_info_using_id($id){
         
         $this->db->select('*');

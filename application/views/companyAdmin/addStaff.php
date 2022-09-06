@@ -5,8 +5,8 @@
         <div class="container">
         <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">Company Setup</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Create Company</li>
+        <li class="breadcrumb-item"><a href="#">Staff Setup</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add Staff</li>
     </ol>
     </nav>
         <div class="col-md-9 mx-auto">
@@ -25,44 +25,73 @@
     <form method="POST" action="SuperAdminController/saveCompanyInfo">
     <i class="bi bi-align-bottom"></i>
         <div class="form-group">
-            <label for="">Company Name</label>
+            <label for="">Staff Name</label>
+            <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Eg. ZMQ Development">
+            <div id="err_company_name"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="">Staff Age</label>
             <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Eg. ZMQ Development">
             <div id="err_company_name"></div>
         </div>
         
+        <label for="">Staff Gender</label><br/>
+        <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="staffGender" id="inlineRadio1" value="0" checked>
+        <label class="form-check-label" for="inlineRadio1">Male</label>
+        </div>
+        <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="staffGender" id="inlineRadio2" value="1">
+        <label class="form-check-label" for="inlineRadio2">Female</label>
+        </div>
+        <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="staffGender" id="inlineRadio3" value="2">
+        <label class="form-check-label" for="inlineRadio3">Other</label>
+        </div>
+        <div>&nbsp;</div>
+
         <div class="form-group">
-            <label for="">Company Type</label>
+            <label for="">Staff PhoneNo</label>
+            <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Eg. ZMQ Development">
+            <div id="err_company_name"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="">Staff Email </label>
+            <input type="email" class="form-control" id="company_email" name="company_email" placeholder="Eg. Example@companyname.com">
+            <div id="err_email_addres"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="">Staff Address</label>
+            <textarea class="form-control" id="company_location" name="company_location"></textarea>
+            <div id="err_company_location"></div>
+         </div>
+         <!-- <//?php var_dump($staff_designation[0]);?>   -->
+        <div class="form-group">
+            <label for="">Staff Designation</label>
             <select id="company_type" name="company_type" class="form-control">
-                <option value="0">Choose Company Type</option>
-                <option value="Public">Public</option>
-                <option value="Private">Private</option>                
+            <option value="0">Choose Staff Designation</option>
+            <?php  for($i = 0; $i < count($staff_designation); $i++){ ?>  
+            
+                <option value="<?php echo($staff_designation[$i]->designation_id); ?>"><?php echo($staff_designation[$i]->designation_name); ?>
+                </option>
+                 
+                <?php } ?>
             </select>
             <div id="err_company_type"></div>
          </div>
 
 
-        <div class="form-group">
-            <label for="">Email Address</label>
-            <input type="email" class="form-control" id="company_email" name="company_email" placeholder="Eg. Example@companyname.com">
-            <div id="err_email_addres"></div>
-        </div>
+    
 
 
-        <div class="form-group">
-            <label for="">Company Location</label>
-            <textarea class="form-control" id="company_location" name="company_location"></textarea>
-            <div id="err_company_location"></div>
-         </div>
-
-        <!-- <div class="form-group">
-            <label for="">Contact Person No.</label>
-            <input type="text" class="form-control" id="company_contact" name="company_contact" placeholder="Eg. 9919910000">
-            <div id="err_contact_number"></div>
-        </div> -->
+      
 
             <hr>
             <div class="alert alert-primary" role="alert">
-                Create Credentials For Company Admin
+                Create Credentials For Staff
             </div>
         <div class="form-group">
             <label for="">Company Admin Name</label>
@@ -72,7 +101,7 @@
 
         <div class="form-group">
             <label for="">Company Admin Password</label>
-            <input type="text" class="form-control" id="companyPassword" name="password" placeholder="" value="<?php echo($virtualPassword); ?>" readonly>
+            <!-- <input type="text" class="form-control" id="companyPassword" name="password" placeholder="" value="<//?php echo($virtualPassword); ?>" readonly> --><input type="password" class="form-control" id="companyAdmin" name="login_id" placeholder="">
             <div id="err_company_password"></div>
         </div>
 

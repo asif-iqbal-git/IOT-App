@@ -10,6 +10,23 @@ class StaffController extends CI_Controller {
 
     }
 
+    public function addStaff()
+    {
+        $userData = $this->session->userdata('userData');
+        // $data['staff'] = $this->loginmodel->get_staff_info();
+        $data['staff_designation'] = $this->getStaffDesignation();
+
+        if($userData){
+            $this->load->view('libs');                                     
+            $this->load->view('Ug/universalmainbody');
+            $this->load->view('companyAdmin/addStaff', $data);
+            // $this->load->view('Ug/universalfooter');
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message'); 
+        }
+    }
+
     public function update_staff_details(){
         
         $data['staff'] = $this->loginmodel->get_staff_info();
@@ -35,10 +52,19 @@ class StaffController extends CI_Controller {
     }
     public function updateStaffInfo()
     {    
-         $id = $this->input->post('staff_uuid');
-         $val= "hy";
-         echo json_encode($val);
+         $id = $this->input->post('id');
+         $staffInfo = $this->loginmodel->getSingleStaffInfo($id);
+         
+         echo json_encode($staffInfo);
     }
+
+    public function getStaffDesignation()
+    {
+        return $this->loginmodel->getDesignation();
+    }
+
+
+
    /* public function get_single_emp_id(){
 
         $id = $this->input->post('staff_uuid');

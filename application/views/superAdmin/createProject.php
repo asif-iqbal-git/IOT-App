@@ -24,22 +24,40 @@
     <form method="POST" action="SuperAdminController/saveProjectInfo">
 
         <!-- <//?php print_r($companyInfo); ?>   -->
-        <div class="form-group">
+       
+  <!--     <div class="form-group">
             <label for="">Company Name</label>
             <select id="" name="company_uuid" class="form-control">
                 <option selected>Choose Company Name</option>
 
-                <?php 
+                <//?php 
                if(isset($companyInfo) && !empty($companyInfo)){
                for($i = 0 ; $i < count($companyInfo); $i++) { ?>
-                <?php if(isset($companyInfo[$i]->company_uuid)){ ?>
-                    <option value="<?= $companyInfo[$i]->created_by; ?>"> 
-                        <?= $companyInfo[$i]->company_name; ?>
-                        <?php }?>
+                <//?php if(isset($companyInfo[$i]->company_uuid)){ ?>
+                    <option value="<//?= $companyInfo[$i]->created_by; ?>"> 
+                        <//?= $companyInfo[$i]->company_name; ?>
+                        <//?php }?>
                     </option>
-                <?php }} ?>
+                <//?php }} ?>
             </select>
          </div>
+ -->
+         <div class="form-group">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="" class="mt-2"><h5>Company Name</h5></label>
+                </div>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" id="" name="" 
+                    value="<?php echo $companyInfo[0]->company_name; ?>"  readonly>
+                    </div>
+                </div>
+            <input type="hidden" id="" name="company_uuid" 
+            value="<?php echo $companyInfo[0]->company_uuid; ?>" />
+
+         </div>
+
+<hr>
 
          <!-- <div class="form-group">
             <label for="">Assign To Company User</label>
@@ -84,7 +102,7 @@
                <!------------ Project admin dropdown ------------>
  <!-- <//?php    var_dump($projectAdminByCompany[0]->staff_uuid); ?> -->
         <div class="form-group">
-            <label for="">Project Admin Name</label>
+            <label for="">Select Existing Project Admin</label>
                 <select id="id_proj_admin_name" name="staff_uuid" class="form-control">
                     <option value='0'>Select project admin</option>
                     <?php                             

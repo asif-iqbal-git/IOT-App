@@ -31,6 +31,7 @@
          //   var_dump(($staff[0]->staff_uuid));die();
           $count = 1;
              foreach($staff as $row){
+
           //   for(var $i=0; $i < count($staff); $i++ ) {  
                 echo "<tr>";
                 echo "<td>".$count."</td>";
@@ -45,7 +46,7 @@
                 echo "<td>".$row->isActive."</td>";
                 echo "<td>".$row->created_by."</td>";
                 echo "<td>".$row->created_datetime."</td>";
-                echo "<td>"."<input type='button' class='btn btn-success' data-toggle='modal' data-target='#exampleModal' value='Update' onclick='update_details();'>"."</td>";                        
+                echo "<td>"."<input type='button' class='btn btn-success' data-toggle='modal' data-target='#exampleModal' id='$row->login_id' value='Update' onclick='update_details(this.id);'>"."</td>";                        
                 echo "</tr>"; 
                 $count++;
         }
@@ -174,8 +175,7 @@
 
 <script> 
 
-
-// Submitting the form after update staff information
+ 
  
 
   //load bootstrap table
@@ -189,27 +189,24 @@
     $('#myInput').trigger('focus')
   })
   
-  function update_details(){
+  function update_details(staff_login_id){
     //after update button click, it will send single staff id to controller,and controller will return all information about staff according to id, that will edit 
     
     //without ajax
+    //alert(staff_login_id);
 
-
-    //get single staff uuid
-    var value = document.getElementById('updateFormId').value;
-    
-    alert(value)
+   
  $.ajax({
          async: false,
          url: "<?= base_url('StaffController/updateStaffInfo') ?>",
          type: 'POST',
-         data: {id: 1},
+         data: {id: staff_login_id},
           
          success: function(data, textStatus, jqXHR) {
-             alert(data);  //data return false if no data
+            // alert(data);     //data return false if no data
              var json_data = $.parseJSON(data);
              
-             
+             console.log(json_data);
              
          },
          error: function(jqXHR, textStatus, errorThrown) {

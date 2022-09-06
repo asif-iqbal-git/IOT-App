@@ -46,6 +46,7 @@ function __construct() {
         }
     }
     */
+
     public function Login() {
 
         $login_data['login_id'] = $this->input->post('username');       
@@ -85,6 +86,6 @@ function __construct() {
 
     public function checkSSN() {
         $val = $this->session->userdata('dootLoginDetails');
-        var_dump($val);
+        //var_dump($val);
     }
 }
