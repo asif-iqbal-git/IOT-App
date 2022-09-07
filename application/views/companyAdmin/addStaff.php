@@ -22,56 +22,56 @@
     <div class="card">
   <div class="card-body">
     <!-- form -->
-    <form method="POST" action="SuperAdminController/saveCompanyInfo">
+    <form method="POST" action="StaffController/saveStaffInfo">
     <i class="bi bi-align-bottom"></i>
         <div class="form-group">
             <label for="">Staff Name</label>
-            <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Eg. ZMQ Development">
+            <input type="text" class="form-control" id="staff_name" name="staff_name" placeholder="Eg. Mitlesh Kumar">
             <div id="err_company_name"></div>
         </div>
 
         <div class="form-group">
             <label for="">Staff Age</label>
-            <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Eg. ZMQ Development">
+            <input type="text" class="form-control" id="staff_age" name="staff_age" placeholder="Eg. 24">
             <div id="err_company_name"></div>
         </div>
         
         <label for="">Staff Gender</label><br/>
         <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="staffGender" id="inlineRadio1" value="0" checked>
+        <input class="form-check-input" type="radio" name="staff_gender" id="inlineRadio1" value="0" checked>
         <label class="form-check-label" for="inlineRadio1">Male</label>
         </div>
         <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="staffGender" id="inlineRadio2" value="1">
+        <input class="form-check-input" type="radio" name="staff_gender" id="inlineRadio2" value="1">
         <label class="form-check-label" for="inlineRadio2">Female</label>
         </div>
         <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="staffGender" id="inlineRadio3" value="2">
+        <input class="form-check-input" type="radio" name="staff_gender" id="inlineRadio3" value="2">
         <label class="form-check-label" for="inlineRadio3">Other</label>
         </div>
         <div>&nbsp;</div>
 
         <div class="form-group">
             <label for="">Staff PhoneNo</label>
-            <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Eg. ZMQ Development">
+            <input type="text" class="form-control" id="staff_phone" name="staff_phone" placeholder="Eg. 9188776655">
             <div id="err_company_name"></div>
         </div>
 
         <div class="form-group">
             <label for="">Staff Email </label>
-            <input type="email" class="form-control" id="company_email" name="company_email" placeholder="Eg. Example@companyname.com">
+            <input type="email" class="form-control" id="staff_email" name="staff_email"  placeholder="Eg. Example@companyname.com">
             <div id="err_email_addres"></div>
         </div>
 
         <div class="form-group">
             <label for="">Staff Address</label>
-            <textarea class="form-control" id="company_location" name="company_location"></textarea>
+            <textarea class="form-control" id="staff_address" name="staff_address"></textarea>
             <div id="err_company_location"></div>
          </div>
          <!-- <//?php var_dump($staff_designation[0]);?>   -->
         <div class="form-group">
             <label for="">Staff Designation</label>
-            <select id="company_type" name="company_type" class="form-control">
+            <select id="company_type" name="staff_designation" class="form-control">
             <option value="0">Choose Staff Designation</option>
             <?php  for($i = 0; $i < count($staff_designation); $i++){ ?>  
             
@@ -94,14 +94,14 @@
                 Create Credentials For Staff
             </div>
         <div class="form-group">
-            <label for="">Company Admin Name</label>
-            <input type="text" class="form-control" id="companyAdmin" name="login_id" placeholder="">
+            <label for="">Staff UserId</label>
+            <input type="text" class="form-control" id="staff_login_id" name="staff_login_id" placeholder="">
             <div id="err_companyAdmin"></div>
         </div>
 
         <div class="form-group">
-            <label for="">Company Admin Password</label>
-            <!-- <input type="text" class="form-control" id="companyPassword" name="password" placeholder="" value="<//?php echo($virtualPassword); ?>" readonly> --><input type="password" class="form-control" id="companyAdmin" name="login_id" placeholder="">
+            <label for="">Staff Password</label>
+            <!-- <input type="text" class="form-control" id="companyPassword" name="password" placeholder="" value="<//?php echo($virtualPassword); ?>" readonly> --><input type="password" class="form-control" id="staff_password" name="staff_password" placeholder="">
             <div id="err_company_password"></div>
         </div>
 
@@ -115,7 +115,8 @@
 </div>
     </body>
     <script>
-        function formValidation()
+        
+        function __formValidation()
         {
             var company_name = document.getElementById("company_name").value;
             var err_company_name = document.getElementById("err_company_name");

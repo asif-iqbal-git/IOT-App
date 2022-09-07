@@ -207,7 +207,7 @@ class SuperAdminController extends CI_Controller {
     {   
         $userData = $this->session->userdata('userData');
      
-         $staff_data = $this->loginmodel->fetchStaffUUID($userData['login_id']);      
+        $staff_data = $this->loginmodel->fetchStaffUUID($userData['login_id']);      
       //   var_dump($staff_data);die();
         $virtualPassword['virtualPassword'] = $this->generateRandomString();
          // var_dump($staff_data);

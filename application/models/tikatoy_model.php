@@ -589,6 +589,20 @@ where BlockId= ?",array($data['BlockId']));
         }        
       // return "Arif khan";
     }
+
+    public  function storeMasterStaffInfo($staff_data,$staff_login_data)
+    {
+        // var_dump($staff_data);
+        $ssn_login_id = $staff_data['login_id'];
+       
+        $this->db->set('staff_uuid', 'UUID()', FALSE);
+        $this->db->insert('master_staff', $staff_data);
+
+       // echo("<pre>");
+        //var_dump($ssn_login_id);
+        //var_dump($staff_data);
+        die();
+    }
     
     public function storeProjectInfo($data_project, $data_login, $data_master_staff)
     {
@@ -675,6 +689,23 @@ where BlockId= ?",array($data['BlockId']));
         }   
     }
 
+    public function getLevelByDesignation($designation_id)
+    {
+        $query = "SELECT level,designation_name
+        FROM tblDesignation
+        WHERE designation_id ='$designation_id'" ;
+   
+          $q = $this->db->query($query);
+          
+         //  print_r($q->result());die();
+        
+         if ($q->num_rows() > 0) {
+                return $q->result();       
+           }   
+           else {
+               return FALSE;
+           }              
+    }
     public function getCompanyUserId()
     {
        $query = "SELECT DISTINCT staff_uuid,login_id FROM tblLogin WHERE level = '1'";

@@ -50,6 +50,44 @@ class StaffController extends CI_Controller {
         redirect('staff_details');
 
     }
+
+    public function saveStaffInfo()
+    {
+        $userData = $this->session->userdata('userData');     
+        $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
+ 
+ 
+        
+        $staff_data['company_uuid'] = $company_info[0]->company_uuid;       
+        $staff_data['login_id'] = $userData['login_id'];       
+
+        $staff_data['emp_name'] = $this->input->post('staff_name');       
+        $staff_data['emp_age'] = $this->input->post('staff_age');
+        $staff_data['emp_gender'] = $this->input->post('staff_gender');
+        $staff_data['emp_phone'] = $this->input->post('staff_phone');
+        $staff_data['emp_email'] = $this->input->post('staff_email');
+        $staff_data['emp_address'] = $this->input->post('staff_address');
+        $staff_data['designation_id'] = $this->input->post('staff_designation');
+        
+        $level = $this->tikatoy_model->getLevelByDesignation($staff_data['designation_id']);
+       
+        $staff_data['level'] = $level[0]->level;
+       
+        $staff_data['isActive'] = 1;
+        $staff_data['created_by'] = $company_info[0]->created_by;
+         
+        
+        $staff_login_data['login_id'] = $this->input->post('staff_login_id');
+        $staff_login_data['password'] = $this->input->post('staff_password');
+    
+       
+        $staff_data['level'] = $level[0]->level;
+        $this->tikatoy_model->storeMasterStaffInfo($staff_data, $staff_login_data);
+        
+        // echo("<pre>");
+        // var_dump($staff_data);die();
+    }
+
     public function updateStaffInfo()
     {    
          $id = $this->input->post('id');
