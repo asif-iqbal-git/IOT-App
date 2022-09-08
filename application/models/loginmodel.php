@@ -488,7 +488,7 @@ class loginmodel extends CI_Model {
 
     public function getDesignation()
     {
-        $query = "SELECT * FROM tblDesignation";
+        $query = "SELECT * FROM tblDesignation WHERE level > 1";
 
         $q = $this->db->query($query);
         //print_r($q->result());die();

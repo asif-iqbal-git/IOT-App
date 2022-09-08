@@ -592,16 +592,44 @@ where BlockId= ?",array($data['BlockId']));
 
     public  function storeMasterStaffInfo($staff_data,$staff_login_data)
     {
-        // var_dump($staff_data);
+        // var_dump($staff_login_data);
+        // var_dump($staff_login_data['login_id']);
+        // var_dump($staff_login_data['password']);
+ 
         $ssn_login_id = $staff_data['login_id'];
        
         $this->db->set('staff_uuid', 'UUID()', FALSE);
         $this->db->insert('master_staff', $staff_data);
-
-       // echo("<pre>");
-        //var_dump($ssn_login_id);
+        
+      //  var_dump($ssn_login_id);
+        
+        $staff_uuid = $this->db->select('staff_uuid')
+                         ->from('master_staff')        
+                         ->where('login_id', $ssn_login_id)->get();
+        
+        
+      //  var_dump($staff_uuid->row());
+        
+        if ($staff_uuid->num_rows() > 0) {
+            //echo "True";
+            
+           
+            $data = array(
+                'staff_uuid' => $staff_uuid->result_array()[0]['staff_uuid'],
+                'login_id'   => $staff_login_data['login_id'],
+                'password'   => $staff_login_data['password'],
+                'level'      => $staff_login_data['level'],
+                'isActive'   => 1
+            );
+           // var_dump($data);die();
+            $this->db->insert('tblLogin',$data);
+        }else{
+            // $staff_uuid->row_data();
+            return Null;
+        } 
+       
         //var_dump($staff_data);
-        die();
+        //die();
     }
     
     public function storeProjectInfo($data_project, $data_login, $data_master_staff)
