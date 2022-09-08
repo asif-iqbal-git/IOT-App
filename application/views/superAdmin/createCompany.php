@@ -66,7 +66,7 @@
             </div>
         <div class="form-group">
             <label for="">Company Admin Name</label>
-            <input type="text" class="form-control" id="companyAdmin" name="login_id" placeholder="">
+            <input type="text" class="form-control" id="companyAdmin" name="company_login_id" placeholder="">
             <div id="err_companyAdmin"></div>
         </div>
 

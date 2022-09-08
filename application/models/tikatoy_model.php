@@ -660,20 +660,53 @@ where BlockId= ?",array($data['BlockId']));
         $this->db->insert('master_login', $data);
     }
 
-    public function storeCompanyAdminInfo($data, $data_login, $data_master_staff)
+    public function storeCompanyAdminInfo($data_company, $data_master_staff, $data_login)
     {
-        // print_r($data);
-     //   print_r($data_login);die();
-     
-        
-     //set id column value as UUID        
+        // echo("<pre>");
+        // print_r($data_login);die();
+  
+     $company_admin_loginId = $data_company['company_admin_loginId'];
+            
         $this->db->set('company_uuid', 'UUID()', FALSE);
-        $this->db->insert('master_company', $data);
+        $this->db->insert('master_company', $data_company);
+
+        $company_uuid = $this->db->select('company_uuid')
+                            ->from('master_company')
+                            ->where('company_admin_loginId',$company_admin_loginId)
+                            ->get();
+       
+        $data_masterStaff = array(
+            "company_uuid"   => $company_uuid->result_array()[0]['company_uuid'],
+            "login_id"       => $data_master_staff['login_id'],
+            "emp_name"       => $data_master_staff['emp_name'],
+            "emp_age"        => $data_master_staff['emp_age'],
+            "emp_gender"     => $data_master_staff['emp_gender'],
+            "emp_phone"      => $data_master_staff['emp_phone'],
+            "emp_email"      => $data_master_staff['emp_email'],
+            "emp_address"    => $data_master_staff['emp_address'],
+            "level"          => $data_master_staff['level'],
+            "designation_id" => $data_master_staff['designation_id'],
+            "isActive"       => $data_master_staff['isActive'],
+            "created_By"     => $data_master_staff['created_By'],
+        );
 
         $this->db->set('staff_uuid', 'UUID()', FALSE);
-        $this->db->insert('tblLogin', $data_login);
-     
-        $this->db->insert('master_staff', $data_master_staff);
+        $this->db->insert('master_staff', $data_masterStaff);
+        
+        $staff_uuid = $this->db->select('staff_uuid')
+                            ->from('master_staff')
+                            ->where('login_id',$company_admin_loginId)
+                            ->get();
+                            
+        $data_login_ = array(
+            "staff_uuid" => $staff_uuid->result_array()[0]['staff_uuid'],
+            "login_id"   => $data_login['login_id'],
+            "password"   => $data_login['password'],
+            "level"      => $data_login['level'],
+            "isActive"   => $data_login['isActive'],
+        );        
+
+        $this->db->insert('tblLogin', $data_login_);      
     }
 
 

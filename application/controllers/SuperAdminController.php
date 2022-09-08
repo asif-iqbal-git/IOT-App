@@ -235,47 +235,45 @@ class SuperAdminController extends CI_Controller {
     {
          //session data
        $userData = $this->session->userdata('userData');
-        
-       //current_logedIn staff_uuid
+       $company_admin_level = 1;
+     
        $current_logedIn_staffUuid = $this->loginmodel->fetchStaffUUID($userData['login_id']);                      
         //For master_company
         $data_company['company_name'] = $this->input->post('company_name');
+        $data_company['company_admin_loginId'] = $this->input->post('company_login_id');
         $data_company['company_type'] = $this->input->post('company_type');
         $data_company['company_location'] = $this->input->post('company_location');
         $data_company['company_email'] = $this->input->post('company_email');
         $data_company['company_location'] = $this->input->post('company_location');
-        // $data_company['company_contact'] = $this->input->post('company_contact');
+         
         $data_company['isActive'] = 1;
         $data_company['created_By'] = $current_logedIn_staffUuid;
       
+        //---------------------For master_staff----------------------------------
+     
+        //  $this->updateMasterStaff($current_logedIn_staffUuid);
+        $data_master_staff['company_uuid'] = "";    
+        $data_master_staff['login_id'] = $this->input->post('company_login_id');
+        
+        $data_master_staff['emp_name'] = "";
+        $data_master_staff['emp_age'] =  0;
+        $data_master_staff['emp_gender'] =  0;
+        $data_master_staff['emp_phone'] = "";
+        $data_master_staff['emp_email'] = "";
+        $data_master_staff['emp_address'] = "";
+        $data_master_staff['level'] = $company_admin_level;
+        $data_master_staff['designation_id'] = 3;
+        $data_master_staff['isActive'] = "1";
+        $data_master_staff['created_By'] = $current_logedIn_staffUuid;
        
         //For tblLogin - for Company Admin
-        $data_login['login_id'] = $this->input->post('login_id');
+        $data_login['login_id'] = $this->input->post('company_login_id');
         $data_login['password'] = $this->input->post('password');         
         $data_login['level'] = "1";       
         $data_login['isActive'] = "1";
         $company_admin_level = $data_login['level'];  
-        $company_adm_log_id =  $data_login['login_id'];
-      
-        //For master_company
-        $data_company['company_admin_loginId'] = $company_adm_log_id;
-        
-        //For master_staff
-     
-        //  $this->updateMasterStaff($current_logedIn_staffUuid);
-            $data_master_staff['staff_uuid'] = "";
-            $data_master_staff['login_id'] = $company_adm_log_id;           
-            $data_master_staff['emp_name'] = "";
-            $data_master_staff['emp_age'] =  0;
-            $data_master_staff['emp_phone'] = "";
-            $data_master_staff['emp_email'] = "";
-            $data_master_staff['emp_address'] = "";
-            $data_master_staff['level'] = $company_admin_level;
-            $data_master_staff['designation_id'] = "";
-            $data_master_staff['isActive'] = "1";
-            $data_master_staff['created_By'] = $current_logedIn_staffUuid;
-       
-        $this->tikatoy_model->storeCompanyAdminInfo($data_company, $data_login,$data_master_staff);
+         
+        $this->tikatoy_model->storeCompanyAdminInfo($data_company,$data_master_staff, $data_login);
         $this->session->set_flashdata('add_company_admin', 'Company & Company Admin has been Created');
 
         redirect(base_url('createCompany')); 
