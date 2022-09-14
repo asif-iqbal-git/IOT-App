@@ -42,78 +42,59 @@
             </select>
          </div>
  -->
-         <div class="form-group">
+         <!-- <div class="form-group">
             <div class="row">
                 <div class="col-md-3">
                     <label for="" class="mt-2"><h5>Company Name</h5></label>
                 </div>
                 <div class="col-md-9">
                     <input type="text" class="form-control" id="" name="" 
-                    value="<?php echo $companyInfo[0]->company_name; ?>"  readonly>
+                    value="<//?php echo $companyInfo[0]->company_name; ?>"  readonly>
                     </div>
                 </div>
             <input type="hidden" id="" name="company_uuid" 
-            value="<?php echo $companyInfo[0]->company_uuid; ?>" />
+            value="<//?php echo $companyInfo[0]->company_uuid; ?>" />
 
-         </div>
-
-<hr>
-
-         <!-- <div class="form-group">
-            <label for="">Assign To Company User</label>
-            <select id="" name="company_login_id" class="form-control">
-                <option selected>Choose UserId Name</option>
-                <//?php for($i = 0 ; $i < count($companyUserId); $i++) { ?>
-                    <option value="<//?= $companyUserId[$i]->auto_loginId; ?>"> 
-                        <//?= $companyUserId[$i]->userId; ?>
-                    </option>
-                <//?php } ?>
-            </select>
          </div> -->
 
+ 
+
+       
 
         <div class="form-group">
             <label for="">Project Name</label>
-            <input type="text" class="form-control" id="" name="project_name" placeholder="Eg. Tika Toy">
+            <input type="text" class="form-control" id="" name="project_name" placeholder="Eg. Tika Toy" required>
         </div>
-  <!--      
-        <p>&nbsp;</p>
-        <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="customRadioInline1" name="customRadioInline" class="custom-control-input">
-            <label class="custom-control-label" for="customRadioInline1">Create Tikka Toy</label>
-        </div>
-        <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="customRadioInline2" name="customRadioInline" class="custom-control-input">
-            <label class="custom-control-label" for="customRadioInline2">Create Pregnancy Toy</label>
-        </div>
-        <p>&nbsp;</p>
-                -->
+ 
         <div class="form-group">
             <label for="">Project Location</label>
-            <textarea class="form-control" name="project_location"></textarea>
+            <textarea class="form-control" name="project_location" required></textarea>
         </div>
 
-       
-     
+        <div class="col-auto float-right">
+            <button type="submit" class="btn btn-primary mb-2" name="submit">Submit</button>
+        </div>
+     <!-- 
         <hr>
+
         <div class="alert alert-primary" role="alert">
-                Create Credentials For Project Admin
+        Select From Existing Project Admin -Or- Create Credentials For Project Admin 
             </div>
-               <!------------ Project admin dropdown ------------>
- <!-- <//?php    var_dump($projectAdminByCompany[0]->staff_uuid); ?> -->
+                
+  <//?php    var_dump($projectAdminByCompany[0]->staff_uuid); ?> 
         <div class="form-group">
             <label for="">Select Existing Project Admin</label>
                 <select id="id_proj_admin_name" name="staff_uuid" class="form-control">
                     <option value='0'>Select project admin</option>
-                    <?php                             
+                    <//?php                             
                         if(isset($projectAdminByCompany) && !empty($projectAdminByCompany)){
                             for($i = 0 ; $i < count($projectAdminByCompany); $i++) { ?>
                                 
-                            <option value="<?= $projectAdminByCompany[$i]->staff_uuid; ?>"> 
-                                    <?= $projectAdminByCompany[$i]->login_id; ?>
+                            <option value="<//?= $projectAdminByCompany[$i]->staff_uuid; ?>"> 
+                                    <//?= $projectAdminByCompany[$i]->login_id; ?>
                                     
                                 </option>
-                                <?php
+                                <//?php
                             }
                         }
                     ?>
@@ -138,10 +119,8 @@
                 <input type="password" class="form-control" id="" name="password" placeholder="">
             </div>
      </div>
-        
-        <div class="col-auto float-right">
-            <button type="submit" class="btn btn-primary mb-2" name="submit">Submit</button>
-            </div>
+        -->
+     
 </form>
   </div>
 </div>
@@ -150,12 +129,12 @@
 </div>
     </body>
     <script>
-        var proAdminDiv = document.getElementById("credentials_section_show");
-        //var dropDown = document.getElementById("id_proj_admin_name"); 
+        // var proAdminDiv = document.getElementById("credentials_section_show");
+        // //var dropDown = document.getElementById("id_proj_admin_name"); 
 
-        window.onload = function() {
-            proAdminDiv.style.display = 'none';
-        };
+        // window.onload = function() {
+        //     proAdminDiv.style.display = 'none';
+        // };
 
  
         function show_hide_projectAdmin()

@@ -645,14 +645,12 @@ where BlockId= ?",array($data['BlockId']));
         $this->db->insert('master_staff', $data_master_staff);
     }
 
-    public function storeProjectInfo2($data_project, $data_master_staff)
+    public function storeProjectDetails($data_project)
     {
         // print_r($data);
         // print_r($data_login);die();
         $this->db->set('project_uuid', 'UUID()', FALSE);
         $this->db->insert('master_project', $data_project);
-        
-        $this->db->insert('master_staff', $data_master_staff);
     }
     
     public function storeProjectAdminInfo($data)

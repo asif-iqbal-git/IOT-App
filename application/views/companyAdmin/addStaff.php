@@ -11,13 +11,13 @@
     </nav>
         <div class="col-md-9 mx-auto">
 
-        <?php if($this->session->flashdata('add_company_admin')) { ?>
+        <?php if($this->session->flashdata('add_company_admin_staff')) { ?>
     	<?php echo '<p class="alert alert-success mt-3 text-center" id="add">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>' 
-          .$this->session->flashdata('add_company_admin') . '</p>'; ?>
-	  	<?php } $this->session->unset_userdata('add_company_admin');  //unset session ?> 
+          .$this->session->flashdata('add_company_admin_staff') . '</p>'; ?>
+	  	<?php } $this->session->unset_userdata('add_company_admin_staff');  //unset session ?> 
 
     <div class="card">
   <div class="card-body">

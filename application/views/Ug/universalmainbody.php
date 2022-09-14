@@ -10,6 +10,11 @@
     <meta name="author" content="">
 
     <title>IOT App</title>
+    <style type="text/css">
+        .sidebar-brand-icon{
+            font-size: 1.4rem!important;
+        }
+        </style>
 <?php 
  $userData = $this->session->userdata('userData');
 //  var_dump($userData)
@@ -28,19 +33,22 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" 
+            href="<?= base_url('dashboard'); ?>">
+                <div class="sidebar-brand-icon">
+                     <?php echo $userData['login_id']; ?>
+                      
                 </div>
-                <div class="sidebar-brand-text mx-3">IOT App</div>
+                <!-- <div class="sidebar-brand-text mx-3">IOT App</div> -->
             </a>
-
+ 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="<?= base_url('dashboard'); ?>">
+                    
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -72,7 +80,7 @@
              <div class="bg-white py-2 collapse-inner rounded">
                  <!-- <h6 class="collapse-header">Custom Components:</h6> -->
                  <a class="collapse-item" href="<?= base_url('addStaff') ?>">Add Staff</a>
-                 <a class="collapse-item" href="<?= base_url('staff_details') ?>">Staff List</a>
+                 <!-- <a class="collapse-item" href="<?= base_url('staff_details') ?>">Staff List</a> -->
              </div>
          </div>
          <?php
@@ -129,11 +137,26 @@
                 ?> 
             </li>
 
+               <!-- Nav Item - Provider -->
+               <?php 
+          
+          if (isset($userData['level'])){
+              if($userData['level'] == '1') {
+              ?>
+      <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('assign-project'); ?>">
+              <i class="fas fa-fw fa-table"></i>
+              <span>Assign Project To Staff</span></a>
+      </li>
+      <?php
+           } }
+          ?> 
+
             <!-- Nav Item - SuperAdmin Menu - Project Setup -->
                <?php
               
                 if (isset($userData['level'])){
-                    if($userData['level'] == '1') {
+                    if($userData['level'] == '1--') {
                     ?>
                 <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse_S_admin1"
@@ -158,7 +181,7 @@
             <?php
                 
                 if (isset($userData['level'])){
-                    if($userData['level'] == '1') {
+                    if($userData['level'] == '1--') {
                     ?>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse_c_admin"
@@ -183,7 +206,7 @@
             <?php
                 
                 if (isset($userData['level'])){
-                    if($userData['level'] == '1') {
+                    if($userData['level'] == '1--') {
                     ?>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
@@ -205,6 +228,10 @@
                 ?> 
             </li>
 
+
+            <?php if (isset($userData['level'])){
+                    if($userData['level'] == '1--') {
+                ?>
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
@@ -221,8 +248,12 @@
                     </div>
                 </div>
             </li>
-
-               
+            <?php
+                 } }
+                ?> 
+            <?php if (isset($userData['level'])){
+                    if($userData['level'] == '1--') {
+                ?>
 
              <!-- Nav Item - Communication Collapse Menu -->
              <li class="nav-item">
@@ -240,12 +271,14 @@
                     </div>
                 </div>
             </li>
-           
+           <?php
+                 } }
+                ?> 
             <!-- Nav Item - Provider -->
             <?php 
           
                 if (isset($userData['level'])){
-                    if($userData['level'] == '1') {
+                    if($userData['level'] == '1--') {
                     ?>
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('providerregister'); ?>">
@@ -255,6 +288,11 @@
             <?php
                  } }
                 ?> 
+
+        <?php 
+          if (isset($userData['level'])){
+              if($userData['level'] == '1--') {
+              ?>
             <!-- Nav Item - Vaccine Planner-->
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('vaccineplanner'); ?>">
@@ -276,7 +314,9 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span>About Us</span></a>
             </li>
-
+            <?php
+                 } }
+                ?> 
             <!-- Divider -->
             <!-- <hr class="sidebar-divider"> -->
 

@@ -64,6 +64,8 @@ $route['childvaccine_card']  ='TikaToy_Controller/Child_Vaccine_Status';
 $route['childCommunication']  ='Welcome/childCommunication';
 
 
+$route['dashboard'] = 'DashboardController/dashboard';
+
 $route['addStaff'] = 'StaffController/addStaff';
 $route['staff_details'] = 'SuperAdminController/staff_details';
 $route['update_staff'] = 'StaffController/update_staff_details';
@@ -78,5 +80,8 @@ $route['assignToysToProjectAdmin'] = 'SuperAdminController/assignToysToProjectAd
 $route['viewAssignToys'] = 'SuperAdminController/viewAssignToys';
 
 $route['projectStatus'] = 'SuperAdminController/projectStatus';
+
+$route['assign-project'] = 'StaffController/assignProjectToPAdmin';
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

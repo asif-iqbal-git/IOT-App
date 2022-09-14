@@ -84,7 +84,9 @@ class StaffController extends CI_Controller {
        
         $staff_login_data['level'] = $level[0]->level;
         $this->tikatoy_model->storeMasterStaffInfo($staff_data, $staff_login_data);
-        
+        $this->session->set_flashdata('add_company_admin_staff', 'Staff has been Created');
+
+        redirect(base_url('addStaff')); 
         // echo("<pre>");
         // var_dump($staff_data);die();
     }
@@ -102,7 +104,22 @@ class StaffController extends CI_Controller {
         return $this->loginmodel->getDesignation();
     }
 
+    public function assignProjectToPAdmin()
+    {
+        $userData = $this->session->userdata('userData');
+        // $data['staff'] = $this->loginmodel->get_staff_info();
+        $data['staff_designation'] = $this->getStaffDesignation();
 
+        if($userData){
+            $this->load->view('libs');                                     
+            $this->load->view('Ug/universalmainbody');
+            $this->load->view('companyAdmin/assignProjectToPAdmin', $data);
+            // $this->load->view('Ug/universalfooter');
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message'); 
+        }
+    }
 
    /* public function get_single_emp_id(){
 
