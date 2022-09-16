@@ -7,6 +7,7 @@ class StaffController extends CI_Controller {
         $this->load->helper('url');
         $this->load->model('loginmodel');
         $this->load->model('tikatoy_model');
+        $this->load->model('staff_model');
 
     }
 
@@ -108,17 +109,44 @@ class StaffController extends CI_Controller {
     {
         $userData = $this->session->userdata('userData');
         // $data['staff'] = $this->loginmodel->get_staff_info();
+        $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
+        $company_uuid = $company_info[0]->company_uuid;
         $data['staff_designation'] = $this->getStaffDesignation();
 
         if($userData){
             $this->load->view('libs');                                     
             $this->load->view('Ug/universalmainbody');
+
+            $data['Padminlist'] = $this->staff_model->fetchPAdminByCompany                  ($company_uuid);
+            $data['projectList'] = $this->staff_model->fetchProjectByCompany($company_uuid);
             $this->load->view('companyAdmin/assignProjectToPAdmin', $data);
             // $this->load->view('Ug/universalfooter');
         }else{
             $this->load->view('libs');
             $this->load->view('welcome_message'); 
         }
+    }
+
+    public function assign_Project_To_PAdmin()
+    {
+        $data['projectAdmin_id'] = $this->input->post('projectAdmin_id');
+        $data['checked_id'] = $this->input->post('checked_id');
+        
+        $description = $this->input->post("description");
+        $voucher_no = $this->input->post("voucher_no");
+        $price = $this->input->post("price");
+
+        foreach($description as $row){
+            $data['description'] = $description[$i];
+            $data['voucher_no'] = $voucher_no[$i];
+            $data['price'] = $price[$i];
+           
+            $this->db->insert("your_table",$data);
+             
+        }
+
+
+        return print_r(json_encode($data));
     }
 
    /* public function get_single_emp_id(){
