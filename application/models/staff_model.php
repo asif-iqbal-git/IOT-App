@@ -54,5 +54,20 @@
            }  
     }
 
+    public function getMappedData()
+    {
+        $query = "SELECT project_admin_uuid,project_uuid FROM project_projectAdmin_mapping WHERE isActive = '1' ";
+        $q = $this->db->query($query);
+          
+        //   var_dump($q->result());die();
+        
+         if ($q->num_rows() > 0) {
+                return $q->result();       
+           }   
+           else {
+               return FALSE;
+           }  
+    }
+
 }
 

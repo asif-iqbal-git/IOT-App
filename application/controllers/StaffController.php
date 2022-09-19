@@ -129,24 +129,76 @@ class StaffController extends CI_Controller {
 
     public function assign_Project_To_PAdmin()
     {
-        $data['projectAdmin_id'] = $this->input->post('projectAdmin_id');
-        $data['checked_id'] = $this->input->post('checked_id');
-        
-        $description = $this->input->post("description");
-        $voucher_no = $this->input->post("voucher_no");
-        $price = $this->input->post("price");
+        $msg  = "Project Admin Already Exits";
+        $msg2 = "Project is assign to Selected Project Admin";
+        $msg3 = "This Project is already assign to Project Admin";
+        $msg4 = "Empty String Or Array";
 
-        foreach($description as $row){
-            $data['description'] = $description[$i];
-            $data['voucher_no'] = $voucher_no[$i];
-            $data['price'] = $price[$i];
+        $data['project_admin_uuid'] = $this->input->post('projectAdmin_id');
+        $data['project_uuid'] = $this->input->post('checked_id');
+        $data['isActive'] = 1;
+    
+        //fetch all mapping data and check it with entered value
+        $mapped_data = $this->staff_model->getMappedData();
+    
+        if(empty($data['project_admin_uuid'])){
            
-            $this->db->insert("your_table",$data);
-             
+            return print_r(json_encode($msg4));
         }
+        
+        if(empty($data['project_uuid'])){
+           
+            return print_r(json_encode($msg4));
+        }
+        
+        if(isset($mapped_data) && !empty($mapped_data)){
 
+        for($i=0 ; $i < count($mapped_data);  $i++){
+        
+            //if project admin is matched,then check for project,if same admin get same project return false
+            if($mapped_data[$i]->project_admin_uuid == $data['project_admin_uuid']){
+                 
+                foreach($data['project_uuid'] as $row)
+                 {
+                    if($mapped_data[$i]->project_uuid == $row)
+                    {  
+                        return print_r(json_encode($msg3));
+                    }
+                 }
+                
+               return  print_r(json_encode($msg));
+            }else{
+                //Diff Project admin dont have same project.
+                foreach($data['project_uuid'] as $row)
+                {
+                   if($mapped_data[$i]->project_uuid == $row)
+                   {  
+                       return print_r(json_encode($msg3));
+                   }else{
+                   //diff admin - have - diff project
+                    foreach($data['project_uuid'] as $row){
+                        $data['project_admin_uuid'] = $this->input->post('projectAdmin_id');
+                        $data['project_uuid'] = $row;
+                        $data['isActive'] = 1;
+                        $this->db->insert("project_projectAdmin_mapping", $data);
+                     //   print_r(json_encode($row));
+                    }
+                  
+                    return print_r(json_encode($msg2));
+                   }
+                }
+                
+            }
+        }
+      
+        // print_r(json_encode($mapped_data[0]->project_admin_uuid));
+        // print_r(json_encode($data['project_admin_uuid']));
 
-        return print_r(json_encode($data));
+        // print_r(json_encode( $mapped_data[0]->project_uuid));
+        // print_r(json_encode($data['project_uuid']));
+         
+      }
+    return false;
     }
 
    /* public function get_single_emp_id(){
