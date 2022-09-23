@@ -118,7 +118,15 @@ class StaffController extends CI_Controller {
             $this->load->view('Ug/universalmainbody');
 
             $data['Padminlist'] = $this->staff_model->fetchPAdminByCompany                  ($company_uuid);
-            $data['projectList'] = $this->staff_model->fetchProjectByCompany($company_uuid);
+            
+            $data['projectStatus'] = $this->staff_model->fetchProjectStatus($company_uuid);
+           
+            $projectStatus = $data['projectStatus'];
+            
+            $data['projectList'] = $this->staff_model->fetchProjectByCompany($company_uuid,$projectStatus);
+            
+            $data['assignedProjects'] = $this->staff_model->fetchAssignedProjects($company_uuid,$projectStatus);
+
             $this->load->view('companyAdmin/assignProjectToPAdmin', $data);
             // $this->load->view('Ug/universalfooter');
         }else{
@@ -126,21 +134,20 @@ class StaffController extends CI_Controller {
             $this->load->view('welcome_message'); 
         }
     }
-
+//not using----------------------------------------------------------
     public function assign_Project_To_PAdmin()
     {
         $msg  = "Project Admin Already Exits";
         $msg2 = "Project is assign to Selected Project Admin";
         $msg3 = "This Project is already assign to Project Admin";
         $msg4 = "Empty String Or Array";
-
+       
+      
         $data['project_admin_uuid'] = $this->input->post('projectAdmin_id');
         $data['project_uuid'] = $this->input->post('checked_id');
-        $data['isActive'] = 1;
-    
-        //fetch all mapping data and check it with entered value
-        $mapped_data = $this->staff_model->getMappedData();
-    
+       
+        
+       
         if(empty($data['project_admin_uuid'])){
            
             return print_r(json_encode($msg4));
@@ -150,9 +157,45 @@ class StaffController extends CI_Controller {
            
             return print_r(json_encode($msg4));
         }
+
+        foreach($data['project_uuid'] as $row){
+            $data['project_admin_uuid'] = $this->input->post('projectAdmin_id');
+            $data['project_uuid'] = $row;
+            $data['status'] = 1;
+            $data['isActive'] = 1;
+            $this->db->insert("project_projectAdmin_mapping", $data);
+         //   print_r(json_encode($row));
+        }
+       
+        return print_r(json_encode($msg2));
+       
+        //fetch all mapping data and check it with entered value
+        $mapped_data = $this->staff_model->getMappedData();
+    
+       
         
         if(isset($mapped_data) && !empty($mapped_data)){
+            for($i=0 ; $i < count($mapped_data);  $i++){
+                if($mapped_data[$i]->project_admin_uuid == $data['project_admin_uuid']){
 
+            //   print_r(json_encode($mapped_data[$i]->project_admin_uuid == $data['project_admin_uuid']));print_r('<br>');
+
+              foreach($data['project_uuid'] as $row)
+                 {
+                    // print_r('-');  print_r(json_encode($mapped_data[$i]->project_uuid == $row));
+                    if($mapped_data[$i]->project_uuid == $row)
+                    {  
+                         
+                        //This Project is already assign to Project Admin
+                        print_r(json_encode($row));
+                        
+                    }else{
+                         print_r(json_encode($msg2));
+                    }
+                 }
+        }
+    }
+            /*
         for($i=0 ; $i < count($mapped_data);  $i++){
         
             //if project admin is matched,then check for project,if same admin get same project return false
@@ -190,7 +233,8 @@ class StaffController extends CI_Controller {
                 
             }
         }
-      
+      */
+
         // print_r(json_encode($mapped_data[0]->project_admin_uuid));
         // print_r(json_encode($data['project_admin_uuid']));
 
@@ -200,6 +244,30 @@ class StaffController extends CI_Controller {
       }
     return false;
     }
+//not using----------------------------------------------------------
+    public function projectList()
+    {
+        $userData = $this->session->userdata('userData');
+        // $data['staff'] = $this->loginmodel->get_staff_info();
+       // $data['staff_designation'] = $this->getStaffDesignation();
+
+        if($userData){
+            $this->load->view('libs');                                     
+            $this->load->view('Ug/universalmainbody');
+            $this->load->view('staff/projectList');
+            // $this->load->view('Ug/universalfooter');
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message'); 
+        }
+    }
+
+
+
+
+
+
+
 
    /* public function get_single_emp_id(){
 

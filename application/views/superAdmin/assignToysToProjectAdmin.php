@@ -45,6 +45,7 @@
                 <!-- <label for="exampleFormControlSelect1">Example select</label> -->
                 <select required id="projectAdminId" name="projectAdminId" class="form-control">
                     <option value="">Select Project Admin</option>
+                    
                  <?php foreach($projectAdminInfo as $value): ?>
                     <option value="<?php echo $value->auto_loginId ?>"> 
                         <?php echo $value->userId; ?></option>

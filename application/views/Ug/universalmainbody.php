@@ -137,7 +137,7 @@
                 ?> 
             </li>
 
-               <!-- Nav Item - Provider -->
+               <!-- Nav Item - Assign Project To Staff -->
                <?php 
           
           if (isset($userData['level'])){
@@ -147,6 +147,21 @@
           <a class="nav-link" href="<?= base_url('assign-project'); ?>">
               <i class="fas fa-fw fa-table"></i>
               <span>Assign Project To Staff</span></a>
+      </li>
+      <?php
+           } }
+          ?> 
+
+           <!-- Nav Item - Provider -->
+           <?php 
+          
+          if (isset($userData['level'])){
+              if($userData['level'] == '1') {
+              ?>
+      <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('project-list'); ?>">
+              <i class="fas fa-fw fa-table"></i>
+              <span>Project List</span></a>
       </li>
       <?php
            } }
