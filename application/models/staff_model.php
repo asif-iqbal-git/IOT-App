@@ -78,7 +78,7 @@
     public function fetchAssignedProjects($company_uuid, $projectStatus)
     {
         $project_uuid = "";
-    //  var_dump($projectStatus);die();
+     
         for($i=0; $i < count($projectStatus); $i++){
            
                 $project_uuid_temp = explode(",", $projectStatus[$i]->project_uuid);
@@ -94,11 +94,14 @@
         AND            
         project_uuid IN ($project_uuid)"; 
                 
-            //-- project_uuid  NOT IN ('e743d690-3813-11ed-ad98-f44d304ae155','6fff912e-38b7-11ed-9604-f44d304ae155')"; 
+ 
+        // $query = "SELECT DISTINCT MS.emp_name,MP.project_name,PPM.project_admin_uuid,PPM.project_uuid FROM project_projectAdmin_mapping As PPM INNER JOIN master_staff As MS ON MS.staff_uuid = PPM.project_admin_uuid INNER JOIN master_project As MP ON MP.project_uuid = PPM.project_uuid WHERE MS.company_uuid ='$company_uuid' AND MP.project_uuid IN ($project_uuid)"; 
+
+ 
 
         $q = $this->db->query($query);
           
-        //   var_dump($q->result());die();
+         
         
          if ($q->num_rows() > 0) {
                 return $q->result();       

@@ -24,7 +24,7 @@
  
      <div class="Card mb-3">
       
-         <!-- <//?php echo("<pre>");print_r(($projectStatus??"None")); ?>   -->
+         <!-- <//?php echo("<pre>");print_r(($assignedProjects??"None")); ?>    -->
            
             <div class="row">
                 <div class="col-md-2"><label class="control-label"></label></div>
@@ -87,12 +87,14 @@
   </thead>
 
   <tbody>
-  
+  <!-- <//?php var_dump($assignedProjects);?> -->
     <?php for($i=0; $i < count($assignedProjects); $i++){?>
       
     <tr>
       <th><?= $i+1 ?></th>
-      <td><?= $assignedProjects[$i]->project_name;  ?>  (Assign to ..)</td>
+      <td><?= $assignedProjects[$i]->project_name;  ?> 
+       <!-- is Assign to   <//?= $assignedProjects[$i]->emp_name;  ?>   -->
+      </td>
       <td>
      
         <input type="checkbox" id="<?= $assignedProjects[$i]->project_uuid; ?>" name=" " 
