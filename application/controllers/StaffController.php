@@ -108,12 +108,16 @@ class StaffController extends CI_Controller {
     public function assignProjectToPAdmin()
     {
         $userData = $this->session->userdata('userData');
+        if($userData != NULL){
         // $data['staff'] = $this->loginmodel->get_staff_info();
         $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
-        $company_uuid = $company_info[0]->company_uuid;
+        
+            $company_uuid = $company_info[0]->company_uuid;
+        }
+        
         $data['staff_designation'] = $this->getStaffDesignation();
 
-        if($userData){
+        if($userData){  
             $this->load->view('libs');                                     
             $this->load->view('Ug/universalmainbody');
 
@@ -134,7 +138,7 @@ class StaffController extends CI_Controller {
             $this->load->view('welcome_message'); 
         }
     }
-//not using----------------------------------------------------------
+ 
     public function assign_Project_To_PAdmin()
     {
         $msg  = "Project Admin Already Exits";
@@ -147,7 +151,7 @@ class StaffController extends CI_Controller {
         $data['project_uuid'] = $this->input->post('checked_id');
        
         
-       
+       var_dump($data['project_uuid'] );
         if(empty($data['project_admin_uuid'])){
            
             return print_r(json_encode($msg4));
@@ -163,8 +167,8 @@ class StaffController extends CI_Controller {
             $data['project_uuid'] = $row;
             $data['status'] = 1;
             $data['isActive'] = 1;
-            $this->db->insert("project_projectAdmin_mapping", $data);
-         //   print_r(json_encode($row));
+           $this->db->insert("project_projectAdmin_mapping", $data);
+            print_r(json_encode($row));
         }
        
         return print_r(json_encode($msg2));
@@ -244,7 +248,18 @@ class StaffController extends CI_Controller {
       }
     return false;
     }
-//not using----------------------------------------------------------
+ 
+    public function unAssign_Project_To_PAdmin()
+    {
+        $project_uuid = $this->input->post('project_uuid');
+        $this->staff_model->updateProjectStatus($project_uuid);
+        
+        $msg = "UnAssigned is done successfully";
+
+        print_r(json_encode($msg));
+    }
+
+
     public function projectList()
     {
         $userData = $this->session->userdata('userData');

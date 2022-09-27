@@ -39,13 +39,16 @@
     public function fetchProjectByCompany($company_uuid, $projectStatus)
     {
     $project_uuid = "";
-     
-    for($i=0; $i < count($projectStatus); $i++){
+    
+    if(isset($projectStatus) || !empty($projectStatus)){
+   
+        for($i=0; $i < count($projectStatus); $i++){
        
             $project_uuid_temp = explode(",", $projectStatus[$i]->project_uuid);
 
             $project_uuid.=",'".$project_uuid_temp[0]."'";       
      }
+   
      $project_uuid=trim($project_uuid,",");
    // print_r($project_uuid);
 
@@ -72,12 +75,13 @@
            }   
            else {
                return FALSE;
-           }  
+           } 
+        }  
     }
     
     public function fetchAssignedProjects($company_uuid, $projectStatus)
     {
-        $project_uuid = "";
+        $project_uuid = "";   
      
         for($i=0; $i < count($projectStatus); $i++){
            
@@ -88,14 +92,19 @@
         
         $project_uuid = trim($project_uuid,",");
 
-        $query = "SELECT project_uuid,project_name
-        FROM master_project 
-        WHERE company_uuid ='$company_uuid' 
-        AND            
-        project_uuid IN ($project_uuid)"; 
+        // $query = "SELECT project_uuid,project_name
+        // FROM master_project 
+        // WHERE company_uuid ='$company_uuid' 
+        // AND            
+        // project_uuid IN ($project_uuid)"; 
                 
- 
-        // $query = "SELECT DISTINCT MS.emp_name,MP.project_name,PPM.project_admin_uuid,PPM.project_uuid FROM project_projectAdmin_mapping As PPM INNER JOIN master_staff As MS ON MS.staff_uuid = PPM.project_admin_uuid INNER JOIN master_project As MP ON MP.project_uuid = PPM.project_uuid WHERE MS.company_uuid ='$company_uuid' AND MP.project_uuid IN ($project_uuid)"; 
+        //Mapping Projects to Project Admin
+        $query = "SELECT DISTINCT MS.emp_name,MP.project_name,PPM.project_admin_uuid,PPM.project_uuid 
+        FROM project_projectAdmin_mapping As PPM 
+        INNER JOIN master_staff As MS ON MS.staff_uuid = PPM.project_admin_uuid 
+        INNER JOIN master_project As MP ON MP.project_uuid = PPM.project_uuid 
+        WHERE MS.company_uuid ='$company_uuid' AND MP.project_uuid IN ($project_uuid) 
+        AND PPM.status='1'"; 
 
  
 
@@ -108,7 +117,8 @@
            }   
            else {
                return FALSE;
-           }  
+           } 
+         
     }
 
     public function fetchProjectStatus($company_uuid)
@@ -132,6 +142,15 @@
            }  
     }
 
+    public function updateProjectStatus($project_uuid)
+    {
+        $data = array(
+            'status' => 0,           
+        );
+    
+        $this->db->where('project_uuid', $project_uuid);
+        $this->db->update('project_projectAdmin_mapping', $data);
+    }
 
     public function getMappedData()
     {

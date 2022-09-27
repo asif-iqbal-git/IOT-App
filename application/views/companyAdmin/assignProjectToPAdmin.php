@@ -47,7 +47,9 @@
       </div>
       <div class="col-md-9 mx-auto">
       <?php if(isset($projectList) && !empty($projectList)){?>
-      <table class="table table-bordered">
+      
+      <!-- table -->
+        <table class="table table-bordered">
   <thead>
     <tr>
       <th scope="col">S.No</th>
@@ -65,7 +67,7 @@
       <td><?= $projectList[$i]->project_name;  ?></td>
       <td>
      
-        <input type="checkbox" id="<?= $projectList[$i]->project_uuid; ?>" name=" " 
+        <input type="checkbox" class="messageCheckbox" id="<?= $projectList[$i]->project_uuid; ?>" name="project_uuid" 
         value="<?= $projectList[$i]->project_uuid; ?>"/>
  
       </td>
@@ -93,15 +95,17 @@
     <tr>
       <th><?= $i+1 ?></th>
       <td><?= $assignedProjects[$i]->project_name;  ?> 
-       <!-- is Assign to   <//?= $assignedProjects[$i]->emp_name;  ?>   -->
+       is Assign to   <?= $assignedProjects[$i]->emp_name;  ?>  
       </td>
-      <td>
-     
-        <input type="checkbox" id="<?= $assignedProjects[$i]->project_uuid; ?>" name=" " 
-        value="<?= $assignedProjects[$i]->project_uuid;?>" Checked disabled>
+      
+      <!-- &#9745; -->
+        <!-- <input type="checkbox" id="<//?= $assignedProjects[$i]->project_uuid; ?>" name=" "  
+        value="<//?= $assignedProjects[$i]->project_uuid;?>" Checked disabled>-->
  
+       
+      <td>
+      <button type="button" class="btn btn-outline-danger" id="<?= $assignedProjects[$i]->project_uuid;  ?>" onclick="unassignedPAdmin(this.id)">UNASSIGNED</button>
       </td>
-    
     </tr>
     <?php }?>
     <?php }else{echo"<h3>No Project To Assign..</h3>";}?>
@@ -112,22 +116,47 @@
       </div>
        
     </body>
-    <script>
-       
+    <script> 
+       // Pass the checkbox name to the function
+/*
+       function getCheckedBoxes() {
+  // var checkboxes = document.getElementsByName(chkboxName);
+  //This will picked all checked box value in this page including default chk value
+ // var checkboxes = document.querySelectorAll('input[name=mycheckboxes]:checked');
+ 
+ var checkboxes = document.querySelector('.messageCheckbox:checked').value;
+  var checkboxesChecked = [];
+  // loop over them all
+  for (var i=0; i<checkboxes.length; i++) {
+     // And stick the checked ones onto an array...
+     if (checkboxes[i].checked) {
+        checkboxesChecked.push(checkboxes[i]);
+     }
+  }
+  // Return the array if it is non-empty, or null
+  return checkboxesChecked.length > 0 ? checkboxesChecked : null;
+}
+
+// Call as
+var checkedBoxes = getCheckedBoxes();
+*/
           // ---------------select Checkbox value---------------------
         var checkedVal={};
-        var all=[];   
+        var all=[];  
+       
         $(document).on('change','input[type=checkbox]' ,function(){
         // checkedVal={};
         all=[];
-
+       
         $('input[type=checkbox]:checked').each(function(){             
             //push all checked value to all(array)
-            all.push($(this).val());          
+            
+            all.push($(this).val());   
+               
         });       
-            //console.log(all);
+        // console.log("ck_val:",all);   
         });
-        
+     
        //  Sending Health-Provider-id with Assign token-id and zmq-id
         $("#assign_Project_To_PAdmin").on('click',function(){
             var projectAdmin = document.getElementById('projectAdminId').value;
@@ -145,8 +174,8 @@
                     document.getElementById('alert').classList.add("alert-primary");
                     document.getElementById('alert').innerHTML = data;
                     setTimeout(refresh, 3000);
-                  console.log(data) 
-                 
+                   console.log(data) 
+                   
                  // var json = JSON.parse(data);      
                    //console.log((json.checked_id))
                 }
@@ -157,6 +186,24 @@
           window.location.href = "<?php echo base_url('assign-project')?>";
         }
 
+     function unassignedPAdmin(project_uuid)
+     {
+        $.ajax({
+            url: "<?= base_url('StaffController/unAssign_Project_To_PAdmin') ?>",
+            type: 'POST',
+            data: {
+              project_uuid:project_uuid,
+                // checked_id:all
+              }, success: function(data, textStatus, jqXHR) {                  
+                document.getElementById('alert').style.display = 'block';
+                    document.getElementById('alert').classList.add("alert-success");
+                    document.getElementById('alert').innerHTML = data;
+                    setTimeout(refresh, 3000);
+                   console.log(data)                          
+          }
+            
+        })
+     }
     </script>
     
 </html>
