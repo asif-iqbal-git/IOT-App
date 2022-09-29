@@ -22,7 +22,7 @@
     <div class="card">
   <div class="card-body">
     <!-- form -->
-    <form method="POST" action="StaffController/saveStaffInfo">
+    <form method="POST"   action="StaffController/saveStaffInfo">
     <i class="bi bi-align-bottom"></i>
         <div class="form-group">
             <label for="">Staff Name</label>
@@ -61,6 +61,7 @@
             <label for="">Staff Email </label>
             <input type="email" class="form-control" id="staff_email" name="staff_email"  placeholder="Eg. Example@companyname.com">
             <div id="err_email_addres"></div>
+              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
         </div>
 
         <div class="form-group">
@@ -88,7 +89,7 @@
 
 
       
-
+<!--
             <hr>
             <div class="alert alert-primary" role="alert">
                 Create Credentials For Staff
@@ -101,21 +102,41 @@
 
         <div class="form-group">
             <label for="">Staff Password</label>
-            <!-- <input type="text" class="form-control" id="companyPassword" name="password" placeholder="" value="<//?php echo($virtualPassword); ?>" readonly> --><input type="password" class="form-control" id="staff_password" name="staff_password" placeholder="">
+           <input type="text" class="form-control" id="companyPassword" name="password" placeholder="" value="<//?php echo($virtualPassword); ?>" readonly>
+           <input type="password" class="form-control" id="staff_password" name="staff_password" placeholder="">
             <div id="err_company_password"></div>
         </div>
-
+            -->
         <div class="col-auto float-right">
-            <button type="submit" class="btn btn-primary mb-2" name="submit" onclick="return formValidation();">Submit</button>
+            <button type="submit" class="btn btn-primary mb-2" name="submit" onclick="return Sendemail();" >Submit</button>
         </div>
+         
 </form>
   </div>
 </div>
 </div>
-</div>
+</div>  
     </body>
+    <script src="https://smtpjs.com/v3/smtp.js">
+</script>
     <script>
-        
+        function Sendemail(){
+
+var staff_email = document.getElementById('staff_email').value;
+        alert('Sending email...',staff_email)
+                Email.send({
+            Host : "smtp.elasticemail.com",
+            Username : "johndeo8789@gmail.com",
+            Password : "6E7C9B5728E32916F7D309DA6459F576D6E6",
+            To : 'aasif.iqbal8446@gmail.com',
+           
+            From : "johndeo8789@gmail.com",
+            Subject : "Activation",
+            Body : "Please Active Your Account.."
+        }).then(
+        message => alert(message)
+        );
+    }
         function __formValidation()
         {
             var company_name = document.getElementById("company_name").value;

@@ -44,7 +44,9 @@
         <div class="form-group">
             <label for="">Email Address</label>
             <input type="email" class="form-control" id="company_email" name="company_email" placeholder="Eg. Example@companyname.com">
+            <small id="emailHelp" class="form-text text-muted">This email address will saved as company admin login id.</small>
             <div id="err_email_addres"></div>
+
         </div>
 
 
@@ -54,12 +56,8 @@
             <div id="err_company_location"></div>
          </div>
 
-        <!-- <div class="form-group">
-            <label for="">Contact Person No.</label>
-            <input type="text" class="form-control" id="company_contact" name="company_contact" placeholder="Eg. 9919910000">
-            <div id="err_contact_number"></div>
-        </div> -->
-
+     
+<!--
             <hr>
             <div class="alert alert-primary" role="alert">
                 Create Credentials For Company Admin
@@ -72,10 +70,10 @@
 
         <div class="form-group">
             <label for="">Company Admin Password</label>
-            <input type="text" class="form-control" id="companyPassword" name="password" placeholder="" value="<?php echo($virtualPassword); ?>" readonly>
+            <input type="text" class="form-control" id="companyPassword" name="password" placeholder="" value="<//?php echo($virtualPassword); ?>" readonly>
             <div id="err_company_password"></div>
         </div>
-
+-->
         <div class="col-auto float-right">
             <button type="submit" class="btn btn-primary mb-2" name="submit" onclick="return formValidation();">Submit</button>
         </div>

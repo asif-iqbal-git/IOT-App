@@ -83,7 +83,7 @@
 
 <?php if(isset($assignedProjects) && !empty($assignedProjects)){?>
  
-<table class="table table-bordered">
+<table class="table table-bordered table-info">
   <thead>
    
   </thead>
@@ -94,8 +94,8 @@
       
     <tr>
       <th><?= $i+1 ?></th>
-      <td><?= $assignedProjects[$i]->project_name;  ?> 
-       is Assign to   <?= $assignedProjects[$i]->emp_name;  ?>  
+      <td><strong><?= $assignedProjects[$i]->project_name;  ?> </strong>
+       is Assign to   <strong><?= $assignedProjects[$i]->emp_name;  ?></strong>  
       </td>
       
       <!-- &#9745; -->
@@ -205,5 +205,6 @@ var checkedBoxes = getCheckedBoxes();
         })
      }
     </script>
-    
+    <!-- pagination -->
+    <!-- https://codepen.io/KennyGHanson/pen/xmGeqO -->
 </html>

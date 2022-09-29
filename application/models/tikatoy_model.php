@@ -595,13 +595,13 @@ where BlockId= ?",array($data['BlockId']));
         // var_dump($staff_login_data);
         // var_dump($staff_login_data['login_id']);
         // var_dump($staff_login_data['password']);
- 
-        $ssn_login_id = $staff_data['login_id'];
-       
+  
+        $ssn_login_id = $staff_login_data['login_id'];
+          
         $this->db->set('staff_uuid', 'UUID()', FALSE);
         $this->db->insert('master_staff', $staff_data);
         
-      //  var_dump($ssn_login_id);
+       
         
         $staff_uuid = $this->db->select('staff_uuid')
                          ->from('master_staff')        

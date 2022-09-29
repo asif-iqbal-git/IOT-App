@@ -8,7 +8,8 @@ class StaffController extends CI_Controller {
         $this->load->model('loginmodel');
         $this->load->model('tikatoy_model');
         $this->load->model('staff_model');
-
+        $this->load->library('email'); //email
+      //  $this->load->library('encrypt');//it will encrypt your email and help to avoid the spamming issue in Gmail. 
     }
 
     public function addStaff()
@@ -56,12 +57,89 @@ class StaffController extends CI_Controller {
     {
         $userData = $this->session->userdata('userData');     
         $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
- 
- 
         
+        /*
+        //using phpmailer         
+        // Load PHPMailer library
+         $this->load->library('phpmailer_lib');        
+         // PHPMailer object
+         $mail = $this->phpmailer_lib->load();
+        // SMTP configuration          
+         $mail->SMTPDebug = 2; //for detailed debugging  
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'johndeo8789@gmail.com';
+        $mail->Password = 'johndeo123';
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+          
+          $mail->setFrom('johndeo8789@gmail.com', 'ZMQ');
+          $mail->addReplyTo('johndeo8789@gmail.com', 'ZMQ');
+          
+          // Add a recipient
+          $mail->addAddress('aasif.iqbal8446@gmail.com');
+          
+          // Add cc or bcc 
+        //   $mail->addCC('cc@example.com');
+        //   $mail->addBCC('bcc@example.com');
+          
+          // Email subject
+          $mail->Subject = 'Send Email via SMTP using PHPMailer in CodeIgniter';
+          
+          // Set email format to HTML
+          $mail->isHTML(true);
+          
+          // Email body content
+          $mailContent = "<h1>Send HTML Email using SMTP in CodeIgniter</h1>
+              <p>This is a test email sending using SMTP mail server with PHPMailer.</p>";
+          $mail->Body = $mailContent;
+          
+          // Send email
+          if(!$mail->send()){
+              echo 'Message could not be sent.';
+              echo 'Mailer Error: ' . $mail->ErrorInfo;
+              die();
+          }else{
+              echo 'Message has been sent';
+              die();
+          }
+        
+        */
+        /* in-build codeigniter email lib
+        //send email to each staff for userId and Password
+        $config = Array(
+                    'protocol'  => 'smtp',
+                    'smtp_host' => 'ssl://smtp.googlemail.com',
+                    'smtp_port' => 465,
+                    'smtp_user' => 'johndeo8789@gmail.com',
+                    'smtp_pass' => 'johndeo123',
+                    'mailtype'  => 'html',
+                    'charset'   => 'utf-8'
+        );
+        $this->email->initialize($config);
+        $this->email->set_mailtype("html");
+        $this->email->set_newline("\r\n");        
+        //Email content
+    $htmlContent = '<h1>Sending email via SMTP server</h1>';
+    $htmlContent .= '<p>This email has sent via SMTP server from CodeIgniter application.</p>';
+        $this->email->to('aasif.iqbal8446@gmail.com');
+        $this->email->from('johndeo8789@gmail.com','MyWebsite');
+        $this->email->subject('How to send email via SMTP server in CodeIgniter');
+        $this->email->message($htmlContent);
+        //Send email
+        
+        if ($this->email->send()) {
+            echo 'Your Email has successfully been sent.';
+        } else {
+            show_error($this->email->print_debugger());
+        }
+        // Set to, from, message, etc.https://www.codexworld.com/codeigniter-send-email-gmail-smtp-server/
+        //https://www.formget.com/codeigniter-gmail-smtp/
+*/
         $staff_data['company_uuid'] = $company_info[0]->company_uuid;       
         
-        $staff_data['login_id'] = $this->input->post('staff_login_id');       
+        $staff_data['login_id'] = $this->input->post('staff_email');       
 
         $staff_data['emp_name'] = $this->input->post('staff_name');       
         $staff_data['emp_age'] = $this->input->post('staff_age');
@@ -78,14 +156,17 @@ class StaffController extends CI_Controller {
         $staff_data['isActive'] = 1;
         $staff_data['created_by'] = $company_info[0]->created_by;
          
+        //Generate Random String And Send it to Users Email Id
+        $staff_login_data['login_id'] = $this->input->post('staff_email');
+        $staff_login_data['password'] = $this->generateRandomString();
+        // $staff_login_data['login_id'] = $this->input->post('staff_login_id');
+        // $staff_login_data['password'] = $this->input->post('staff_password');
         
-        $staff_login_data['login_id'] = $this->input->post('staff_login_id');
-        $staff_login_data['password'] = $this->input->post('staff_password');
-    
+        //var_dump($staff_login_data);die();
        
         $staff_login_data['level'] = $level[0]->level;
         $this->tikatoy_model->storeMasterStaffInfo($staff_data, $staff_login_data);
-        $this->session->set_flashdata('add_company_admin_staff', 'Staff has been Created');
+        $this->session->set_flashdata('add_company_admin_staff', 'Staff has been Created & Credentials send to Staff Email');
 
         redirect(base_url('addStaff')); 
         // echo("<pre>");
@@ -103,6 +184,16 @@ class StaffController extends CI_Controller {
     public function getStaffDesignation()
     {
         return $this->loginmodel->getDesignation();
+    }
+   
+    public function generateRandomString($length = 8) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 
     public function assignProjectToPAdmin()

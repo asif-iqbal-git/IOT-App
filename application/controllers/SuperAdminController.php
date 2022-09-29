@@ -258,13 +258,13 @@ class SuperAdminController extends CI_Controller {
      
         //  $this->updateMasterStaff($current_logedIn_staffUuid);
         $data_master_staff['company_uuid'] = "";    
-        $data_master_staff['login_id'] = $this->input->post('company_login_id');
+        $data_master_staff['login_id'] = $this->input->post('company_email');
         
         $data_master_staff['emp_name'] = "";
         $data_master_staff['emp_age'] =  0;
         $data_master_staff['emp_gender'] =  0;
         $data_master_staff['emp_phone'] = "";
-        $data_master_staff['emp_email'] = "";
+        $data_master_staff['emp_email'] = $this->input->post('company_email');
         $data_master_staff['emp_address'] = "";
         $data_master_staff['level'] = $company_admin_level;
         $data_master_staff['designation_id'] = 3;
@@ -272,14 +272,14 @@ class SuperAdminController extends CI_Controller {
         $data_master_staff['created_By'] = $current_logedIn_staffUuid;
        
         //For tblLogin - for Company Admin
-        $data_login['login_id'] = $this->input->post('company_login_id');
-        $data_login['password'] = $this->input->post('password');         
+        $data_login['login_id'] =  $data_master_staff['emp_email'];
+        $data_login['password'] =  $this->generateRandomString();        
         $data_login['level'] = "1";       
         $data_login['isActive'] = "1";
         $company_admin_level = $data_login['level'];  
          
         $this->tikatoy_model->storeCompanyAdminInfo($data_company,$data_master_staff, $data_login);
-        $this->session->set_flashdata('add_company_admin', 'Company & Company Admin has been Created');
+        $this->session->set_flashdata('add_company_admin', 'Company & Company Admin has been Created & Mail send to Company Admin');
 
         redirect(base_url('createCompany')); 
     }
