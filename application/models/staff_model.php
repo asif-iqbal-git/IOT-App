@@ -167,5 +167,35 @@
            }  
     }
 
+    public function getPhcCenterList()
+    {
+        $query = "SELECT * FROM tblPhcRegister WHERE isActive = '1' ";
+        $q = $this->db->query($query);
+          
+        //   var_dump($q->result());die();
+        
+         if ($q->num_rows() > 0) {
+                return $q->result();       
+           }   
+           else {
+               return FALSE;
+           }    
+    }
+
+    public function getZMQToysList()
+    {
+        $query = "SELECT * FROM tblToyRegistration WHERE isActive = '1' ";
+        $q = $this->db->query($query);
+          
+        //   var_dump($q->result());die();
+        
+         if ($q->num_rows() > 0) {
+                return $q->result();       
+           }   
+           else {
+               return FALSE;
+           }    
+    }
+
 }
 

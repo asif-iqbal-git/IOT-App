@@ -84,5 +84,8 @@ $route['projectStatus'] = 'SuperAdminController/projectStatus';
 $route['assign-project'] = 'StaffController/assignProjectToPAdmin';
 $route['project-list'] = 'StaffController/projectList';
 
+$route['toy-registration'] = 'StaffController/staff_registration';
+$route['assign-ToysToPHC-Center'] = 'StaffController/show_assign_Toys_To_PHC_Center';
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

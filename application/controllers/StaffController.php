@@ -242,7 +242,7 @@ class StaffController extends CI_Controller {
         $data['project_uuid'] = $this->input->post('checked_id');
        
         
-       var_dump($data['project_uuid'] );
+     //  var_dump($data['project_uuid'] );
         if(empty($data['project_admin_uuid'])){
            
             return print_r(json_encode($msg4));
@@ -258,7 +258,7 @@ class StaffController extends CI_Controller {
             $data['project_uuid'] = $row;
             $data['status'] = 1;
             $data['isActive'] = 1;
-           $this->db->insert("project_projectAdmin_mapping", $data);
+            $this->db->insert("project_projectAdmin_mapping", $data);
             print_r(json_encode($row));
         }
        
@@ -368,13 +368,6 @@ class StaffController extends CI_Controller {
         }
     }
 
-
-
-
-
-
-
-
    /* public function get_single_emp_id(){
 
         $id = $this->input->post('staff_uuid');
@@ -385,6 +378,49 @@ class StaffController extends CI_Controller {
 
     }*/
 
-}
+    public function staff_registration()
+    {
+        $userData = $this->session->userdata('userData');
+        // $data['staff'] = $this->loginmodel->get_staff_info();
+       // $data['staff_designation'] = $this->getStaffDesignation();
 
+        if($userData){
+            $this->load->view('libs');                                     
+            $this->load->view('Ug/universalmainbody');
+            $this->load->view('companyAdmin/toyRegistration');
+            // $this->load->view('Ug/universalfooter');
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message'); 
+        } 
+    }
+
+    public function show_assign_Toys_To_PHC_Center()
+    {
+        $userData = $this->session->userdata('userData');
+        $data['phc_list'] = $this->staff_model->getPhcCenterList();
+        $data['toy_list'] = $this->staff_model->getZMQToysList();
+         
+        if($userData){
+            $this->load->view('libs');                                     
+            $this->load->view('Ug/universalmainbody');
+            $this->load->view('companyAdmin/assignToyToPhcCenter', $data);
+            // $this->load->view('Ug/universalfooter');
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message'); 
+        } 
+    }
+
+    public function assign_toys_To_phc_center()
+    {
+        $userData = $this->session->userdata('userData');
+        $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
+        $phcCenterId = $this->input->post('phcCenterId');
+        $zmqToyId = $this->input->post('checked_id');
+
+        print_r(json_encode($company_info));
+    }
+
+}
 ?>

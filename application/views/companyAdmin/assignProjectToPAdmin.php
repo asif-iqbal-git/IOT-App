@@ -83,7 +83,7 @@
 
 <?php if(isset($assignedProjects) && !empty($assignedProjects)){?>
  
-<table class="table table-bordered table-info">
+<table class="table table-bordered table-danger">
   <thead>
    
   </thead>

@@ -17,8 +17,8 @@
         </style>
 <?php 
  $userData = $this->session->userdata('userData');
-//  var_dump($userData)
-
+ $company_name = $this->session->userdata('company_name');
+//  var_dump($company_name);
 ?>
     <!-- Custom fonts for this template-->
     
@@ -36,7 +36,7 @@
             <a class="sidebar-brand d-flex align-items-center justify-content-center" 
             href="<?= base_url('dashboard'); ?>">
                 <div class="sidebar-brand-icon">
-                     <?php echo $userData['login_id']; ?>
+                     <?php echo $company_name['companyName']; ?>
                       
                 </div>
                 <!-- <div class="sidebar-brand-text mx-3">IOT App</div> -->
@@ -60,9 +60,6 @@
             <div class="sidebar-heading">
                 Interface
             </div>
-
-        
-          
 
                   <!-- Nav Item - - staff Setup -->
              <?php
@@ -215,7 +212,32 @@
                  } }
                 ?> 
             </li>
+            <?php
 
+            if (isset($userData['level'])){
+                if($userData['level'] == '1') {
+                ?>
+            <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url('toy-registration'); ?>">
+                                <i class="fas fa-fw fa-table"></i>
+                                <span>Toy Registration</span></a>
+                        </li>
+                        <?php
+                            } }
+                ?> 
+            <?php
+
+            if (isset($userData['level'])){
+                if($userData['level'] == '1') {
+                ?>
+            <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url('assign-ToysToPHC-Center'); ?>">
+                                <i class="fas fa-fw fa-table"></i>
+                                <span>Assign Toys to PHC Center</span></a>
+                        </li>
+                        <?php
+                            } }
+                ?> 
 
             <!-- Nav Item - Pages Collapse Menu -->
             <?php
@@ -290,8 +312,8 @@
                  } }
                 ?> 
             <!-- Nav Item - Provider -->
-            <?php 
-          
+            
+            <?php           
                 if (isset($userData['level'])){
                     if($userData['level'] == '1--') {
                     ?>

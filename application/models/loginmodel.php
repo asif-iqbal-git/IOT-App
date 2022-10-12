@@ -440,7 +440,24 @@ class loginmodel extends CI_Model {
              return false;
          }         
     }
-
+    
+    public function fetchCompanyName($login_id)
+    {
+        /*
+        SELECT company_name FROM `master_company` As mc INNER JOIN `master_staff` As ms ON mc.company_uuid = ms.company_uuid  WHERE login_id = 'aasif.iqbal86@gmail.com';
+        */
+        $this->db->select('company_name');
+        $this->db->from('master_staff');
+        $this->db->join('master_company', 'master_company.company_uuid = master_staff.company_uuid');
+        $this->db->where('login_id', $login_id);
+        
+        $query = $this->db->get();
+        if($query->num_rows() > 0){
+           return $query->result();
+        }else{
+            return false;
+        }       
+    }
     
     //This method is use for pagination for particular table
      public function total_rows(){

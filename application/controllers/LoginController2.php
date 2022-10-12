@@ -7,8 +7,6 @@ class LoginController2 extends CI_Controller {
         parent::__construct();
                 
         $this->load->model('loginmodel'); 
-     
-
     }
 
     public  function login()
@@ -18,10 +16,10 @@ class LoginController2 extends CI_Controller {
         $login_data['password'] = $this->input->post('password');
         
         $isValid = $this->loginmodel->validateLoginUser($login_data);
-   // var_dump($login_data);
+        // var_dump($login_data);
       if(isset($isValid)){
  
-    
+      
         $userData = [                   
             'login_id' => ($isValid['login_id']),
             'level'	=> ($isValid['level']),
@@ -30,6 +28,17 @@ class LoginController2 extends CI_Controller {
             // Set Session For login User
             $this->session->set_userdata('userData', $userData);    
            
+            //fetch company_name by login_id
+            $company_name_by_login_id = $this->loginmodel->fetchCompanyName($userData['login_id'])?? 0;
+            
+         //  var_dump($company_name_by_login_id);
+            $company_name = [                                
+                'companyName' => $company_name_by_login_id[0]->company_name
+               ];
+                // Set Session For login User
+                $this->session->set_userdata('company_name', $company_name);  
+
+                
         if(isset($login_data) && !empty($login_data)){
            
         
@@ -64,6 +73,7 @@ class LoginController2 extends CI_Controller {
         $this->load->view('welcome_message');
     }
 
+    
 }
 
 

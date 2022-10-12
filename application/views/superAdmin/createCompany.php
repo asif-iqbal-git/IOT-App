@@ -46,7 +46,6 @@
             <input type="email" class="form-control" id="company_email" name="company_email" placeholder="Eg. Example@companyname.com">
             <small id="emailHelp" class="form-text text-muted">This email address will saved as company admin login id.</small>
             <div id="err_email_addres"></div>
-
         </div>
 
 
@@ -54,7 +53,7 @@
             <label for="">Company Location</label>
             <textarea class="form-control" id="company_location" name="company_location"></textarea>
             <div id="err_company_location"></div>
-         </div>
+        </div>
 
      
 <!--
@@ -75,7 +74,7 @@
         </div>
 -->
         <div class="col-auto float-right">
-            <button type="submit" class="btn btn-primary mb-2" name="submit" onclick="return formValidation();">Submit</button>
+            <button type="submit" class="btn btn-primary mb-2" name="submit" onclick="return Sendemail();">Submit</button>
         </div>
 </form>
   </div>
@@ -83,7 +82,25 @@
 </div>
 </div>
     </body>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
     <script>
+           function Sendemail(){
+
+var staff_email = document.getElementById('staff_email').value;
+        alert('Sending email to ',staff_email)
+                Email.send({
+            Host : "smtp.elasticemail.com",
+            Username : "johndeo8789@gmail.com",
+            Password : "6E7C9B5728E32916F7D309DA6459F576D6E6",
+            To : 'aasif.iqbal8446@gmail.com',
+           
+            From : "johndeo8789@gmail.com",
+            Subject : "Activation",
+            Body : "Please Active Your Account.."
+        }).then(
+        message => alert(message)
+        );
+    }
         function formValidation()
         {
             var company_name = document.getElementById("company_name").value;

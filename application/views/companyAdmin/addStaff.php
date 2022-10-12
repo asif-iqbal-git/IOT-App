@@ -26,7 +26,7 @@
     <i class="bi bi-align-bottom"></i>
         <div class="form-group">
             <label for="">Staff Name</label>
-            <input type="text" class="form-control" id="staff_name" name="staff_name" placeholder="Eg. Mitlesh Kumar">
+            <input type="text" class="form-control" id="staff_name" name="staff_name" placeholder="Eg. Mitlesh Kumar" required>
             <div id="err_company_name"></div>
         </div>
 
@@ -123,7 +123,7 @@
         function Sendemail(){
 
 var staff_email = document.getElementById('staff_email').value;
-        alert('Sending email...',staff_email)
+        alert('Sending email to ',staff_email)
                 Email.send({
             Host : "smtp.elasticemail.com",
             Username : "johndeo8789@gmail.com",
