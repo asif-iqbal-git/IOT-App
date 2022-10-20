@@ -184,7 +184,18 @@
 
     public function getZMQToysList()
     {
-        $query = "SELECT * FROM tblToyRegistration WHERE isActive = '1' ";
+        $query = "SELECT DISTINCT TR.ToyId,
+                         TR.ToyName,
+                         TR.IsAssignedtoPhc,
+                         TR.PhcId,TR.isActive,
+                         TPM.zmq_toy_Id,
+                         TPM.phc_center_id,
+                         TPM.status,
+                         TPM.isActive
+            FROM tblToyRegistration As TR 
+            INNER JOIN toys_phcCenter_mapping As TPM 
+            WHERE TR.isActive = TPM.isActive  AND TR.IsAssignedtoPhc='0' GROUP BY TR.ToyId";
+
         $q = $this->db->query($query);
           
         //   var_dump($q->result());die();
@@ -196,6 +207,93 @@
                return FALSE;
            }    
     }
+ 
+    public function fetchAssignedToys()
+    {
+        //tblPhcRegister, toys_phcCenter_mapping, tblToyRegistration
 
-}
+        // $query11 = "SELECT DISTINCT MS.emp_name,MP.project_name,PPM.project_admin_uuid,PPM.project_uuid 
+        // FROM project_projectAdmin_mapping As PPM 
+        // INNER JOIN master_staff As MS ON MS.staff_uuid = PPM.project_admin_uuid 
+        // INNER JOIN master_project As MP ON MP.project_uuid = PPM.project_uuid 
+        // WHERE MS.company_uuid ='$company_uuid' AND MP.project_uuid IN ($project_uuid) 
+        // AND PPM.status='1'"; 
+
+        $query = "SELECT DISTINCT TR.ToyId,
+                                TR.ToyName,
+                                TR.IsAssignedtoPhc,
+                                TR.PhcId,
+                                TR.isActive,
+                                TPM.zmq_toy_Id,
+                                TPM.phc_center_id,
+                                TPM.status,
+                                TPM.isActive
+                                
+        FROM tblToyRegistration As TR 
+        INNER JOIN toys_phcCenter_mapping As TPM ON TR.ToyId = TPM.zmq_toy_Id
+        INNER JOIN tblPhcRegister As PR   ON TPM.isActive = PR.isActive        
+        AND TR.IsAssignedtoPhc='0' GROUP BY TR.ToyId";
+
+        $q = $this->db->query($query);
+                
+        //   var_dump($q->result());die();
+
+        if ($q->num_rows() > 0) {
+                return $q->result();       
+        }   
+        else {
+            return FALSE;
+        }    
+    }
+
+    public function fetchOnlyAssignedToys(){
+        $query = "SELECT ToyId,ToyName,IsAssignedtoPhc,isActive From tblToyRegistration
+        WHERE IsAssignedtoPhc='1'";
+        $q = $this->db->query($query);
+                
+        //   var_dump($q->result());die();
+
+        if ($q->num_rows() > 0) {
+                return $q->result();       
+        }   
+        else {
+            return FALSE;
+        }    
+    }
+
+    public function getZMQTokenList(){
+        $query = "SELECT TokenId,ZMQTokenId,TokenRealId,isActive From tblTokenMaster
+        WHERE isActive='1' AND isAssignedtoToy='0'";
+        $q = $this->db->query($query);
+                
+        //   var_dump($q->result());die();
+
+        if ($q->num_rows() > 0) {
+                return $q->result();       
+        }   
+        else {
+            return FALSE;
+        }       
+    }
+
+    public function getPHCStaffList($company_uuid)
+    {
+       // var_dump($company_uuid);
+
+        $query = "SELECT staff_uuid,emp_name,designation_id,isActive From master_staff
+        WHERE isActive='1' AND level='3' AND company_uuid='$company_uuid'";
+
+        $q = $this->db->query($query);
+                
+        //   var_dump($q->result());die();
+
+        if ($q->num_rows() > 0) {
+                return $q->result();       
+        }   
+        else {
+            return FALSE;
+        }      
+    }
+    
+} //class-ends
 

@@ -238,6 +238,37 @@
                         <?php
                             } }
                 ?> 
+        <?php
+            if (isset($userData['level'])){
+                if($userData['level'] == '1') {
+                ?>
+            <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url('assign-TokensToToy'); ?>">
+                                <i class="fas fa-fw fa-table"></i>
+                                <span>Assign Token to Toys</span></a>
+                        </li>
+                        <?php
+                            } }
+                ?> 
+
+        <?php
+            if (isset($userData['level'])){
+                if($userData['level'] == '1') {
+                ?>
+            <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url('assign-toyToPhcStaff'); ?>">
+                                <i class="fas fa-fw fa-table"></i>
+                                <span>Assign Toy to PHC-Staff</span></a>
+                        </li>
+                        <?php
+                            } }
+                ?> 
+
+
+
+
+
+
 
             <!-- Nav Item - Pages Collapse Menu -->
             <?php

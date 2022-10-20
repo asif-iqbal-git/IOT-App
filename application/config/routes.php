@@ -81,11 +81,14 @@ $route['viewAssignToys'] = 'SuperAdminController/viewAssignToys';
 
 $route['projectStatus'] = 'SuperAdminController/projectStatus';
 
-$route['assign-project'] = 'StaffController/assignProjectToPAdmin';
+$route['assign-project'] = 'StaffController/displayAssignProjectToPAdmin';
 $route['project-list'] = 'StaffController/projectList';
 
 $route['toy-registration'] = 'StaffController/staff_registration';
-$route['assign-ToysToPHC-Center'] = 'StaffController/show_assign_Toys_To_PHC_Center';
+$route['assign-ToysToPHC-Center'] = 'StaffController/displayAssignToysToPhcCenter';
 
+$route['assign-TokensToToy'] = 'StaffController/displayAssignTokensToToy';
+
+$route['assign-toyToPhcStaff'] = 'StaffController/displayAssignToyTOPhcStaff';
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

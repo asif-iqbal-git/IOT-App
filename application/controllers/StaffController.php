@@ -196,7 +196,7 @@ class StaffController extends CI_Controller {
         return $randomString;
     }
 
-    public function assignProjectToPAdmin()
+    public function displayAssignProjectToPAdmin()
     {
         $userData = $this->session->userdata('userData');
         if($userData != NULL){
@@ -264,7 +264,7 @@ class StaffController extends CI_Controller {
        
         return print_r(json_encode($msg2));
        
-        //fetch all mapping data and check it with entered value
+        //fetch all mapping data and check it with entered value and remove return first
         $mapped_data = $this->staff_model->getMappedData();
     
        
@@ -395,12 +395,13 @@ class StaffController extends CI_Controller {
         } 
     }
 
-    public function show_assign_Toys_To_PHC_Center()
+    public function displayAssignToysToPhcCenter()
     {
         $userData = $this->session->userdata('userData');
         $data['phc_list'] = $this->staff_model->getPhcCenterList();
         $data['toy_list'] = $this->staff_model->getZMQToysList();
-         
+        $data['assignToyList'] = $this->staff_model->fetchAssignedToys();
+        
         if($userData){
             $this->load->view('libs');                                     
             $this->load->view('Ug/universalmainbody');
@@ -414,13 +415,116 @@ class StaffController extends CI_Controller {
 
     public function assign_toys_To_phc_center()
     {
+        $msg = "Toys are assigned to phc-Center";
+
         $userData = $this->session->userdata('userData');
         $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
-        $phcCenterId = $this->input->post('phcCenterId');
-        $zmqToyId = $this->input->post('checked_id');
+        // var_dump($company_info[0]->created_by);die();
+        $data['phc_center_id'] = $this->input->post('phcCenterId');
+        $data['zmq_toy_Id'] = $this->input->post('checked_id');
+        $updatedStatus = 1;
 
-        print_r(json_encode($company_info));
+        foreach($data['zmq_toy_Id'] as $row){
+            $data['phc_center_id'] = $this->input->post('phcCenterId');
+            $data['zmq_toy_Id'] = $row;
+            $data['created_by'] =  $company_info[0]->created_by;
+            $data['status'] = 1;
+            $data['isActive'] = 1;
+            $this->db->insert("toys_phcCenter_mapping", $data);
+            //update toy status and PhcId
+            $this->db->set('IsAssignedtoPhc',$updatedStatus)->set('PhcId',$data['phc_center_id'])->where('ToyId',$row)->update('tblToyRegistration');
+            print_r(json_encode($row));
+        }
+
+
+        print_r(json_encode($msg));
     }
 
+    public function displayAssignTokensToToy(){
+        $userData = $this->session->userdata('userData');
+        // $data['phc_list'] = $this->staff_model->getPhcCenterList();
+        $data['token_list'] = $this->staff_model->getZMQTokenList();
+        $data['assignToyList'] = $this->staff_model->fetchOnlyAssignedToys();
+        
+        if($userData){
+            $this->load->view('libs');                                     
+            $this->load->view('Ug/universalmainbody');
+            $this->load->view('companyAdmin/assignTokensToToy', $data);
+            // $this->load->view('Ug/universalfooter');
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message'); 
+        } 
+    }
+    
+    public function assign_token_To_toys()
+    {
+        $msg = "Tokens are assigned to selected Toy";
+
+        $userData = $this->session->userdata('userData');
+        $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
+        // var_dump($company_info[0]->created_by);die();
+        $data['zmq_toy_Id'] = $this->input->post('zmqToyId');
+        $data['zmq_token_Id'] = $this->input->post('checked_id');
+        $updatedStatus = 1;
+
+        foreach($data['zmq_token_Id'] as $row){
+            $data['zmq_toy_Id'] = $this->input->post('zmqToyId');
+            $data['zmq_token_Id'] = $row;
+            $data['created_by'] =  $company_info[0]->created_by;
+            $data['status'] = 1;
+            $data['isActive'] = 1;
+            $this->db->insert("tokens_toy_mapping", $data);
+            //update toy status and PhcId
+            $this->db->set('isAssignedtoToy',$updatedStatus)->set('ToyId',$data['zmq_toy_Id'])->where('TokenId',$row)->update('tblTokenMaster');
+            print_r(json_encode($row));
+        }
+
+
+        print_r(json_encode($msg));
+    }
+
+    public function displayAssignToyTOPhcStaff()
+    {
+        $userData = $this->session->userdata('userData');
+        $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
+        
+        $data['assignToyList'] = $this->staff_model->fetchOnlyAssignedToys();
+ 
+        $data['phcStaff_list'] = $this->staff_model->getPHCStaffList($company_info[0]->company_uuid);
+        
+     
+        if($userData){
+            $this->load->view('libs');                                     
+            $this->load->view('Ug/universalmainbody');
+            $this->load->view('companyAdmin/assignToyToPhcStaff', $data);
+            // $this->load->view('Ug/universalfooter');
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message'); 
+        }   
+    }
+
+    public function assign_toy_To_phcStaff()
+    {
+        $msg = "Toy is assigned to selected Phc-Staff";
+
+        $userData = $this->session->userdata('userData');
+        $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
+        // var_dump($company_info[0]->created_by);die();
+           
+            $data['zmq_toy_Id'] = $this->input->post('zmqToyId');
+            $data['phc_staff_id'] = implode($this->input->post('checked_id'));
+           
+            $data['created_by'] =  $company_info[0]->created_by;
+            $data['status'] = 1;
+            $data['isActive'] = 1;
+            //insert mapping details
+            $this->db->insert("toy_phcStaff_mapping", $data);
+            //update toy status and PhcId
+            // $this->db->set('isAssignedtoToy',1)->set('ToyId',$data['zmq_toy_Id'])->where('TokenId',$row)->update('tblTokenMaster');
+            print_r(json_encode($row));
+    }
+     
 }
 ?>

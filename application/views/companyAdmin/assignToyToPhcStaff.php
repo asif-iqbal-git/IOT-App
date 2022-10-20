@@ -12,7 +12,7 @@
     </style>
 </head>
 <body>
-    <h2>Assign Toys to PHC</h2>
+    <h2>Assign Toy To PHC-Staff</h2>
     <div class="alert  col-md-9 mx-auto" id="alert" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>   
@@ -25,17 +25,17 @@
          <div class="row">
              <div class="col-md-2"><label class="control-label"></label></div>
              <div class="col-md-4">
-               <select required  id="phcCenterId" name="phcCenterId" class="form-control" >
-               <option value="" disabled="" selected=""><span>Select PHC Center</span></option>
-               <?php if(isset($phc_list) && !empty($phc_list)){?>
-               <?php for($i = 0; $i < count($phc_list); $i++) {?>
-                   <option value="<?= $phc_list[$i]->PhcId??"No Data Found" ?>">
-                   <?= $phc_list[$i]->PhcName??"No Project Admin Found" ?></option>  
+               <select required  id="zmqToyId" name="zmqToyId" class="form-control" >
+               <option value="" disabled="" selected=""><span>Select ZMQ Toy</span></option>
+               <?php if(isset($assignToyList) && !empty($assignToyList)){?>
+               <?php for($i = 0; $i < count($assignToyList); $i++) {?>
+                   <option value="<?= $assignToyList[$i]->ToyId??"No Data Found" ?>">
+                   <?= $assignToyList[$i]->ToyName??"No Project Admin Found" ?></option>  
                <?php } }?>
                </select>
              </div>
              <div class="col-md-3">
-             <button  id="assign_toyid_to_phc_center" class="btn btn-primary center-block" type="submit"><span class="">                    
+             <button  id="assign_toyid_to_phc_staff" class="btn btn-primary center-block" type="submit"><span class="">                    
                  </span>&nbsp;<strong>Assign Toy</strong>
              </button> 
              </div>
@@ -44,42 +44,39 @@
 
    <!-- Toy  Table -->
    <div class="col-md-9 mx-auto">
-      <?php if(isset($toy_list) && !empty($toy_list)){?>
+      <?php if(isset($phcStaff_list) && !empty($phcStaff_list)){?>
       
       <!-- table -->
         <table class="table table-bordered">
   <thead>
     <tr>
       <th scope="col">S.No</th>
-      <th scope="col">Toys ZMQ Id</th>    
+      <th scope="col">PHC-Staff</th>    
       <th scope="col">Assign</th>
     </tr>
   </thead>
 
   <tbody>
   
-    <?php for($i=0; $i < count($toy_list); $i++){?>
+    <?php for($i=0; $i < count($phcStaff_list); $i++){?>
       
     <tr>
       <th><?= $i+1 ?></th>
-      <td><?= $toy_list[$i]->ToyName;  ?></td>
+      <td><?= $phcStaff_list[$i]->emp_name;  ?></td>
       <td>
-     
-        <input type="checkbox" class="messageCheckbox" id="<?= $toy_list[$i]->ToyId; ?>" name="project_uuid" 
-        value="<?= $toy_list[$i]->ToyId; ?>"/>
- 
+      <input class="" type="radio" name="project_uuid" id="<?= $phcStaff_list[$i]->staff_uuid; ?>" value="<?= $phcStaff_list[$i]->staff_uuid; ?>">               
       </td>
     
     </tr>
     <?php }?>
    
-    <?php }else{echo"<h3>No Toys To Assign..</h3>";}?>
+    <?php }else{echo"<h3>No Phc-staff To Assign..</h3>";}?>
     </tr>
   </tbody>
 </table>
 
-    <!-- UnAssigned Toys List -->
-<?php var_dump($assignToyList); ?>
+    <!-- UnAssigned Tokens List -->
+<!-- <//?php var_dump($assignToyList); ?> -->
 
 <?php if(isset($assignedProjects) && !empty($assignedProjects)){?>
  
@@ -98,9 +95,6 @@
        is Assign to   <strong><?= $assignedProjects[$i]->emp_name;  ?></strong>  
       </td>
       
-      <!-- &#9745; -->
-        <!-- <input type="checkbox" id="<//?= $assignedProjects[$i]->project_uuid; ?>" name=" "  
-        value="<//?= $assignedProjects[$i]->project_uuid;?>" Checked disabled>-->
  
        
       <td>
@@ -108,7 +102,7 @@
       </td>
     </tr>
     <?php }?>
-    <?php }else{echo"<h3>No Toys To Unassigned..</h3>";}?>
+    <?php }else{echo"<h3>No Phc-Staff To Unassigned..</h3>";}?>
     </tr>
   </tbody>
 </table>
@@ -121,11 +115,11 @@
       var checkedVal={};
         var all=[];  
        
-        $(document).on('change','input[type=checkbox]' ,function(){
+        $(document).on('change','input[type=radio]' ,function(){
         // checkedVal={};
         all=[];
        
-        $('input[type=checkbox]:checked').each(function(){             
+        $('input[type=radio]:checked').each(function(){             
             //push all checked value to all(array)
             
             all.push($(this).val());   
@@ -134,15 +128,15 @@
          console.log("ck_val:",all);   
         });
      
-       //  Sending Health-Provider-id with Assign token-id and zmq-id
-        $("#assign_toyid_to_phc_center").on('click',function(){
-            var phcCenterId = document.getElementById('phcCenterId').value;
-                alert(phcCenterId)
+       //  Sending ZMQ Token id with zmq-toy
+        $("#assign_toyid_to_phc_staff").on('click',function(){
+            var zmqToyId = document.getElementById('zmqToyId').value;
+                alert(zmqToyId)
             $.ajax({
-                url: "<?= base_url('StaffController/assign_toys_To_phc_center') ?>",
+                url: "<?= base_url('StaffController/assign_toy_To_phcStaff') ?>",
                 type: 'POST',
                 data: {
-                    phcCenterId:phcCenterId,
+                    zmqToyId:zmqToyId,
                     checked_id:all
                 },
                 success: function(data, textStatus, jqXHR) {
