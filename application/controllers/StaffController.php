@@ -493,7 +493,6 @@ class StaffController extends CI_Controller {
  
         $data['phcStaff_list'] = $this->staff_model->getPHCStaffList($company_info[0]->company_uuid);
         
-     
         if($userData){
             $this->load->view('libs');                                     
             $this->load->view('Ug/universalmainbody');
@@ -522,8 +521,10 @@ class StaffController extends CI_Controller {
             //insert mapping details
             $this->db->insert("toy_phcStaff_mapping", $data);
             //update toy status and PhcId
-            // $this->db->set('isAssignedtoToy',1)->set('ToyId',$data['zmq_toy_Id'])->where('TokenId',$row)->update('tblTokenMaster');
-            print_r(json_encode($row));
+            $this->db->set('hasToy', 1)->where('staff_uuid',$data['phc_staff_id'])->update('master_staff');
+            //update toyRegistration for selected Toy for phcStaff
+            $this->db->set('isAssignedToPhcStaff', 1)->where('ToyId',$data['zmq_toy_Id'])->update('tblToyRegistration');                                                                                                                                                 
+            print_r(json_encode($msg));
     }
      
 }

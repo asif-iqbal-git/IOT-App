@@ -16,7 +16,16 @@
     <div class="alert  col-md-9 mx-auto" id="alert" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>   
+      
+        
       </div>
+      <div class="alert alert-warning alert-dismissible fade show col-md-9 mx-auto" role="alert">
+  Single Toy is Assign To Single Phc-Staff
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+     
     <!-- PHC Center List -->
       <div class="Card mb-3">
       
@@ -57,7 +66,7 @@
   </thead>
 
   <tbody>
-  
+  <!-- <//?php var_dump($phcStaff_list); die();?> -->
     <?php for($i=0; $i < count($phcStaff_list); $i++){?>
       
     <tr>

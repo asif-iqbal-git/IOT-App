@@ -248,7 +248,7 @@
 
     public function fetchOnlyAssignedToys(){
         $query = "SELECT ToyId,ToyName,IsAssignedtoPhc,isActive From tblToyRegistration
-        WHERE IsAssignedtoPhc='1'";
+        WHERE IsAssignedtoPhc='1' AND isAssignedToPhcStaff ='0'";
         $q = $this->db->query($query);
                 
         //   var_dump($q->result());die();
@@ -279,10 +279,14 @@
     public function getPHCStaffList($company_uuid)
     {
        // var_dump($company_uuid);
-
+        
+       
         $query = "SELECT staff_uuid,emp_name,designation_id,isActive From master_staff
-        WHERE isActive='1' AND level='3' AND company_uuid='$company_uuid'";
-
+        WHERE isActive='1' AND level='3' AND hasToy ='0' AND company_uuid = '$company_uuid'";
+        
+/*
+        $query = "SELECT `staff_uuid`,`phc_staff_id`,`emp_name` FROM `toy_phcStaff_mapping` AS tpm INNER JOIN master_staff as ms ON tpm.isActive = ms.isActive AND ms.company_uuid='$company_uuid' AND ms.level=3 AND tpm.status=1 GROUP BY tpm.status";
+*/      
         $q = $this->db->query($query);
                 
         //   var_dump($q->result());die();
