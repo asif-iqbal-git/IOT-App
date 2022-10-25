@@ -123,7 +123,7 @@
         function Sendemail(){
 
 var staff_email = document.getElementById('staff_email').value;
-        alert('Sending email to ',staff_email)
+      //  alert('Mail Sending...',staff_email)
                 Email.send({
             Host : "smtp.elasticemail.com",
             Username : "johndeo8789@gmail.com",

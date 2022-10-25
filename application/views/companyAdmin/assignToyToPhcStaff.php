@@ -19,7 +19,7 @@
       
         
       </div>
-      <div class="alert alert-warning alert-dismissible fade show col-md-9 mx-auto" role="alert">
+      <div class="alert alert-warning alert-dismissible fade show col-md-10 mx-auto" role="alert">
   Single Toy is Assign To Single Phc-Staff
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
@@ -30,16 +30,31 @@
       <div class="Card mb-3">
       
       <!-- <//?php echo("<pre>");print_r(($toy_list??"None")); ?>    -->
-        
-         <div class="row">
-             <div class="col-md-2"><label class="control-label"></label></div>
+        <!-- #todo
+            1. select PHC
+            2. select PHC staff
+            3. show list of toys to select by phc-staff
+        -->
+        <div class="row">
+             <div class="col-md-1"><label class="control-label"></label></div>
+             <div class="col-md-4">
+               <select required  id="phcCenterId" name="phcCenterId" class="form-control" >
+               <option value="" disabled="" selected=""><span>Select PHC Center</span></option>
+               <?php if(isset($phc_list) && !empty($phc_list)){?>
+               <?php for($i = 0; $i < count($phc_list); $i++) {?>
+                   <option value="<?= $phc_list[$i]->PhcId??"No Data Found" ?>">
+                   <?= $phc_list[$i]->PhcName??"No Project Admin Found" ?></option>  
+               <?php } }?>
+               </select>
+             </div>     
+             
              <div class="col-md-4">
                <select required  id="zmqToyId" name="zmqToyId" class="form-control" >
-               <option value="" disabled="" selected=""><span>Select ZMQ Toy</span></option>
-               <?php if(isset($assignToyList) && !empty($assignToyList)){?>
-               <?php for($i = 0; $i < count($assignToyList); $i++) {?>
-                   <option value="<?= $assignToyList[$i]->ToyId??"No Data Found" ?>">
-                   <?= $assignToyList[$i]->ToyName??"No Project Admin Found" ?></option>  
+               <option value="" disabled="" selected=""><span>Select PHC Staff</span></option>
+               <?php if(isset($phcStaff_list) && !empty($phcStaff_list)){?>
+               <?php for($i = 0; $i < count($phcStaff_list); $i++) {?>
+                   <option value="<?= $phcStaff_list[$i]->emp_name ??"No Data Found" ?>">
+                   <?= $phcStaff_list[$i]->emp_name??"No Project Admin Found" ?></option>  
                <?php } }?>
                </select>
              </div>
@@ -48,40 +63,27 @@
                  </span>&nbsp;<strong>Assign Toy</strong>
              </button> 
              </div>
-         </div>      
+
+         </div>    
+           
+             
    </div>
 
    <!-- Toy  Table -->
-   <div class="col-md-9 mx-auto">
-      <?php if(isset($phcStaff_list) && !empty($phcStaff_list)){?>
+   <div class="col-md-12">
+       
       
       <!-- table -->
         <table class="table table-bordered">
   <thead>
     <tr>
       <th scope="col">S.No</th>
-      <th scope="col">PHC-Staff</th>    
+      <th scope="col">Toy List</th>    
       <th scope="col">Assign</th>
     </tr>
   </thead>
-
-  <tbody>
-  <!-- <//?php var_dump($phcStaff_list); die();?> -->
-    <?php for($i=0; $i < count($phcStaff_list); $i++){?>
-      
-    <tr>
-      <th><?= $i+1 ?></th>
-      <td><?= $phcStaff_list[$i]->emp_name;  ?></td>
-      <td>
-      <input class="" type="radio" name="project_uuid" id="<?= $phcStaff_list[$i]->staff_uuid; ?>" value="<?= $phcStaff_list[$i]->staff_uuid; ?>">               
-      </td>
-    
-    </tr>
-    <?php }?>
+  <tbody id="tbl_data"></tbody>
    
-    <?php }else{echo"<h3>No Phc-staff To Assign..</h3>";}?>
-    </tr>
-  </tbody>
 </table>
 
     <!-- UnAssigned Tokens List -->
@@ -124,11 +126,11 @@
       var checkedVal={};
         var all=[];  
        
-        $(document).on('change','input[type=radio]' ,function(){
+        $(document).on('change','input[type=checkbox]' ,function(){
         // checkedVal={};
         all=[];
        
-        $('input[type=radio]:checked').each(function(){             
+        $('input[type=checkbox]:checked').each(function(){             
             //push all checked value to all(array)
             
             all.push($(this).val());   
@@ -153,7 +155,7 @@
                     document.getElementById('alert').style.display = 'block';
                     document.getElementById('alert').classList.add("alert-primary");
                     document.getElementById('alert').innerHTML = data;
-                   // setTimeout(refresh, 9000);
+                   // setTimeout(refresh, 10000);
                     console.log(data) 
                    
                    // var json = JSON.parse(data);      
@@ -165,6 +167,39 @@
         function refresh(){
           window.location.href = "<?php echo base_url('assign-ToysToPHC-Center')?>";
         }
+
+        var phcCenterId = document.getElementById('phcCenterId');
+        phcCenterId.addEventListener('change',function(){
+          //alert(phcCenterId.value)
+          phc_Center_Id = phcCenterId.value;
+          alert(phc_Center_Id)
+          $.ajax({
+                url: "<?= base_url('StaffController/showToyListByPHC') ?>",
+                type: 'POST',
+                data: {
+                  phcCenterId:phc_Center_Id, 
+                },
+                success: function(data, textStatus, jqXHR) {
+                  //  alert(data);  
+                  console.log(data)  
+                  var jsonData = JSON.parse(data);      
+                  console.log(jsonData)
+                  var htmlTemp = '';
+                  for (var i = 0; i <jsonData.length; i++){
+                    htmlTemp += `<tr><td>${i+1}</td>`;
+                    htmlTemp += `<td>${jsonData[i].ToyName}</td>`;
+                    htmlTemp += `<td><input type="checkbox" id="ckboxToyId" value="${jsonData[i].zmq_toy_Id}"/></td></tr>`;
+                  }
+                  document.getElementById('tbl_data').innerHTML = htmlTemp;
+                  
+                  
+                },// Error handling 
+                error: function (error) {
+                    console.log(`Error ${error}`);
+                }
+            })
+        })
+        
 
 </script>
 </html>

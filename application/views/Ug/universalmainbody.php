@@ -153,7 +153,7 @@
            <?php 
           
           if (isset($userData['level'])){
-              if($userData['level'] == '1') {
+              if($userData['level'] == '1--') {
               ?>
       <li class="nav-item">
           <a class="nav-link" href="<?= base_url('project-list'); ?>">

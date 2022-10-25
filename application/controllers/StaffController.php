@@ -486,11 +486,14 @@ class StaffController extends CI_Controller {
 
     public function displayAssignToyTOPhcStaff()
     {
+      
         $userData = $this->session->userdata('userData');
         $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
         
         $data['assignToyList'] = $this->staff_model->fetchOnlyAssignedToys();
- 
+        $data['phc_list'] = $this->staff_model->getPhcCenterList();
+        //fetch toy according to phc center
+       // $data['toyListByphc']= $this->staff_model->getToyListAccordingToPHC($phc_id=1);
         $data['phcStaff_list'] = $this->staff_model->getPHCStaffList($company_info[0]->company_uuid);
         
         if($userData){
@@ -502,6 +505,13 @@ class StaffController extends CI_Controller {
             $this->load->view('libs');
             $this->load->view('welcome_message'); 
         }   
+    }
+
+    public function showToyListByPHC(){
+        $data['phcCenterId'] = $this->input->post('phcCenterId');
+        $phc_id=$data['phcCenterId'];
+        $data['toyListByphc'] = $this->staff_model->getToyListAccordingToPHC($phc_id);
+        print_r(json_encode($data['toyListByphc']));
     }
 
     public function assign_toy_To_phcStaff()

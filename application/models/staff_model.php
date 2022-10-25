@@ -298,6 +298,22 @@
             return FALSE;
         }      
     }
+
+    // ------------------------------
+    public function getToyListAccordingToPHC($phc_id)
+    {
+        $query = "SELECT zmq_toy_Id,ToyName, phc_center_id,status FROM toys_phcCenter_mapping as tp INNER JOIN tblToyRegistration as tr ON tr.ToyId = tp.zmq_toy_Id WHERE tp.phc_center_id='$phc_id'";
+        $q = $this->db->query($query);
+                
+        //   var_dump($q->result());die();
+
+        if ($q->num_rows() > 0) {
+                return $q->result();       
+        }   
+        else {
+            return FALSE;
+        }      
+    }
     
 } //class-ends
 
