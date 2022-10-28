@@ -521,10 +521,12 @@ class StaffController extends CI_Controller {
         $userData = $this->session->userdata('userData');
         $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
         // var_dump($company_info[0]->created_by);die();
-           
-            $data['zmq_toy_Id'] = $this->input->post('zmqToyId');
-            $data['phc_staff_id'] = implode($this->input->post('checked_id'));
-           
+
+        $data['zmq_toy_Id'] = $this->input->post('checked_id');
+        foreach($data['zmq_toy_Id'] as $row){
+            $data['phc_center_id'] = $this->input->post('phcCenterId');
+            $data['zmq_toy_Id'] = $row;
+            $data['phc_staff_id'] = $this->input->post('phcStaffId');    
             $data['created_by'] =  $company_info[0]->created_by;
             $data['status'] = 1;
             $data['isActive'] = 1;
@@ -533,8 +535,30 @@ class StaffController extends CI_Controller {
             //update toy status and PhcId
             $this->db->set('hasToy', 1)->where('staff_uuid',$data['phc_staff_id'])->update('master_staff');
             //update toyRegistration for selected Toy for phcStaff
-            $this->db->set('isAssignedToPhcStaff', 1)->where('ToyId',$data['zmq_toy_Id'])->update('tblToyRegistration');                                                                                                                                                 
+            $this->db->set('isAssignedToPhcStaff', 1)->set('PhcId',$data['phc_center_id'])->where('ToyId',$data['zmq_toy_Id'])->update('tblToyRegistration');                                                          
+        }                                                                                 
             print_r(json_encode($msg));
+    }
+
+    public function showToysUnderphcstaff()
+    {
+        $userData = $this->session->userdata('userData');
+        //$company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
+        $phc_staff_id = $this->staff_model->getPhcStaffId($userData['login_id']);
+        //var_dump($phc_staff_id[0]['staff_uuid']);die();
+        $data['userInfo'] = $userData['login_id'];
+         $data['selectedToytokens'] = $this->staff_model->getSelectedToyTokens($phc_staff_id[0]->staff_uuid);
+        $data['toysUnderphcstaff'] = $this->staff_model->getToysUnderphcstaff($phc_staff_id[0]->staff_uuid);
+
+        if($userData){
+            $this->load->view('libs');                                     
+            $this->load->view('Ug/universalmainbody');
+            $this->load->view('staff/toysUnderPhcStaff', $data);
+            // $this->load->view('Ug/universalfooter');
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message'); 
+        }   
     }
      
 }

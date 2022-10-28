@@ -16,11 +16,9 @@
     <div class="alert  col-md-9 mx-auto" id="alert" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>   
-      
-        
       </div>
       <div class="alert alert-warning alert-dismissible fade show col-md-10 mx-auto" role="alert">
-  Single Toy is Assign To Single Phc-Staff
+      Multiple Toy is Assign To Single Phc-Staff for Single PHC.
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -43,18 +41,18 @@
                <?php if(isset($phc_list) && !empty($phc_list)){?>
                <?php for($i = 0; $i < count($phc_list); $i++) {?>
                    <option value="<?= $phc_list[$i]->PhcId??"No Data Found" ?>">
-                   <?= $phc_list[$i]->PhcName??"No Project Admin Found" ?></option>  
+                   <?= $phc_list[$i]->PhcName??"No PHC Center Found" ?></option>  
                <?php } }?>
                </select>
              </div>     
              
              <div class="col-md-4">
-               <select required  id="zmqToyId" name="zmqToyId" class="form-control" >
+               <select required  id="phcStaffId" name="phcStaffId" class="form-control" >
                <option value="" disabled="" selected=""><span>Select PHC Staff</span></option>
                <?php if(isset($phcStaff_list) && !empty($phcStaff_list)){?>
                <?php for($i = 0; $i < count($phcStaff_list); $i++) {?>
-                   <option value="<?= $phcStaff_list[$i]->emp_name ??"No Data Found" ?>">
-                   <?= $phcStaff_list[$i]->emp_name??"No Project Admin Found" ?></option>  
+                   <option value="<?= $phcStaff_list[$i]->staff_uuid ??"No Data Found" ?>">
+                   <?= $phcStaff_list[$i]->emp_name??"No PHC  Staff Found" ?></option>  
                <?php } }?>
                </select>
              </div>
@@ -75,48 +73,13 @@
       
       <!-- table -->
         <table class="table table-bordered">
-  <thead>
-    <tr>
-      <th scope="col">S.No</th>
-      <th scope="col">Toy List</th>    
-      <th scope="col">Assign</th>
-    </tr>
-  </thead>
+ 
   <tbody id="tbl_data"></tbody>
    
 </table>
 
-    <!-- UnAssigned Tokens List -->
-<!-- <//?php var_dump($assignToyList); ?> -->
-
-<?php if(isset($assignedProjects) && !empty($assignedProjects)){?>
  
-<table class="table table-bordered table-danger">
-  <thead>
-   
-  </thead>
-
-  <tbody>
-  <!-- <//?php var_dump($assignedProjects);?> -->
-    <?php for($i=0; $i < count($assignedProjects); $i++){?>
-      
-    <tr>
-      <th><?= $i+1 ?></th>
-      <td><strong><?= $assignedProjects[$i]->project_name;  ?> </strong>
-       is Assign to   <strong><?= $assignedProjects[$i]->emp_name;  ?></strong>  
-      </td>
-      
  
-       
-      <td>
-      <button type="button" class="btn btn-outline-danger" id="<?= $assignedProjects[$i]->project_uuid;  ?>" onclick="unassignedPAdmin(this.id)">UNASSIGNED</button>
-      </td>
-    </tr>
-    <?php }?>
-    <?php }else{echo"<h3>No Phc-Staff To Unassigned..</h3>";}?>
-    </tr>
-  </tbody>
-</table>
 
       </div>
 </body>
@@ -141,13 +104,16 @@
      
        //  Sending ZMQ Token id with zmq-toy
         $("#assign_toyid_to_phc_staff").on('click',function(){
-            var zmqToyId = document.getElementById('zmqToyId').value;
-                alert(zmqToyId)
+            var phcStaffId = document.getElementById('phcStaffId').value;
+            var phcCenterId = document.getElementById('phcCenterId').value;
+                // alert("phcStaffId:"+phcStaffId);
+                // alert("phcCenterId:"+phcCenterId);
             $.ajax({
                 url: "<?= base_url('StaffController/assign_toy_To_phcStaff') ?>",
                 type: 'POST',
                 data: {
-                    zmqToyId:zmqToyId,
+                    phcCenterId:phcCenterId,
+                    phcStaffId:phcStaffId,
                     checked_id:all
                 },
                 success: function(data, textStatus, jqXHR) {
@@ -155,7 +121,7 @@
                     document.getElementById('alert').style.display = 'block';
                     document.getElementById('alert').classList.add("alert-primary");
                     document.getElementById('alert').innerHTML = data;
-                   // setTimeout(refresh, 10000);
+                    setTimeout(refresh, 10000);
                     console.log(data) 
                    
                    // var json = JSON.parse(data);      
@@ -165,14 +131,14 @@
         });
 
         function refresh(){
-          window.location.href = "<?php echo base_url('assign-ToysToPHC-Center')?>";
+          window.location.href = "<?php echo base_url('assign-toyToPhcStaff')?>";
         }
 
         var phcCenterId = document.getElementById('phcCenterId');
         phcCenterId.addEventListener('change',function(){
           //alert(phcCenterId.value)
           phc_Center_Id = phcCenterId.value;
-          alert(phc_Center_Id)
+        //  alert("phc"+phc_Center_Id)
           $.ajax({
                 url: "<?= base_url('StaffController/showToyListByPHC') ?>",
                 type: 'POST',
@@ -185,6 +151,13 @@
                   var jsonData = JSON.parse(data);      
                   console.log(jsonData)
                   var htmlTemp = '';
+                  htmlTemp += `<thead>
+                                <tr>
+                                  <th scope="col">S.No</th>
+                                  <th scope="col">Toy List</th>    
+                                  <th scope="col">Assign</th>
+                                </tr>
+                              </thead>`;
                   for (var i = 0; i <jsonData.length; i++){
                     htmlTemp += `<tr><td>${i+1}</td>`;
                     htmlTemp += `<td>${jsonData[i].ToyName}</td>`;

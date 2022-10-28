@@ -90,5 +90,7 @@ $route['assign-ToysToPHC-Center'] = 'StaffController/displayAssignToysToPhcCente
 $route['assign-TokensToToy'] = 'StaffController/displayAssignTokensToToy';
 
 $route['assign-toyToPhcStaff'] = 'StaffController/displayAssignToyTOPhcStaff';
+
+$route['show-toys-underphcstaff'] = 'StaffController/showToysUnderphcstaff';
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

@@ -302,10 +302,12 @@
     // ------------------------------
     public function getToyListAccordingToPHC($phc_id)
     {
-        $query = "SELECT zmq_toy_Id,ToyName, phc_center_id,status FROM toys_phcCenter_mapping as tp INNER JOIN tblToyRegistration as tr ON tr.ToyId = tp.zmq_toy_Id WHERE tp.phc_center_id='$phc_id'";
+        $query = "SELECT zmq_toy_Id,ToyName, phc_center_id,status FROM toys_phcCenter_mapping as tp INNER JOIN tblToyRegistration as tr ON tr.ToyId = tp.zmq_toy_Id         
+        WHERE tp.phc_center_id='$phc_id' AND isAssignedToPhcStaff='0'";
+        
         $q = $this->db->query($query);
                 
-        //   var_dump($q->result());die();
+        //var_dump($q->result());die();
 
         if ($q->num_rows() > 0) {
                 return $q->result();       
@@ -313,6 +315,71 @@
         else {
             return FALSE;
         }      
+    }
+    public function getPhcStaffId($phc_login_id)
+    {
+        $query = "SELECT staff_uuid FROM tblLogin where login_id='$phc_login_id' AND level='3'";
+
+        $q = $this->db->query($query);
+                
+       // var_dump($q->result());die();
+
+        if ($q->num_rows() > 0) {
+                return $q->result();       
+        }   
+        else {
+            
+            return FALSE;
+        }  
+    }
+
+    public function getToysUnderphcstaff($phc_staff_id){
+        //var_dump($phc_staff_id);
+        
+        $query = "SELECT tp.phc_center_id,
+                         tp.zmq_toy_Id, 
+                         tp.phc_staff_id,
+                         tp.status, 
+                         tr.ToyName
+                FROM toy_phcStaff_mapping as tp 
+                INNER JOIN tblToyRegistration as tr 
+                ON tr.ToyId = tp.zmq_toy_Id 
+                WHERE tp.phc_staff_id ='$phc_staff_id'";
+         
+        $q = $this->db->query($query);
+                
+        //var_dump($q->result());die();
+
+        if ($q->num_rows() > 0) {
+                return $q->result();       
+        }   
+        else {
+            
+            return FALSE;
+        }    
+    }
+    public function getSelectedToyTokens($phc_staff_id)
+    {
+        //  var_dump($phc_staff_id);die();
+        $query = "SELECT ttm.zmq_token_Id,tp.phc_center_id,pr.PhcName                   
+                FROM toy_phcStaff_mapping as tp 
+                INNER JOIN tokens_toy_mapping as ttm                  
+                ON tp.zmq_toy_Id = ttm.zmq_toy_Id 
+                INNER JOIN tblPhcRegister as pr
+                ON pr.PhcId = tp.phc_center_id                
+                WHERE tp.phc_staff_id ='$phc_staff_id'";
+
+        $q = $this->db->query($query);
+
+      
+
+        if ($q->num_rows() > 0) {
+        return $q->result();       
+        }   
+        else {
+
+        return FALSE;
+        }    
     }
     
 } //class-ends

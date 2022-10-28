@@ -266,6 +266,17 @@
 
 
 
+          <?php if (isset($userData['level'])){
+                if($userData['level'] == '3') {
+                ?>
+            <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url('show-toys-underphcstaff'); ?>">
+                                <i class="fas fa-fw fa-table"></i>
+                                <span>Show Toys</span></a>
+                        </li>
+                        <?php
+                            } }
+                ?> 
 
 
 
@@ -462,6 +473,21 @@
                                     src=<//?= base_url('assets/Admin_assets/vendor/img/undraw_profile.svg'); ?>"> -->
                             </a>
                             <? }} ?>
+
+
+                            <?php if(isset($userData['level'])){
+                                if ($userData['level'] == '3') {
+                        ?>
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"> PHC-Staff  
+                                | <?php print_r($userData['login_id']); ?> </span>
+                                <!-- <img class="img-profile rounded-circle"
+                                    src=<//?= base_url('assets/Admin_assets/vendor/img/undraw_profile.svg'); ?>"> -->
+                            </a>
+                            <? }} ?>
+
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
@@ -482,7 +508,7 @@
                                 
                                 <?php 
                              $userData = $this->session->userdata('userData');
-                                // print_r($userData);
+                                //  print_r($userData);
                                 if(isset($userData['level'])){
                                 if ( $userData['level'] == '0' || $userData['level'] == '1' || $userData['level'] == '2' || $userData['level'] == '3') {
                                     ?>
