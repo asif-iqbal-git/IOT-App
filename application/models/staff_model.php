@@ -353,20 +353,23 @@
         if ($q->num_rows() > 0) {
                 return $q->result();       
         }   
-        else {
-            
+        else {            
             return FALSE;
         }    
     }
+
     public function getSelectedToyTokens($phc_staff_id)
     {
         //  var_dump($phc_staff_id);die();
-        $query = "SELECT ttm.zmq_token_Id,tp.phc_center_id,pr.PhcName                   
+        $query = "SELECT ttm.zmq_token_Id,ttm.zmq_toy_Id,
+                tp.phc_center_id,pr.PhcName,ttr.ToyName                   
                 FROM toy_phcStaff_mapping as tp 
                 INNER JOIN tokens_toy_mapping as ttm                  
                 ON tp.zmq_toy_Id = ttm.zmq_toy_Id 
                 INNER JOIN tblPhcRegister as pr
-                ON pr.PhcId = tp.phc_center_id                
+                ON pr.PhcId = tp.phc_center_id 
+                INNER JOIN tblToyRegistration as ttr
+                ON ttr.ToyId = tp.zmq_toy_Id         
                 WHERE tp.phc_staff_id ='$phc_staff_id'";
 
         $q = $this->db->query($query);

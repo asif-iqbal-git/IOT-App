@@ -26,10 +26,10 @@
 // $config['base_url'] = 'http://connect2mfi.org/IOT-App/'; 
 
 // for localhost
-// $config['base_url'] = 'http://localhost/IOT-App/';
+$config['base_url'] = 'http://localhost/IOT-App/';
 
 // for local-Network-wifi zmq58
-$config['base_url'] = 'http://192.168.1.49/IOT-App/';
+// $config['base_url'] = 'http://192.168.1.49/IOT-App/';
  
 
 /*
