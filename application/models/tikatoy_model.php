@@ -663,14 +663,14 @@ where BlockId= ?",array($data['BlockId']));
         // echo("<pre>");
         // print_r($data_login);die();
   
-     $company_admin_loginId = $data_company['company_admin_loginId'];
-            
+     $company_admin_loginId = $data_company['company_email'];
+           // var_dump($company_admin_loginId);
         $this->db->set('company_uuid', 'UUID()', FALSE);
         $this->db->insert('master_company', $data_company);
 
         $company_uuid = $this->db->select('company_uuid')
                             ->from('master_company')
-                            ->where('company_admin_loginId',$company_admin_loginId)
+                            ->where('company_email',$company_admin_loginId)
                             ->get();
        
         $data_masterStaff = array(
@@ -695,7 +695,11 @@ where BlockId= ?",array($data['BlockId']));
                             ->from('master_staff')
                             ->where('login_id',$company_admin_loginId)
                             ->get();
-                            
+
+         
+        
+        if(isset($staff_uuid->result_array()[0]['staff_uuid'])){
+            
         $data_login_ = array(
             "staff_uuid" => $staff_uuid->result_array()[0]['staff_uuid'],
             "login_id"   => $data_login['login_id'],
@@ -704,7 +708,9 @@ where BlockId= ?",array($data['BlockId']));
             "isActive"   => $data_login['isActive'],
         );        
 
-        $this->db->insert('tblLogin', $data_login_);      
+        
+     }      
+     $this->db->insert('tblLogin', $data_login_);           
     }
 
 
@@ -731,14 +737,14 @@ where BlockId= ?",array($data['BlockId']));
     //    $query = "SELECT  C.company_uuid, C.company_name, C.created_by,L.login_id 
     //              FROM master_company As C INNER JOIN tblLogin As L ON 
     //              C.company_uuid = L.staff_uuid WHERE C.company_uuid='$company_login_id'" ;
-      
+      //var_dump($company_admin_login_id);
     $query = "SELECT company_uuid,company_name, created_by
      FROM master_company 
-     WHERE company_admin_loginId ='$company_admin_login_id'" ;
+     WHERE company_email ='$company_admin_login_id'" ;
 
        $q = $this->db->query($query);
        
-      //  print_r($q->result());die();
+   //  print_r($q->result());die();
      
       if ($q->num_rows() > 0) {
              return $q->result();       

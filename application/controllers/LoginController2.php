@@ -29,15 +29,18 @@ class LoginController2 extends CI_Controller {
             $this->session->set_userdata('userData', $userData);    
            
             //fetch company_name by login_id
-            $company_name_by_login_id = $this->loginmodel->fetchCompanyName($userData['login_id'])?? 0;
+            $company_name_by_login_id = $this->loginmodel->fetchCompanyName($userData['login_id']) ?? 0;
             
-         //  var_dump($company_name_by_login_id);
+             //var_dump($company_name_by_login_id);
+            if(isset($company_name_by_login_id)){
+                if($company_name_by_login_id != 0){
             $company_name = [                                
                 'companyName' => $company_name_by_login_id[0]->company_name
                ];
                 // Set Session For login User
                 $this->session->set_userdata('company_name', $company_name);  
-
+                }
+            }
                 
         if(isset($login_data) && !empty($login_data)){
            
@@ -70,6 +73,9 @@ class LoginController2 extends CI_Controller {
     public function logout()
     {
         $this->session->unset_userdata('login_id');
+        $this->session->unset_userdata('userData');
+        $this->session->unset_userdata('company_name');
+        
         $this->load->view('welcome_message');
     }
 

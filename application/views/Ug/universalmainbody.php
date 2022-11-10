@@ -18,7 +18,7 @@
 <?php 
  $userData = $this->session->userdata('userData');
  $company_name = $this->session->userdata('company_name');
-//  var_dump($company_name);
+//   var_dump($company_name);
 ?>
     <!-- Custom fonts for this template-->
     
@@ -36,7 +36,7 @@
             <a class="sidebar-brand d-flex align-items-center justify-content-center" 
             href="<?= base_url('dashboard'); ?>">
                 <div class="sidebar-brand-icon">
-                     <?php echo $company_name['companyName']; ?>
+                     <?= $company_name['companyName'] ?? ""; ?>
                       
                 </div>
                 <!-- <div class="sidebar-brand-text mx-3">IOT App</div> -->

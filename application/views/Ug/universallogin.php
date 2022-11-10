@@ -127,7 +127,7 @@
         }
 
         function validateEmail(username){
-            var emailFormat = /([a-zA-Z0-9-]){3,15}$/g;
+            var emailFormat = /([a-zA-Z0-9-]){2,15}$/g;
             if(username.match(emailFormat)){
                 return true;
             }
@@ -140,7 +140,7 @@
 
         function validatePassword(inputPassword){
             document.getElementById('usernameError').innerHTML = "";
-            var passwordFormat = /([a-zA-Z0-9-]){3,15}$/g;
+            var passwordFormat = /([a-zA-Z0-9-]){2,15}$/g;
             if(inputPassword.match(passwordFormat)){
                 return true;
             }

@@ -42,9 +42,9 @@
     
     if(isset($projectStatus) || !empty($projectStatus)){
    
-        for($i=0; $i < count($projectStatus); $i++){
+        for($i=0; $i < count(array($projectStatus)); $i++){
        
-            $project_uuid_temp = explode(",", $projectStatus[$i]->project_uuid);
+            $project_uuid_temp = explode(",", $projectStatus[$i]->project_uuid??NULL);
 
             $project_uuid.=",'".$project_uuid_temp[0]."'";       
      }
@@ -83,9 +83,9 @@
     {
         $project_uuid = "";   
      
-        for($i=0; $i < count($projectStatus); $i++){
+        for($i=0; $i < count(array($projectStatus)); $i++){
            
-                $project_uuid_temp = explode(",", $projectStatus[$i]->project_uuid);
+                $project_uuid_temp = explode(",", $projectStatus[$i]->project_uuid??NULL);
     
                 $project_uuid.=",'".$project_uuid_temp[0]."'";       
         }

@@ -212,7 +212,7 @@ class SuperAdminController extends CI_Controller {
     {   
         $userData = $this->session->userdata('userData');
      
-        $staff_data = $this->loginmodel->fetchStaffUUID($userData['login_id']);      
+        $staff_data = $this->loginmodel->fetchStaffUUID($userData['login_id'] ?? NULL);      
       //   var_dump($staff_data);die();
         $virtualPassword['virtualPassword'] = $this->generateRandomString();
          // var_dump($staff_data);
@@ -245,7 +245,8 @@ class SuperAdminController extends CI_Controller {
        $current_logedIn_staffUuid = $this->loginmodel->fetchStaffUUID($userData['login_id']);                      
         //For master_company
         $data_company['company_name'] = $this->input->post('company_name');
-        $data_company['company_admin_loginId'] = $this->input->post('company_login_id');
+        $data_company['company_admin_loginId'] = $data_company['company_name'];
+        // $data_company['company_admin_loginId'] = $this->input->post('company_login_id');
         $data_company['company_type'] = $this->input->post('company_type');
         $data_company['company_location'] = $this->input->post('company_location');
         $data_company['company_email'] = $this->input->post('company_email');

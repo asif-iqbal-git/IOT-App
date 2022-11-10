@@ -94,16 +94,23 @@ class loginmodel extends CI_Model {
     public function fetchStaffUUID($data)
     {
         //var_dump(trim($data));die();
-        $query = $this->db->select('staff_uuid')
-                        ->from('tblLogin')  
-                        ->where('login_id', $data)->get();
+        if($data){
+            $query = $this->db->select('staff_uuid')
+            ->from('tblLogin')  
+            ->where('login_id', $data)->get();
 
-        if ($query->num_rows() > 0) {
+            if ($query->num_rows() > 0) {
             $this->result = $query->result();
             $this->result = $this->result[0];
+            }
+
+            $data = $this->result;
+
+            return $data->staff_uuid; 
+        }else{
+            echo "";
         }
-        $data = $this->result;
-        return $data->staff_uuid; 
+        
     }
 
      
@@ -204,8 +211,10 @@ class loginmodel extends CI_Model {
     {
         
       $this->load->database();
-        $query = "select `BlockId` , `BlockName`   from  tblBlockMaster where  DistrictId=? and  isActive = 1";
-        $q = $this->db->query($query,$data['districtId']);
+        $query = "select `BlockId` , `BlockName`   from  tblBlockMaster where  
+        DistrictId=? and  isActive = 1";
+
+        $q = $this->db->query($query, $data['districtId']);
         if ($q->num_rows() > 0) {
             $this->data['blockInfo'] = $q->result_array();
             $this->data['success'] = TRUE;

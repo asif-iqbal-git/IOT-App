@@ -57,7 +57,8 @@ class StaffController extends CI_Controller {
     {
         $userData = $this->session->userdata('userData');     
         $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
-        
+       
+       // var_dump($company_info);
         /*
         //using phpmailer         
         // Load PHPMailer library
@@ -137,6 +138,7 @@ class StaffController extends CI_Controller {
         // Set to, from, message, etc.https://www.codexworld.com/codeigniter-send-email-gmail-smtp-server/
         //https://www.formget.com/codeigniter-gmail-smtp/
 */
+
         $staff_data['company_uuid'] = $company_info[0]->company_uuid;       
         
         $staff_data['login_id'] = $this->input->post('staff_email');       
@@ -489,7 +491,7 @@ class StaffController extends CI_Controller {
       
         $userData = $this->session->userdata('userData');
         $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
-        
+       // var_dump($userData['login_id']);
         $data['assignToyList'] = $this->staff_model->fetchOnlyAssignedToys();
         $data['phc_list'] = $this->staff_model->getPhcCenterList();
         //fetch toy according to phc center
