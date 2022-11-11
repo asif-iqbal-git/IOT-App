@@ -384,6 +384,35 @@
         return FALSE;
         }    
     }
+
+    public function getLastInsertedToyId()
+    {
+        $query = "SELECT * FROM tblToyRegistration ORDER BY ToyId DESC limit 1";
+        
+        $q = $this->db->query($query);
+       
+        if ($q->num_rows() > 0) {
+            return $q->result();       
+        }   
+        else {
+            return FALSE;
+        }    
+    }
+
+    public function getLastTenRecords()
+    {
+        $query = "SELECT ToyName FROM tblToyRegistration ORDER BY ToyId DESC limit 10";
+        
+        $q = $this->db->query($query);
+       
+        if ($q->num_rows() > 0) {
+            return $q->result();       
+        }   
+        else {
+            return FALSE;
+        }    
+    }
+
     
 } //class-ends
 

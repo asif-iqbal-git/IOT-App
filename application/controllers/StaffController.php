@@ -562,6 +562,42 @@ class StaffController extends CI_Controller {
             $this->load->view('welcome_message'); 
         }   
     }
-     
-}
+    
+    public function generateZMQToys()
+    {
+        $msg = 'Toy Generated Successfully';
+
+        $flag = $this->input->post('flag');
+        $last_id = $this->staff_model->getLastInsertedToyId();        
+
+        $last_inserted_id = $last_id[0]->ToyName ? $last_id[0]->ToyName: 1;
+        
+        //$str = "ZMQ_TOY_016";
+        $str = substr($last_inserted_id,8);
+        $last_inserted_id = (int)$str;
+
+        // for($i = $last_inserted_id; $i <= $last_inserted_id+10; $i++)
+        // {
+        //     $data = array(
+        //         'ToyName' => 'ZMQ_TOY_0'.$i,
+        //         'PhcId' => '0',
+        //         'IsInitialized' => '0',
+        //         'IsAssignedtoPhc' => '0',
+        //         'isAssignedToPhcStaff' => '0',
+        //         'No_Of_Tokens' => '0',
+        //         'projectid' => '0',
+        //         'isActive' => '1'
+        // );
+        
+        // $this->db->insert('tblToyRegistration', $data);
+        // }        
+
+        if($flag){
+            $getLastTenRecords = $this->staff_model->getLastTenRecords();
+            return print_r(json_encode($getLastTenRecords));
+        }
+    }
+    
+
+} //class-end
 ?>

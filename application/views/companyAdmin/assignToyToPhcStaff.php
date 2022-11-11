@@ -121,7 +121,7 @@
                     document.getElementById('alert').style.display = 'block';
                     document.getElementById('alert').classList.add("alert-primary");
                     document.getElementById('alert').innerHTML = data;
-                    setTimeout(refresh, 10000);
+                    setTimeout(refresh, 5000);
                     console.log(data) 
                    
                    // var json = JSON.parse(data);      

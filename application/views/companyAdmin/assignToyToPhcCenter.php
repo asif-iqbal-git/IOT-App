@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Document</title>
     <style type="text/css">
           #alert{
@@ -43,7 +44,7 @@
    </div>
 
    <!-- Toy  Table -->
-   <div class="col-md-9 mx-auto">
+   <div class="col-md-9 mx-auto" style='overflow:auto; width:1400px;height:400px;'>
       <?php if(isset($toy_list) && !empty($toy_list)){?>
       
       <!-- table -->
@@ -79,7 +80,7 @@
 </table>
 
     <!-- UnAssigned Toys List -->
-<?php var_dump($assignToyList); ?>
+<!-- <//?php var_dump($assignToyList); ?> -->
 
 <?php if(isset($assignedProjects) && !empty($assignedProjects)){?>
  
@@ -150,8 +151,8 @@
                     document.getElementById('alert').style.display = 'block';
                     document.getElementById('alert').classList.add("alert-primary");
                     document.getElementById('alert').innerHTML = data;
-                   // setTimeout(refresh, 9000);
-                    console.log(data) 
+                   setTimeout(refresh, 5000);
+                    //console.log(data) 
                    
                    // var json = JSON.parse(data);      
                    //console.log((json.checked_id))
