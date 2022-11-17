@@ -43,7 +43,7 @@
    </div>
 
    <!-- Toy  Table -->
-   <div class="col-md-9 mx-auto">
+   <div class="col-md-9 mx-auto" style='overflow:auto; width:1400px;height:400px;'>
       <?php if(isset($token_list) && !empty($token_list)){?>
       
       <!-- table -->
@@ -78,42 +78,45 @@
   </tbody>
 </table>
 
-    <!-- UnAssigned Tokens List -->
-<?php var_dump($assignToyList); ?>
-
-<?php if(isset($assignedProjects) && !empty($assignedProjects)){?>
- 
-<table class="table table-bordered table-danger">
-  <thead>
-   
-  </thead>
-
-  <tbody>
-  <!-- <//?php var_dump($assignedProjects);?> -->
-    <?php for($i=0; $i < count($assignedProjects); $i++){?>
-      
-    <tr>
-      <th><?= $i+1 ?></th>
-      <td><strong><?= $assignedProjects[$i]->project_name;  ?> </strong>
-       is Assign to   <strong><?= $assignedProjects[$i]->emp_name;  ?></strong>  
-      </td>
-      
-      <!-- &#9745; -->
-        <!-- <input type="checkbox" id="<//?= $assignedProjects[$i]->project_uuid; ?>" name=" "  
-        value="<//?= $assignedProjects[$i]->project_uuid;?>" Checked disabled>-->
- 
-       
-      <td>
-      <button type="button" class="btn btn-outline-danger" id="<?= $assignedProjects[$i]->project_uuid;  ?>" onclick="unassignedPAdmin(this.id)">UNASSIGNED</button>
-      </td>
-    </tr>
-    <?php }?>
-    <?php }else{echo"<h3>No Toys To Unassigned..</h3>";}?>
-    </tr>
-  </tbody>
-</table>
 
       </div>
+
+    <!-- UnAssigned Tokens List -->
+<!-- <//?php var_dump($assignToyList); ?> -->
+<div class="col-md-9 mt-4 mx-auto" style='overflow:auto; width:1400px;height:400px;'>
+<?php if(isset($assignedProjects) && !empty($assignedProjects)){?>
+ 
+ <table class="table table-bordered table-danger">
+   <thead>
+    
+   </thead>
+ 
+   <tbody>
+   <!-- <//?php var_dump($assignedProjects);?> -->
+     <?php for($i=0; $i < count($assignedProjects); $i++){?>
+       
+     <tr>
+       <th><?= $i+1 ?></th>
+       <td><strong><?= $assignedProjects[$i]->project_name;  ?> </strong>
+        is Assign to   <strong><?= $assignedProjects[$i]->emp_name;  ?></strong>  
+       </td>
+       
+       <!-- &#9745; -->
+         <!-- <input type="checkbox" id="<//?= $assignedProjects[$i]->project_uuid; ?>" name=" "  
+         value="<//?= $assignedProjects[$i]->project_uuid;?>" Checked disabled>-->
+  
+        
+       <td>
+       <button type="button" class="btn btn-outline-danger" id="<?= $assignedProjects[$i]->project_uuid;  ?>" onclick="unassignedPAdmin(this.id)">UNASSIGNED</button>
+       </td>
+     </tr>
+     <?php }?>
+     <?php }else{echo"<h3>No Toys To Unassigned..</h3>";}?>
+     </tr>
+   </tbody>
+ </table>
+
+ </div>
 </body>
 
 <script>

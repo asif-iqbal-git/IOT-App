@@ -205,7 +205,7 @@ class StaffController extends CI_Controller {
         // $data['staff'] = $this->loginmodel->get_staff_info();
         $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
         
-            $company_uuid = $company_info[0]->company_uuid;
+            $company_uuid = $company_info[0]->company_uuid??'';
         }
         
         $data['staff_designation'] = $this->getStaffDesignation();
@@ -219,9 +219,10 @@ class StaffController extends CI_Controller {
             $data['projectStatus'] = $this->staff_model->fetchProjectStatus($company_uuid);
            
             $projectStatus = $data['projectStatus'];
-            
+            // echo("<pre>");
+            // var_dump($projectStatus);
             $data['projectList'] = $this->staff_model->fetchProjectByCompany($company_uuid,$projectStatus);
-            
+         
             $data['assignedProjects'] = $this->staff_model->fetchAssignedProjects($company_uuid,$projectStatus);
 
             $this->load->view('companyAdmin/assignProjectToPAdmin', $data);
@@ -235,16 +236,19 @@ class StaffController extends CI_Controller {
     public function assign_Project_To_PAdmin()
     {
         $msg  = "Project Admin Already Exits";
-        $msg2 = "Project is assign to Selected Project Admin";
-        $msg3 = "This Project is already assign to Project Admin";
+        $msg2 = "This Project is Assigned Successfully";
+        $msg3 = "This Project is already assigned to Selected Project Admin, Select New";        
         $msg4 = "Empty String Or Array";
-       
+        $msg5 = "Admin Found & Project Not Found";
       
         $data['project_admin_uuid'] = $this->input->post('projectAdmin_id');
         $data['project_uuid'] = $this->input->post('checked_id');
        
-        
-     //  var_dump($data['project_uuid'] );
+        $project_found = 0;
+        $project_admin_found = 0;
+    //    var_dump($data['project_uuid'] );
+    //    var_dump($data['project_admin_uuid']);die();
+
         if(empty($data['project_admin_uuid'])){
            
             return print_r(json_encode($msg4));
@@ -255,93 +259,46 @@ class StaffController extends CI_Controller {
             return print_r(json_encode($msg4));
         }
 
-        foreach($data['project_uuid'] as $row){
-            $data['project_admin_uuid'] = $this->input->post('projectAdmin_id');
-            $data['project_uuid'] = $row;
-            $data['status'] = 1;
-            $data['isActive'] = 1;
-            $this->db->insert("project_projectAdmin_mapping", $data);
-            print_r(json_encode($row));
-        }
-       
-        return print_r(json_encode($msg2));
-       
-        //fetch all mapping data and check it with entered value and remove return first
-        $mapped_data = $this->staff_model->getMappedData();
-    
-       
+        $project_projectAdmin_mapping = $this->staff_model->getMappedData();
         
-        if(isset($mapped_data) && !empty($mapped_data)){
-            for($i=0 ; $i < count($mapped_data);  $i++){
-                if($mapped_data[$i]->project_admin_uuid == $data['project_admin_uuid']){
-
-            //   print_r(json_encode($mapped_data[$i]->project_admin_uuid == $data['project_admin_uuid']));print_r('<br>');
-
-              foreach($data['project_uuid'] as $row)
-                 {
-                    // print_r('-');  print_r(json_encode($mapped_data[$i]->project_uuid == $row));
-                    if($mapped_data[$i]->project_uuid == $row)
-                    {  
-                         
-                        //This Project is already assign to Project Admin
-                        print_r(json_encode($row));
-                        
-                    }else{
-                         print_r(json_encode($msg2));
-                    }
-                 }
-        }
-    }
-            /*
-        for($i=0 ; $i < count($mapped_data);  $i++){
-        
-            //if project admin is matched,then check for project,if same admin get same project return false
-            if($mapped_data[$i]->project_admin_uuid == $data['project_admin_uuid']){
-                 
-                foreach($data['project_uuid'] as $row)
-                 {
-                    if($mapped_data[$i]->project_uuid == $row)
-                    {  
-                        return print_r(json_encode($msg3));
-                    }
-                 }
-                
-               return  print_r(json_encode($msg));
-            }else{
-                //Diff Project admin dont have same project.
-                foreach($data['project_uuid'] as $row)
-                {
-                   if($mapped_data[$i]->project_uuid == $row)
-                   {  
-                       return print_r(json_encode($msg3));
-                   }else{
-                   //diff admin - have - diff project
-                    foreach($data['project_uuid'] as $row){
-                        $data['project_admin_uuid'] = $this->input->post('projectAdmin_id');
-                        $data['project_uuid'] = $row;
-                        $data['isActive'] = 1;
-                        $this->db->insert("project_projectAdmin_mapping", $data);
-                     //   print_r(json_encode($row));
-                    }
-                  
-                    return print_r(json_encode($msg2));
-                   }
+        // echo('<pre/>');
+        // var_dump($project_projectAdmin_mapping);
+        for($i=0 ; $i < count($project_projectAdmin_mapping);  $i++)
+        {
+           if($data['project_admin_uuid'] == $project_projectAdmin_mapping[$i]->project_admin_uuid)
+            {
+                // echo "Found Admin already exist";echo"<br>";
+                $project_admin_found = 1;
+                foreach($data['project_uuid'] as $row){
+                    if($row == $project_projectAdmin_mapping[$i]->project_uuid){
+                        // echo "Found project is already exist";echo"<br>";
+                        $project_found = 1;
+                    }        
                 }
-                
             }
         }
-      */
+        if($project_admin_found && $project_found){                         
+                print_r(json_encode($msg3));            
+        }
 
-        // print_r(json_encode($mapped_data[0]->project_admin_uuid));
-        // print_r(json_encode($data['project_admin_uuid']));
+        if($project_admin_found!=1 && $project_found!=1 ||
+            $project_admin_found == 1 && $project_found!=1){
 
-        // print_r(json_encode( $mapped_data[0]->project_uuid));
-        // print_r(json_encode($data['project_uuid']));
-         
-      }
-    return false;
+            foreach($data['project_uuid'] as $row){
+                $data['project_admin_uuid'] = $this->input->post('projectAdmin_id');
+                $data['project_uuid'] = $row;
+                $data['status'] = 1;
+                $data['isActive'] = 1;
+
+               $this->db->insert("project_projectAdmin_mapping", $data);              
+            }       
+            print_r(json_encode($msg2));
+        } 
+             
+        
+        
     }
- 
+         
     public function unAssign_Project_To_PAdmin()
     {
         $project_uuid = $this->input->post('project_uuid');
@@ -353,16 +310,17 @@ class StaffController extends CI_Controller {
     }
 
 
-    public function projectList()
+    public function project_list()
     {
         $userData = $this->session->userdata('userData');
         // $data['staff'] = $this->loginmodel->get_staff_info();
        // $data['staff_designation'] = $this->getStaffDesignation();
-
+        $data['project_list_by_company'] = ['Project-Alpha'];
+        
         if($userData){
             $this->load->view('libs');                                     
             $this->load->view('Ug/universalmainbody');
-            $this->load->view('staff/projectList');
+            $this->load->view('staff/projectList', $data);
             // $this->load->view('Ug/universalfooter');
         }else{
             $this->load->view('libs');
@@ -496,7 +454,7 @@ class StaffController extends CI_Controller {
         $data['phc_list'] = $this->staff_model->getPhcCenterList();
         //fetch toy according to phc center
        // $data['toyListByphc']= $this->staff_model->getToyListAccordingToPHC($phc_id=1);
-        $data['phcStaff_list'] = $this->staff_model->getPHCStaffList($company_info[0]->company_uuid);
+        $data['phcStaff_list'] = $this->staff_model->getPHCStaffList($company_info[0]->company_uuid??'');
         
         if($userData){
             $this->load->view('libs');                                     
@@ -576,7 +534,7 @@ class StaffController extends CI_Controller {
         $str = substr($last_inserted_id,8);
         $last_inserted_id = (int)$str;
 
-        // for($i = $last_inserted_id; $i <= $last_inserted_id+10; $i++)
+        // for($i = $last_inserted_id+1; $i <= $last_inserted_id+10; $i++)
         // {
         //     $data = array(
         //         'ToyName' => 'ZMQ_TOY_0'.$i,
@@ -596,6 +554,7 @@ class StaffController extends CI_Controller {
             $getLastTenRecords = $this->staff_model->getLastTenRecords();
             return print_r(json_encode($getLastTenRecords));
         }
+        
     }
     
 

@@ -13,7 +13,7 @@
 </head>
 <body>
     <h2>Toy Registration</h2>
-     
+     <!-- //https://code-boxx.com/simple-pure-javascript-calendar-events/#sec-download -->
      <div class="alert alert-warning alert-dismissible fade show col-md-9 mx-auto" role="alert">
         It Will Generate 10 Toys
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -38,7 +38,7 @@
                     flag:1,                    
                 },
                 success: function(data, textStatus, jqXHR) {
-                  // alert(data);  
+                // alert(data);  
                 //   data = data.replace(/[[{"} ]/g, "")
                 //   data = data.replace(/[\] ]/g, "")
                 //   data = data.replace(/[,]/g, "<br>")

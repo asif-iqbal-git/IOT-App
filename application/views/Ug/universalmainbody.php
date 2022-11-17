@@ -163,6 +163,21 @@
       <?php
            } }
           ?> 
+           <!-- Nav Item - Provider -->
+           <?php 
+          
+          if (isset($userData['level'])){
+              if($userData['level'] == '2') {
+              ?>
+      <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('project-list'); ?>">
+              <i class="fas fa-fw fa-table"></i>
+              <span>Projects</span></a>
+      </li>
+      <?php
+           } }
+          ?> 
+
 
             <!-- Nav Item - SuperAdmin Menu - Project Setup -->
                <?php

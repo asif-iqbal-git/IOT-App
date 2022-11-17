@@ -24,123 +24,143 @@
         WHERE company_uuid ='$company_uuid' AND level='2'" ;
    
           $q = $this->db->query($query);
-          
-        //   var_dump($q->result());die();
-        
+         
          if ($q->num_rows() > 0) {
                 return $q->result();       
            }   
            else {
-               return FALSE;
+               return NULL;
            }  
        // return $company_uuid;
     }
- 
-    public function fetchProjectByCompany($company_uuid, $projectStatus)
+
+    public function fetchProjectStatus($company_uuid)
     {
-    $project_uuid = "";
-    
-    if(isset($projectStatus) || !empty($projectStatus)){
-   
-        for($i=0; $i < count(array($projectStatus)); $i++){
-       
-            $project_uuid_temp = explode(",", $projectStatus[$i]->project_uuid??NULL);
-
-            $project_uuid.=",'".$project_uuid_temp[0]."'";       
-     }
-   
-     $project_uuid=trim($project_uuid,",");
-   // print_r($project_uuid);
-
-   
-        // $query = "SELECT project_uuid,project_name
-        //     FROM master_project 
-        //     WHERE company_uuid ='$company_uuid'"; 
-            
-    
-        $query = "SELECT project_uuid,project_name
-        FROM master_project 
-        WHERE company_uuid ='$company_uuid' 
-        AND            
-        project_uuid  NOT IN ($project_uuid)"; 
+        // var_dump($company_uuid);
+        try{
+            $query = "SELECT MS.emp_name, 
+                            MP.project_admin_uuid,
+                            MP.project_uuid,
+                            MP.status 
+                    FROM project_projectAdmin_mapping As MP
+                    INNER JOIN master_staff As MS
+                    ON MS.staff_uuid = MP.project_admin_uuid	
+                    WHERE MP.isActive = '1' AND MS.company_uuid = '$company_uuid'
+                    AND MP.status = '1' ";
                 
-            //-- project_uuid  NOT IN ('e743d690-3813-11ed-ad98-f44d304ae155','6fff912e-38b7-11ed-9604-f44d304ae155')"; 
-
-          $q = $this->db->query($query);
-          
-        //   var_dump($q->result());die();
+        $q = $this->db->query($query);
+        //   echo "<pre/>";
+        //    var_dump($q->result());die();
         
          if ($q->num_rows() > 0) {
                 return $q->result();       
            }   
            else {
-               return FALSE;
-           } 
-        }  
+               return array();
+           }  
+        }catch (Exception $e){ echo $e->getMessage();}
+    }
+
+    public function fetchProjectByCompany($company_uuid, $projectStatus)
+    {
+        // var_dump($projectStatus);
+        try {
+            $project_uuid = "";
+        
+            if(isset($projectStatus) || !empty($projectStatus)){
+        
+                for($i=0; $i < count(array($projectStatus)); $i++){
+            
+                    $project_uuid_temp = explode(",", $projectStatus[$i]->project_uuid??NULL);
+
+                    $project_uuid.=",'".$project_uuid_temp[0]."'";       
+            }
+   
+            $project_uuid = trim($project_uuid,",");
+            // print_r($project_uuid);
+
+   
+            // $query = "SELECT project_uuid,project_name
+            //     FROM master_project 
+            //     WHERE company_uuid ='$company_uuid'"; 
+                
+    
+            $query = "SELECT project_uuid,project_name
+            FROM master_project 
+            WHERE company_uuid ='$company_uuid' 
+            AND            
+            project_uuid  NOT IN ($project_uuid)"; 
+                
+            //-- project_uuid  NOT IN ('e743d690-3813-11ed-ad98-f44d304ae155','6fff912e-38b7-11ed-9604-f44d304ae155')"; 
+
+            $q = $this->db->query($query);
+            
+            //   var_dump($q->result());die();
+            
+            if ($q->num_rows() > 0) {
+                    return $q->result();       
+                }   
+                else {
+                    return array();
+                } 
+            } 
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        } 
     }
     
     public function fetchAssignedProjects($company_uuid, $projectStatus)
     {
         $project_uuid = "";   
-     
-        for($i=0; $i < count(array($projectStatus)); $i++){
+   
+    
+    try {
+        
+        for($i=0; $i < count(($projectStatus)); $i++){
            
                 $project_uuid_temp = explode(",", $projectStatus[$i]->project_uuid??NULL);
     
                 $project_uuid.=",'".$project_uuid_temp[0]."'";       
         }
         
-        $project_uuid = trim($project_uuid,",");
-
-        // $query = "SELECT project_uuid,project_name
-        // FROM master_project 
-        // WHERE company_uuid ='$company_uuid' 
-        // AND            
-        // project_uuid IN ($project_uuid)"; 
-                
-        //Mapping Projects to Project Admin
-        $query = "SELECT DISTINCT MS.emp_name,MP.project_name,PPM.project_admin_uuid,PPM.project_uuid 
-        FROM project_projectAdmin_mapping As PPM 
-        INNER JOIN master_staff As MS ON MS.staff_uuid = PPM.project_admin_uuid 
-        INNER JOIN master_project As MP ON MP.project_uuid = PPM.project_uuid 
-        WHERE MS.company_uuid ='$company_uuid' AND MP.project_uuid IN ($project_uuid) 
-        AND PPM.status='1'"; 
-
- 
+            $project_uuid = trim($project_uuid,",");
+            // echo("<pre/>");
+            // var_dump(($project_uuid));
+        
+            if(!empty($project_uuid)){
+            //Mapping Projects to Project Admin
+            $query = "SELECT DISTINCT MS.emp_name,
+                                      MP.project_name,
+                                      PPM.project_admin_uuid,
+                                      PPM.project_uuid 
+            FROM project_projectAdmin_mapping As PPM 
+            INNER JOIN master_staff As MS 
+            ON MS.staff_uuid = PPM.project_admin_uuid 
+            INNER JOIN master_project As MP 
+            ON MP.project_uuid = PPM.project_uuid 
+            WHERE MS.company_uuid ='$company_uuid' 
+            AND MP.project_uuid IN ($project_uuid) 
+            AND PPM.status='1'"; 
 
         $q = $this->db->query($query);
-          
-         
-        
-         if ($q->num_rows() > 0) {
-                return $q->result();       
-           }   
-           else {
-               return FALSE;
-           } 
-         
+
+                if ($q->num_rows() > 0) {
+                        return $q->result();       
+                }   
+                else {
+                    return array();
+                } 
+            }else{
+                echo "Empty Project UUID";
+            }
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }  
     }
 
-    public function fetchProjectStatus($company_uuid)
-    {
-        $query = "SELECT MS.emp_name, MP.project_admin_uuid,MP.project_uuid,MP.status 
-                FROM project_projectAdmin_mapping As MP
-                INNER JOIN master_staff As MS
-                ON MS.staff_uuid = MP.project_admin_uuid	
-                WHERE MP.isActive = '1' AND MS.company_uuid = '$company_uuid'
-                AND MP.status = '1' ";
-                
-        $q = $this->db->query($query);
-          
-        //   var_dump($q->result());die();
-        
-         if ($q->num_rows() > 0) {
-                return $q->result();       
-           }   
-           else {
-               return FALSE;
-           }  
-    }
+  
 
     public function updateProjectStatus($project_uuid)
     {
@@ -163,7 +183,7 @@
                 return $q->result();       
            }   
            else {
-               return FALSE;
+               return array();
            }  
     }
 
@@ -336,7 +356,7 @@
     public function getToysUnderphcstaff($phc_staff_id){
         //var_dump($phc_staff_id);
         
-        $query = "SELECT tp.phc_center_id,
+        $query = "SELECT DISTINCT tp.phc_center_id,
                          tp.zmq_toy_Id, 
                          tp.phc_staff_id,
                          tp.status, 
@@ -349,8 +369,9 @@
         $q = $this->db->query($query);
                 
         //var_dump($q->result());die();
-
-        if ($q->num_rows() > 0) {
+        // var_dump($q->num_rows());
+        
+        if ((int)$q->num_rows() > 0) {
                 return $q->result();       
         }   
         else {            
@@ -413,6 +434,7 @@
         }    
     }
 
+    
     
 } //class-ends
 

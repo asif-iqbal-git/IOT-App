@@ -6,6 +6,7 @@
     <body>
         <h3>Project-List</h3>
         <div class="container">
+          <?= implode($project_list_by_company); ?>
         <!-- <div class="card" style="width: 18rem;">
           <div class="card-body">
             <h5 class="card-title">Card title</h5>

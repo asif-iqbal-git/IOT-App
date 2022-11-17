@@ -1,5 +1,4 @@
- <!DOCTYPE html>
- 
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
@@ -15,6 +14,7 @@
         </style>
     </head>
     <body>
+      <!-- <//?php var_dump($projectList);?> -->
      <h3>Assign Project To Project Admin</h3>
       <div class="alert  col-md-9 mx-auto" id="alert" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -63,13 +63,10 @@
     <?php for($i=0; $i < count($projectList); $i++){?>
       
     <tr>
-      <th><?= $i+1 ?></th>
+      <th><?= $i+1; ?></th>
       <td><?= $projectList[$i]->project_name;  ?></td>
       <td>
-     
-        <input type="checkbox" class="messageCheckbox" id="<?= $projectList[$i]->project_uuid; ?>" name="project_uuid" 
-        value="<?= $projectList[$i]->project_uuid; ?>"/>
- 
+        <input type="checkbox" class="messageCheckbox" id="<?= $projectList[$i]->project_uuid; ?>" name="project_uuid" value="<?= $projectList[$i]->project_uuid; ?>"/>
       </td>
     
     </tr>
@@ -89,7 +86,7 @@
   </thead>
 
   <tbody>
-  <!-- <//?php var_dump($assignedProjects);?> -->
+   <!-- <//?php var_dump($assignedProjects);?>  -->
     <?php for($i=0; $i < count($assignedProjects); $i++){?>
       
     <tr>
@@ -108,7 +105,7 @@
       </td>
     </tr>
     <?php }?>
-    <?php }else{echo"<h3>No Project To Assign..</h3>";}?>
+    <?php }else{echo"<h3>No Project To Unassign..</h3>";}?>
     </tr>
   </tbody>
 </table>
@@ -154,7 +151,7 @@ var checkedBoxes = getCheckedBoxes();
             all.push($(this).val());   
                
         });       
-        // console.log("ck_val:",all);   
+        console.log("ck_val:",all);   
         });
      
        //  Sending Health-Provider-id with Assign token-id and zmq-id
@@ -173,7 +170,7 @@ var checkedBoxes = getCheckedBoxes();
                     document.getElementById('alert').style.display = 'block';
                     document.getElementById('alert').classList.add("alert-primary");
                     document.getElementById('alert').innerHTML = data;
-                    setTimeout(refresh, 3000);
+                   // setTimeout(refresh, 3000);
                    console.log(data) 
                    
                  // var json = JSON.parse(data);      
