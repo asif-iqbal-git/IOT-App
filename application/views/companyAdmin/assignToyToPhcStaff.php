@@ -26,16 +26,11 @@
      
     <!-- PHC Center List -->
       <div class="Card mb-3">
-      
-      <!-- <//?php echo("<pre>");print_r(($toy_list??"None")); ?>    -->
-        <!-- #todo
-            1. select PHC
-            2. select PHC staff
-            3. show list of toys to select by phc-staff
-        -->
+   <!-- <//?php echo("<pre>");print_r(($phcStaff_list??"None")); ?>      -->
+  
         <div class="row">
              <div class="col-md-1"><label class="control-label"></label></div>
-             <div class="col-md-4">
+             <!-- <div class="col-md-4">
                <select required  id="phcCenterId" name="phcCenterId" class="form-control" >
                <option value="" disabled="" selected=""><span>Select PHC Center</span></option>
                <?php if(isset($phc_list) && !empty($phc_list)){?>
@@ -44,18 +39,23 @@
                    <?= $phc_list[$i]->PhcName??"No PHC Center Found" ?></option>  
                <?php } }?>
                </select>
-             </div>     
+             </div>      -->
              
-             <div class="col-md-4">
+           <!-- <//?php var_dump($phcStaff_list); ?>  -->
+
+             <div class="col-md-8">
                <select required  id="phcStaffId" name="phcStaffId" class="form-control" >
-               <option value="" disabled="" selected=""><span>Select PHC Staff</span></option>
+               <option value="" disabled="" selected=""><span>Select -- PHC Staff | PHC</span></option>
                <?php if(isset($phcStaff_list) && !empty($phcStaff_list)){?>
                <?php for($i = 0; $i < count($phcStaff_list); $i++) {?>
-                   <option value="<?= $phcStaff_list[$i]->staff_uuid ??"No Data Found" ?>">
-                   <?= $phcStaff_list[$i]->emp_name??"No PHC  Staff Found" ?></option>  
+                   <option value="<?= $phcStaff_list[$i]->staff_uuid;?>,<?= $phcStaff_list[$i]->phc_id;?>">
+                     <?= $phcStaff_list[$i]->emp_name??"No PHC  Staff Found" ?> |
+                     <?= $phcStaff_list[$i]->PhcName??"No PHC Found" ?>
+                  </option>  
                <?php } }?>
                </select>
              </div>
+
              <div class="col-md-3">
              <button  id="assign_toyid_to_phc_staff" class="btn btn-primary center-block" type="submit"><span class="">                    
                  </span>&nbsp;<strong>Assign Toy</strong>
@@ -102,12 +102,17 @@
          console.log("ck_val:",all);   
         });
      
-       //  Sending ZMQ Token id with zmq-toy
+       
         $("#assign_toyid_to_phc_staff").on('click',function(){
-            var phcStaffId = document.getElementById('phcStaffId').value;
-            var phcCenterId = document.getElementById('phcCenterId').value;
-                // alert("phcStaffId:"+phcStaffId);
-                // alert("phcCenterId:"+phcCenterId);
+            var phcStaffId_phcId = document.getElementById('phcStaffId').value;
+          
+            phcStaffId = phcStaffId_phcId.split(',')[0];
+            phcCenterId = phcStaffId_phcId.split(',')[1];
+            console.log(phcStaffId);
+            console.log(phcCenterId);
+            
+               
+             
             $.ajax({
                 url: "<?= base_url('StaffController/assign_toy_To_phcStaff') ?>",
                 type: 'POST',
@@ -133,12 +138,17 @@
         function refresh(){
           window.location.href = "<?php echo base_url('assign-toyToPhcStaff')?>";
         }
-
-        var phcCenterId = document.getElementById('phcCenterId');
+       
+       
+        var phcCenterId = document.getElementById('phcStaffId');
+        
         phcCenterId.addEventListener('change',function(){
-          //alert(phcCenterId.value)
-          phc_Center_Id = phcCenterId.value;
-        //  alert("phc"+phc_Center_Id)
+         
+          phcCenterId = phcCenterId.value;
+          phc_Center_Id = phcCenterId.split(',')[1];
+    
+         
+         alert("phc"+phcCenterId)
           $.ajax({
                 url: "<?= base_url('StaffController/showToyListByPHC') ?>",
                 type: 'POST',

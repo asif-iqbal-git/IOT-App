@@ -17,7 +17,7 @@ class StaffController extends CI_Controller {
         $userData = $this->session->userdata('userData');
         // $data['staff'] = $this->loginmodel->get_staff_info();
         $data['staff_designation'] = $this->getStaffDesignation();
-
+        $data['phc_name'] = $this->staff_model->fetchAllPhcName();
         if($userData){
             $this->load->view('libs');                                     
             $this->load->view('Ug/universalmainbody');
@@ -43,6 +43,7 @@ class StaffController extends CI_Controller {
         $updated_data['emp_address'] = $this->input->post('emp_address');
         $updated_data['level'] = $this->input->post('level');
         $updated_data['designation_id'] = $this->input->post('desig_id');
+        $updated_data['phc_id'] = $this->input->post('phc_id');
         $updated_data['isActive'] = $this->input->post('isActive');
         $updated_data['created_by'] = $this->input->post('created_by');
         $updated_data['created_datetime'] = $this->input->post('created_at');
@@ -150,7 +151,8 @@ class StaffController extends CI_Controller {
         $staff_data['emp_email'] = $this->input->post('staff_email');
         $staff_data['emp_address'] = $this->input->post('staff_address');
         $staff_data['designation_id'] = $this->input->post('staff_designation');
-        
+        $staff_data['phc_id'] = $this->input->post('phc_id');
+
         $level = $this->tikatoy_model->getLevelByDesignation($staff_data['designation_id']);
       
         $staff_data['level'] = $level[0]->level;
@@ -164,7 +166,7 @@ class StaffController extends CI_Controller {
         // $staff_login_data['login_id'] = $this->input->post('staff_login_id');
         // $staff_login_data['password'] = $this->input->post('staff_password');
         
-        //var_dump($staff_login_data);die();
+        // var_dump($staff_data);die();
        
         $staff_login_data['level'] = $level[0]->level;
         $this->tikatoy_model->storeMasterStaffInfo($staff_data, $staff_login_data);
@@ -240,12 +242,14 @@ class StaffController extends CI_Controller {
         $msg3 = "This Project is already assigned to Selected Project Admin, Select New";        
         $msg4 = "Empty String Or Array";
         $msg5 = "Admin Found & Project Not Found";
-      
+        $msg6 = "Assigned Updated Successfully";
+
         $data['project_admin_uuid'] = $this->input->post('projectAdmin_id');
         $data['project_uuid'] = $this->input->post('checked_id');
        
         $project_found = 0;
         $project_admin_found = 0;
+        $is_Assigned = 0;
     //    var_dump($data['project_uuid'] );
     //    var_dump($data['project_admin_uuid']);die();
 
@@ -262,27 +266,34 @@ class StaffController extends CI_Controller {
         $project_projectAdmin_mapping = $this->staff_model->getMappedData();
         
         // echo('<pre/>');
-        // var_dump($project_projectAdmin_mapping);
+       // var_dump($project_projectAdmin_mapping);
+
         for($i=0 ; $i < count($project_projectAdmin_mapping);  $i++)
         {
            if($data['project_admin_uuid'] == $project_projectAdmin_mapping[$i]->project_admin_uuid)
             {
-                // echo "Found Admin already exist";echo"<br>";
+                // echo "Found Admin already exist But Not assiged";
                 $project_admin_found = 1;
                 foreach($data['project_uuid'] as $row){
+                    
                     if($row == $project_projectAdmin_mapping[$i]->project_uuid){
-                        // echo "Found project is already exist";echo"<br>";
+                        //  echo "Admin Found-Project Found - And Assigned (is already exist)";
                         $project_found = 1;
+                        
+                    }
+                    if($project_projectAdmin_mapping[$i]->status == 1 && 
+                        $row == $project_projectAdmin_mapping[$i]->project_uuid){
+                        $is_Assigned = 1;
                     }        
                 }
             }
         }
-        if($project_admin_found && $project_found){                         
+        if($project_admin_found && $project_found && $is_Assigned){                         
                 print_r(json_encode($msg3));            
         }
 
-        if($project_admin_found!=1 && $project_found!=1 ||
-            $project_admin_found == 1 && $project_found!=1){
+        if($project_admin_found!=1 && $project_found!=1 || 
+            $project_admin_found == 1 && $project_found!=1 && $is_Assigned == 0){
 
             foreach($data['project_uuid'] as $row){
                 $data['project_admin_uuid'] = $this->input->post('projectAdmin_id');
@@ -290,15 +301,44 @@ class StaffController extends CI_Controller {
                 $data['status'] = 1;
                 $data['isActive'] = 1;
 
-               $this->db->insert("project_projectAdmin_mapping", $data);              
+               //$this->db->insert("project_projectAdmin_mapping", $data);              
             }       
             print_r(json_encode($msg2));
         } 
              
-        
+        // if admin found - update
+        if($project_admin_found == 1 && $project_found == 1 && $is_Assigned != 1){
+
+            foreach($data['project_uuid'] as $row){
+               
+                $data['project_uuid'] = $row;
+                
+                $query = "UPDATE project_projectAdmin_mapping SET status = '1' WHERE 
+                project_uuid = '$row'";
+                $q = $this->db->query($query);                                        
+            }       
+            print_r(json_encode($msg6));
+        } 
+         
         
     }
-         
+    
+    public function assign_Project_To_PAdmin_Ajax(){
+        $msg = "got it";
+        $userData = $this->session->userdata('userData');
+        
+        if($userData != NULL){
+        // $data['staff'] = $this->loginmodel->get_staff_info();
+        $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
+        
+            $company_uuid = $company_info[0]->company_uuid??'';
+        }
+
+        $projectAdminId = $this->input->post('projectAdmin_id');
+        $project_list_by_admin = $this->staff_model->getProjectListByAdmin($projectAdminId, $company_uuid);
+        print_r(json_encode($project_list_by_admin));
+    }   
+
     public function unAssign_Project_To_PAdmin()
     {
         $project_uuid = $this->input->post('project_uuid');
@@ -468,8 +508,9 @@ class StaffController extends CI_Controller {
     }
 
     public function showToyListByPHC(){
+
         $data['phcCenterId'] = $this->input->post('phcCenterId');
-        $phc_id=$data['phcCenterId'];
+        $phc_id = $data['phcCenterId'];
         $data['toyListByphc'] = $this->staff_model->getToyListAccordingToPHC($phc_id);
         print_r(json_encode($data['toyListByphc']));
     }
@@ -556,7 +597,56 @@ class StaffController extends CI_Controller {
         }
         
     }
-    
 
+    public function displayStaffInfo()
+    {
+        $userData = $this->session->userdata('userData');
+         
+        $data['staff_info'] = $this->staff_model->getAllStaffDetails();
+
+        if($userData){
+            $this->load->view('libs');                                     
+            $this->load->view('Ug/universalmainbody');
+            $this->load->view('staff/staff_info', $data);
+            // $this->load->view('Ug/universalfooter');
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message'); 
+        } 
+    }
+    
+    public function phc_registration()
+    {
+        $userData = $this->session->userdata('userData');
+        
+    
+        
+        $data['phc_name'] = $this->staff_model->fetchAllPhcName();
+
+        if($userData){
+            $this->load->view('libs');                                     
+            $this->load->view('Ug/universalmainbody');
+            $this->load->view('staff/phc_registration', $data);            
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message'); 
+        } 
+    }
+
+    public function savePhcName(){
+        $success_msg = "Phc Name Added Successfully";
+        $phc_name = $this->input->post('phc_name');
+        
+        $data['PhcName'] = $phc_name;
+        $data['isActive'] = '1';
+            
+        if(isset($data) && !empty($data)){
+            $this->db->insert('tblPhcRegister', $data);
+            print_r(json_encode($success_msg));
+        }
+        
+    }
+
+    
 } //class-end
 ?>

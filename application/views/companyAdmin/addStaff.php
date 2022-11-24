@@ -1,5 +1,10 @@
 <html>
     <head>
+        <style type="text/css">
+            #phc_name{
+                display: none
+            }
+        </style>
     </head>
     <body>
         <div class="container">
@@ -72,11 +77,12 @@
          <!-- <//?php var_dump($staff_designation[0]);?>   -->
         <div class="form-group">
             <label for="">Staff Designation</label>
-            <select id="company_type" name="staff_designation" class="form-control">
+            <select id="staff_desg_id" name="staff_designation" class="form-control">
             <option value="0">Choose Staff Designation</option>
             <?php  for($i = 0; $i < count($staff_designation); $i++){ ?>  
             
-                <option value="<?php echo($staff_designation[$i]->designation_id); ?>"><?php echo($staff_designation[$i]->designation_name); ?>
+                <option value="<?php echo($staff_designation[$i]->designation_id); ?>">
+                <?php echo($staff_designation[$i]->designation_name); ?>
                 </option>
                  
                 <?php } ?>
@@ -84,7 +90,19 @@
             <div id="err_company_type"></div>
          </div>
 
-
+         <div class="form-group" id="phc_name">
+            <label for="">PHC</label>
+            <select  name="phc_id" id="phc_id" class="form-control">
+            <option value="0">Choose PHC</option>
+            <?php  for($i = 0; $i < count($phc_name); $i++){ ?>  
+            
+                <option value="<?php echo($phc_name[$i]->PhcId); ?>"><?php echo($phc_name[$i]->PhcName); ?>
+                </option>
+                 
+                <?php } ?>
+            </select>
+            <div id="err_company_type"></div>
+         </div>
     
 
 
@@ -279,5 +297,27 @@ var staff_email = document.getElementById('staff_email').value;
                 return false;                
             }
         }
+
+        $("#staff_desg_id").change(function () {
+        
+       
+
+            var e = document.getElementById('staff_desg_id');
+            var optionSelIndex = e.options[e.selectedIndex].value;
+            var optionSelectedText = e.options[e.selectedIndex].text;
+          
+                // alert(optionSelIndex) 
+                // alert(optionSelectedText)
+
+                if(optionSelIndex == 2){
+                    var phc_name = document.getElementById('phc_name');
+                    phc_name.style.display =  "block";
+                }
+           
+
+      
+     });
+
+    
     </script>
 </html>

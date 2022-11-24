@@ -63,13 +63,13 @@
 
     public function fetchProjectByCompany($company_uuid, $projectStatus)
     {
-        // var_dump($projectStatus);
+      //  var_dump(count( ($projectStatus)));
         try {
             $project_uuid = "";
         
             if(isset($projectStatus) || !empty($projectStatus)){
         
-                for($i=0; $i < count(array($projectStatus)); $i++){
+                for($i=0; $i < count(($projectStatus)); $i++){
             
                     $project_uuid_temp = explode(",", $projectStatus[$i]->project_uuid??NULL);
 
@@ -77,20 +77,28 @@
             }
    
             $project_uuid = trim($project_uuid,",");
-            // print_r($project_uuid);
+            // var_dump($project_uuid);
 
    
+            $query = "SELECT DISTINCT project_uuid,project_name
+                FROM master_project 
+                WHERE company_uuid ='$company_uuid'"; 
+                
+            // if($project_uuid != ""){}
             // $query = "SELECT project_uuid,project_name
-            //     FROM master_project 
-            //     WHERE company_uuid ='$company_uuid'"; 
-                
-    
-            $query = "SELECT project_uuid,project_name
-            FROM master_project 
-            WHERE company_uuid ='$company_uuid' 
-            AND            
-            project_uuid  NOT IN ($project_uuid)"; 
-                
+            // FROM master_project 
+            // WHERE company_uuid ='$company_uuid' 
+            // AND            
+            // project_uuid  NOT IN ($project_uuid)"; 
+
+            // $query = "SELECT DISTINCT mp.project_uuid,mp.project_name From master_project as mp
+            // INNER JOIN project_projectAdmin_mapping as ppm 
+            // ON mp.project_uuid = ppm.project_uuid
+            // AND mp.company_uuid='$company_uuid'"; 
+                // And ppm.status = '0' 
+
+          
+
             //-- project_uuid  NOT IN ('e743d690-3813-11ed-ad98-f44d304ae155','6fff912e-38b7-11ed-9604-f44d304ae155')"; 
 
             $q = $this->db->query($query);
@@ -174,7 +182,9 @@
 
     public function getMappedData()
     {
-        $query = "SELECT project_admin_uuid,project_uuid FROM project_projectAdmin_mapping WHERE isActive = '1' ";
+        $query = "SELECT project_admin_uuid,project_uuid,status FROM project_projectAdmin_mapping WHERE isActive = '1'"; 
+        // -- and project_admin_uuid= '".$adminId. "'";
+        
         $q = $this->db->query($query);
           
         //   var_dump($q->result());die();
@@ -183,7 +193,7 @@
                 return $q->result();       
            }   
            else {
-               return array();
+               return (object)[];
            }  
     }
 
@@ -301,8 +311,15 @@
        // var_dump($company_uuid);
         
        
-        $query = "SELECT staff_uuid,emp_name,designation_id,isActive From master_staff
-        WHERE isActive='1' AND level='3' AND hasToy ='0' AND company_uuid = '$company_uuid'";
+        $query = "SELECT ms.staff_uuid,ms.emp_name,ms.designation_id,
+                ms.phc_id,tpg.PhcName,ms.isActive 
+                From master_staff As ms
+                INNER JOIN tblPhcRegister as tpg
+                ON ms.phc_id = tpg.PhcId
+                WHERE ms.isActive='1' 
+                AND ms.level='3' 
+                AND ms.hasToy ='0' 
+                AND ms.company_uuid = '$company_uuid'";
         
 /*
         $query = "SELECT `staff_uuid`,`phc_staff_id`,`emp_name` FROM `toy_phcStaff_mapping` AS tpm INNER JOIN master_staff as ms ON tpm.isActive = ms.isActive AND ms.company_uuid='$company_uuid' AND ms.level=3 AND tpm.status=1 GROUP BY tpm.status";
@@ -430,11 +447,70 @@
             return $q->result();       
         }   
         else {
-            return FALSE;
+            return (object)[];
         }    
     }
 
+    public function getAllStaffDetails(){
+        $query = "SELECT ms.emp_name,
+                ms.login_id,
+                tl.password,
+                ms.level,
+                ms.designation_id,                
+                ms.emp_phone, 
+                ms.emp_address,
+                tl.created_datetime
+            FROM master_staff As ms
+            INNER JOIN tblLogin As tl 
+            ON ms.staff_uuid = tl.staff_uuid  
+            AND ms.isActive='1' 
+            ORDER BY tl.created_datetime DESC";
+ 
+            $q = $this->db->query($query);
+                
+            if ($q->num_rows() > 0) {
+                return $q->result();       
+            }   
+            else {
+                return (object)[];
+            }        
+}
+
+
+/*
+    public function getProjectListByAdmin($projectAdminId, $company_uuid)
+    {
+        $query = "SELECT DISTINCT mp.project_uuid,mp.project_name From master_project as mp
+            INNER JOIN project_projectAdmin_mapping as ppm 
+            ON mp.isActive = ppm.isActive
+            And ppm.status = '0'   
+            AND mp.company_uuid='$company_uuid'";                 
+ 
+            $q = $this->db->query($query);
+            
+              //var_dump($q->result());die();
+            
+            if ($q->num_rows() > 0) {
+                    return $q->result();       
+                }   
+                else {
+                    return (object)[];
+                }
+    }
+    */
     
-    
+    public function fetchAllPhcName(){
+        $query = "SELECT * FROM tblPhcRegister WHERE isActive = '1'";
+        
+        $q = $this->db->query($query);
+       
+        if ($q->num_rows() > 0) {
+            return $q->result();       
+        }   
+        else {
+            return (object)[];
+        }  
+    }
+
 } //class-ends
 

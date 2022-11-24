@@ -61,6 +61,22 @@
                 Interface
             </div>
 
+              <!-- Nav Item - Assign Project To Staff -->
+              <?php 
+          
+          if (isset($userData['level'])){
+              if($userData['level'] == '1') {
+              ?>
+      <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('Add-PHC'); ?>">
+              <i class="fas fa-fw fa-table"></i>
+              <span>Add PHC</span></a>
+      </li>
+      <?php
+           } }
+          ?> 
+
+
                   <!-- Nav Item - - staff Setup -->
              <?php
          
@@ -110,6 +126,22 @@
                 ?> 
             </li>
             
+
+              <!-- Nav Item - Assign Project To Staff -->
+              <?php 
+          
+          if (isset($userData['level'])){
+              if($userData['level'] == '0') {
+              ?>
+      <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('Staff-Info'); ?>">
+              <i class="fas fa-fw fa-table"></i>
+              <span>Staff-Info</span></a>
+      </li>
+      <?php
+           } }
+          ?> 
+
               <!-- Nav Item - Company Menu - Project Setup -->
               <?php
                  

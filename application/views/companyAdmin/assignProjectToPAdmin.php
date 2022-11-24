@@ -16,10 +16,10 @@
     <body>
       <!-- <//?php var_dump($projectList);?> -->
      <h3>Assign Project To Project Admin</h3>
-      <div class="alert  col-md-9 mx-auto" id="alert" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <div class="alert  col-md-9 mx-auto" id="alert" role="alert"> 
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
-        </button>
-   
+        </button>   
       </div>
  
      <div class="Card mb-3">
@@ -46,9 +46,12 @@
             </div>      
       </div>
       <div class="col-md-9 mx-auto">
-      <?php if(isset($projectList) && !empty($projectList)){?>
+        <div id='showProjectList'></div>
       
-      <!-- table -->
+    
+         <?php if(isset($projectList) && !empty($projectList)){?> 
+      
+      
         <table class="table table-bordered">
   <thead>
     <tr>
@@ -78,6 +81,8 @@
 </table>
 
 
+
+
 <?php if(isset($assignedProjects) && !empty($assignedProjects)){?>
  
 <table class="table table-bordered table-danger">
@@ -86,8 +91,8 @@
   </thead>
 
   <tbody>
-   <!-- <//?php var_dump($assignedProjects);?>  -->
-    <?php for($i=0; $i < count($assignedProjects); $i++){?>
+    <!-- <//?php var_dump($assignedProjects);?>   -->
+      <?php for($i=0; $i < count($assignedProjects); $i++){?>  
       
     <tr>
       <th><?= $i+1 ?></th>
@@ -95,17 +100,15 @@
        is Assign to   <strong><?= $assignedProjects[$i]->emp_name;  ?></strong>  
       </td>
       
-      <!-- &#9745; -->
-        <!-- <input type="checkbox" id="<//?= $assignedProjects[$i]->project_uuid; ?>" name=" "  
-        value="<//?= $assignedProjects[$i]->project_uuid;?>" Checked disabled>-->
- 
+      
+       
        
       <td>
       <button type="button" class="btn btn-outline-danger" id="<?= $assignedProjects[$i]->project_uuid;  ?>" onclick="unassignedPAdmin(this.id)">UNASSIGNED</button>
       </td>
     </tr>
-    <?php }?>
-    <?php }else{echo"<h3>No Project To Unassign..</h3>";}?>
+      <?php }?>   
+    <?php }else{ echo"<h3>No Project To Unassign..</h3>";} ?>
     </tr>
   </tbody>
 </table>
@@ -114,29 +117,7 @@
        
     </body>
     <script> 
-       // Pass the checkbox name to the function
-/*
-       function getCheckedBoxes() {
-  // var checkboxes = document.getElementsByName(chkboxName);
-  //This will picked all checked box value in this page including default chk value
- // var checkboxes = document.querySelectorAll('input[name=mycheckboxes]:checked');
- 
- var checkboxes = document.querySelector('.messageCheckbox:checked').value;
-  var checkboxesChecked = [];
-  // loop over them all
-  for (var i=0; i<checkboxes.length; i++) {
-     // And stick the checked ones onto an array...
-     if (checkboxes[i].checked) {
-        checkboxesChecked.push(checkboxes[i]);
-     }
-  }
-  // Return the array if it is non-empty, or null
-  return checkboxesChecked.length > 0 ? checkboxesChecked : null;
-}
-
-// Call as
-var checkedBoxes = getCheckedBoxes();
-*/
+       
           // ---------------select Checkbox value---------------------
         var checkedVal={};
         var all=[];  
@@ -154,10 +135,11 @@ var checkedBoxes = getCheckedBoxes();
         console.log("ck_val:",all);   
         });
      
-       //  Sending Health-Provider-id with Assign token-id and zmq-id
+       //  
         $("#assign_Project_To_PAdmin").on('click',function(){
             var projectAdmin = document.getElementById('projectAdminId').value;
-                //alert(projectAdmin)
+                alert(projectAdmin)
+                alert(all)
             $.ajax({
                 url: "<?= base_url('StaffController/assign_Project_To_PAdmin') ?>",
                 type: 'POST',
@@ -174,7 +156,9 @@ var checkedBoxes = getCheckedBoxes();
                    console.log(data) 
                    
                  // var json = JSON.parse(data);      
-                   //console.log((json.checked_id))
+                  //  console.log((json.checked_id))
+
+                  //Also Show Unassigned Projects in table format
                 }
             })
         });
@@ -200,6 +184,52 @@ var checkedBoxes = getCheckedBoxes();
           }
             
         })
+     }
+
+     const element = document.getElementById("projectAdminId");
+     element.addEventListener("onchange", function(){
+      alert('Sending');
+     });
+     
+     function show(projectAdmin){
+      
+      $.ajax({
+                url: "<?= base_url('StaffController/assign_Project_To_PAdmin_Ajax') ?>",
+                type: 'POST',
+                data: {
+                    projectAdmin_id:projectAdmin,
+                    checked_id:all
+                },
+                success: function(data, textStatus, jqXHR) {
+                  // alert(data);  
+                    document.getElementById('alert').style.display = 'block';
+                    document.getElementById('alert').classList.add("alert-primary");
+                    document.getElementById('alert').innerHTML = data;
+                   // setTimeout(refresh, 3000);
+                   console.log(data) 
+                   
+                 var jsonData = JSON.parse(data);      
+                   console.log((jsonData[0].project_name))
+                   let  htmlTemp= "";
+                    htmlTemp += `<table class='table table-bordered'> <thead><tr>`;
+                    htmlTemp += `<th scope="col">Sr. No</th>`;
+                    htmlTemp += `<th scope="col">Project Name</th>`;
+                    htmlTemp += `<th scope="col">Assign</th> </tr> </thead>`;
+                   for (var i = 0; i < jsonData.length; i++){
+                   
+                    htmlTemp += `<tbody>  <tr>`;
+                    htmlTemp += `<th scope="row">${i+1}</th>`;
+                    htmlTemp += `<th scope="row">${jsonData[i].project_name}</th>`;
+                    htmlTemp += `<th scope="row">&nbsp;&nbsp;&nbsp;&nbsp;<input class="form-check-input" type="checkbox" value="${jsonData[i].project_uuid}" id="project_id"></th></tr>`;
+                   
+                   }
+                   htmlTemp += `</tbody></table>`;
+                   document.getElementById('showProjectList').innerHTML = htmlTemp;
+                   project_id = document.getElementById('project_id').value;
+                   alert(project_id);
+                }
+
+            })
      }
     </script>
     <!-- pagination -->
