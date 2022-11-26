@@ -60,7 +60,7 @@
                         echo "Project Admin" ?? "--";
                         break;
                         case $staff_info[$i]->level==3:
-                        echo "PHC Field Worker!"??"--";
+                        echo "PHC Field Worker"??"--";
                         break;
                       default:
                         echo "--";

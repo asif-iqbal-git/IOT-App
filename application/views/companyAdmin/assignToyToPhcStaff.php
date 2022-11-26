@@ -74,10 +74,10 @@
       <!-- table -->
         <table class="table table-bordered">
  
-  <tbody id="tbl_data"></tbody>
+        <tbody id="tbl_data"></tbody>
    
-</table>
-
+      </table>
+                <div id="no_data_found"></div>
  
  
 
@@ -148,7 +148,7 @@
           phc_Center_Id = phcCenterId.split(',')[1];
     
          
-         alert("phc"+phcCenterId)
+         //alert("phc"+phcCenterId)
           $.ajax({
                 url: "<?= base_url('StaffController/showToyListByPHC') ?>",
                 type: 'POST',
@@ -168,11 +168,16 @@
                                   <th scope="col">Assign</th>
                                 </tr>
                               </thead>`;
+                              if(jsonData){
                   for (var i = 0; i <jsonData.length; i++){
                     htmlTemp += `<tr><td>${i+1}</td>`;
                     htmlTemp += `<td>${jsonData[i].ToyName}</td>`;
                     htmlTemp += `<td><input type="checkbox" id="ckboxToyId" value="${jsonData[i].zmq_toy_Id}"/></td></tr>`;
                   }
+                }else{
+                  document.getElementById('no_data_found').innerHTML = 
+                  `<card style="text-align: center;"><h2>No Data Found</h2></card>`;
+                }
                   document.getElementById('tbl_data').innerHTML = htmlTemp;
                   
                   

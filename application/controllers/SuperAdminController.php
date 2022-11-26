@@ -21,14 +21,18 @@ class SuperAdminController extends CI_Controller {
 
     public function assignToysToProjectAdmin()
     {
-        $this->load->view('welcome_message');    
-        // $this->load->view('Ug/universalmainbody');
-        
-        //
+        $userData = $this->session->userdata('userData');
         $data['projectAdminInfo'] = $this->tikatoy_model->getProjectAdminName();
         
-        $this->load->view('superAdmin/assignToysToProjectAdmin', $data);
-        $this->load->view('Ug/universalfooter');
+        if($userData){
+            $this->load->view('libs');                                     
+            $this->load->view('Ug/universalmainbody');
+            $this->load->view('superAdmin/assignToysToProjectAdmin', $data);
+             
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message'); 
+        }    
     }
 
     

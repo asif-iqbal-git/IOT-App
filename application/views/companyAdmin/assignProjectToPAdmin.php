@@ -28,7 +28,7 @@
            
             <div class="row">
                 <div class="col-md-2"><label class="control-label"></label></div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                   <select required  id="projectAdminId" name="projectAdminId" class="form-control" >
                   <option value="" disabled="" selected=""><span>Select Project Admin</span></option>
                   <?php if(isset($projectList) && !empty($projectList)){?>
@@ -69,7 +69,7 @@
       <th><?= $i+1; ?></th>
       <td><?= $projectList[$i]->project_name;  ?></td>
       <td>
-        <input type="checkbox" class="messageCheckbox" id="<?= $projectList[$i]->project_uuid; ?>" name="project_uuid" value="<?= $projectList[$i]->project_uuid; ?>"/>
+        <input type="checkbox" class="messageCheckbox" id="<?= $projectList[$i]->project_uuid;?>" name="project_uuid" value="<?= $projectList[$i]->project_uuid; ?>"/>
       </td>
     
     </tr>
@@ -104,7 +104,8 @@
        
        
       <td>
-      <button type="button" class="btn btn-outline-danger" id="<?= $assignedProjects[$i]->project_uuid;  ?>" onclick="unassignedPAdmin(this.id)">UNASSIGNED</button>
+      <button type="button" class="btn btn-outline-danger" 
+      id="<?= $assignedProjects[$i]->project_uuid?>, <?= $assignedProjects[$i]->project_admin_uuid?>" onclick="unassignedPAdmin(this.id)">UNASSIGNED</button>
       </td>
     </tr>
       <?php }?>   
@@ -135,11 +136,11 @@
         console.log("ck_val:",all);   
         });
      
-       //  
+       //  Assign
         $("#assign_Project_To_PAdmin").on('click',function(){
             var projectAdmin = document.getElementById('projectAdminId').value;
-                alert(projectAdmin)
-                alert(all)
+                 //alert(projectAdmin)
+                // alert(all)
             $.ajax({
                 url: "<?= base_url('StaffController/assign_Project_To_PAdmin') ?>",
                 type: 'POST',
@@ -152,7 +153,7 @@
                     document.getElementById('alert').style.display = 'block';
                     document.getElementById('alert').classList.add("alert-primary");
                     document.getElementById('alert').innerHTML = data;
-                   // setTimeout(refresh, 3000);
+                    setTimeout(refresh, 3000);
                    console.log(data) 
                    
                  // var json = JSON.parse(data);      
@@ -167,19 +168,23 @@
           window.location.href = "<?php echo base_url('assign-project')?>";
         }
 
-     function unassignedPAdmin(project_uuid)
+     function unassignedPAdmin(project_uuid_proAdminId)
      {
+       var project_uuid = project_uuid_proAdminId.split(',')[0];
+       var projectAdminId = project_uuid_proAdminId.split(',')[1];
+     // alert(project_uuid);
         $.ajax({
             url: "<?= base_url('StaffController/unAssign_Project_To_PAdmin') ?>",
             type: 'POST',
             data: {
               project_uuid:project_uuid,
+              projectAdminId:projectAdminId
                 // checked_id:all
               }, success: function(data, textStatus, jqXHR) {                  
                 document.getElementById('alert').style.display = 'block';
                     document.getElementById('alert').classList.add("alert-success");
                     document.getElementById('alert').innerHTML = data;
-                    setTimeout(refresh, 3000);
+                   setTimeout(refresh, 3000);
                    console.log(data)                          
           }
             
@@ -226,7 +231,7 @@
                    htmlTemp += `</tbody></table>`;
                    document.getElementById('showProjectList').innerHTML = htmlTemp;
                    project_id = document.getElementById('project_id').value;
-                   alert(project_id);
+                   //alert(project_id);
                 }
 
             })

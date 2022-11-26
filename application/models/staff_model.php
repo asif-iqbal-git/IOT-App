@@ -170,14 +170,22 @@
 
   
 
-    public function updateProjectStatus($project_uuid)
+    public function updateProjectStatus($project_uuid, $projectAdminId)
     {
-        $data = array(
-            'status' => 0,           
-        );
-    
-        $this->db->where('project_uuid', $project_uuid);
-        $this->db->update('project_projectAdmin_mapping', $data);
+     
+        $project_uuid= trim($project_uuid);
+        $projectAdminId= trim($projectAdminId);
+        
+        $query = "UPDATE project_projectAdmin_mapping SET `status` = 0 WHERE (`project_uuid` = '".$project_uuid."' AND `project_admin_uuid`='".$projectAdminId."')";
+      
+        $q = $this->db->query($query);
+        
+        if ($q) {
+            return true;       
+         }   
+       else {
+           return false;
+       }  
     }
 
     public function getMappedData()

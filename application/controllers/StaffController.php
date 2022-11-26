@@ -237,9 +237,13 @@ class StaffController extends CI_Controller {
  
     public function assign_Project_To_PAdmin()
     {
+        /*
+        Rules:If we Insert New Project(Not in DB) with Old Project(Present in DB)
+        Then It gives msg='msg3'; 
+        */
         $msg  = "Project Admin Already Exits";
         $msg2 = "This Project is Assigned Successfully";
-        $msg3 = "This Project is already assigned to Selected Project Admin, Select New";        
+        $msg3 = "This Project is already assigned to Selected Project Admin, Please Select New";        
         $msg4 = "Empty String Or Array";
         $msg5 = "Admin Found & Project Not Found";
         $msg6 = "Assigned Updated Successfully";
@@ -266,21 +270,23 @@ class StaffController extends CI_Controller {
         $project_projectAdmin_mapping = $this->staff_model->getMappedData();
         
         // echo('<pre/>');
-       // var_dump($project_projectAdmin_mapping);
+        if(($project_projectAdmin_mapping)!= (object)[]){
+                
+      // var_dump($project_projectAdmin_mapping);
 
         for($i=0 ; $i < count($project_projectAdmin_mapping);  $i++)
         {
            if($data['project_admin_uuid'] == $project_projectAdmin_mapping[$i]->project_admin_uuid)
             {
-                // echo "Found Admin already exist But Not assiged";
+                // echo "Found Admin already exist But Project Not assiged";
                 $project_admin_found = 1;
                 foreach($data['project_uuid'] as $row){
                     
                     if($row == $project_projectAdmin_mapping[$i]->project_uuid){
                         //  echo "Admin Found-Project Found - And Assigned (is already exist)";
-                        $project_found = 1;
-                        
+                        $project_found = 1;                        
                     }
+                     // echo "Admin-Found & Project-Found & Assigned to Admin";
                     if($project_projectAdmin_mapping[$i]->status == 1 && 
                         $row == $project_projectAdmin_mapping[$i]->project_uuid){
                         $is_Assigned = 1;
@@ -288,6 +294,10 @@ class StaffController extends CI_Controller {
                 }
             }
         }
+    }
+    //else{
+        //echo"empty obj";
+    //}
         if($project_admin_found && $project_found && $is_Assigned){                         
                 print_r(json_encode($msg3));            
         }
@@ -301,7 +311,7 @@ class StaffController extends CI_Controller {
                 $data['status'] = 1;
                 $data['isActive'] = 1;
 
-               //$this->db->insert("project_projectAdmin_mapping", $data);              
+               $this->db->insert("project_projectAdmin_mapping", $data);              
             }       
             print_r(json_encode($msg2));
         } 
@@ -319,8 +329,6 @@ class StaffController extends CI_Controller {
             }       
             print_r(json_encode($msg6));
         } 
-         
-        
     }
     
     public function assign_Project_To_PAdmin_Ajax(){
@@ -342,7 +350,9 @@ class StaffController extends CI_Controller {
     public function unAssign_Project_To_PAdmin()
     {
         $project_uuid = $this->input->post('project_uuid');
-        $this->staff_model->updateProjectStatus($project_uuid);
+        $projectAdminId = $this->input->post('projectAdminId');
+
+        $this->staff_model->updateProjectStatus($project_uuid, $projectAdminId);
         
         $msg = "UnAssigned is done successfully";
 
@@ -636,6 +646,7 @@ class StaffController extends CI_Controller {
     public function savePhcName(){
         $success_msg = "Phc Name Added Successfully";
         $phc_name = $this->input->post('phc_name');
+
         
         $data['PhcName'] = $phc_name;
         $data['isActive'] = '1';
