@@ -9,6 +9,10 @@
           #alert{
               display: none;
             }
+            #user_msg{
+              font-size:1.5rem;
+              padding: 0 0 0 10%;
+            }
     </style>
 </head>
 <body>
@@ -41,27 +45,38 @@
                </select>
              </div>      -->
              
-           <!-- <//?php var_dump($phcStaff_list); ?>  -->
-
+            <!-- </?php var_dump(count($phcStaff_list));  ?>    -->
+         
              <div class="col-md-8">
+              
                <select required  id="phcStaffId" name="phcStaffId" class="form-control" >
                <option value="" disabled="" selected=""><span>Select -- PHC Staff | PHC</span></option>
+                
                <?php if(isset($phcStaff_list) && !empty($phcStaff_list)){?>
                <?php for($i = 0; $i < count($phcStaff_list); $i++) {?>
                    <option value="<?= $phcStaff_list[$i]->staff_uuid;?>,<?= $phcStaff_list[$i]->phc_id;?>">
                      <?= $phcStaff_list[$i]->emp_name??"No PHC  Staff Found" ?> |
                      <?= $phcStaff_list[$i]->PhcName??"No PHC Found" ?>
                   </option>  
-               <?php } }?>
+               <?php }  ?>
+            
+               <?php }else{echo"asd";} ?>   
                </select>
+              
              </div>
 
+             
              <div class="col-md-3">
              <button  id="assign_toyid_to_phc_staff" class="btn btn-primary center-block" type="submit"><span class="">                    
                  </span>&nbsp;<strong>Assign Toy</strong>
              </button> 
              </div>
 
+             <?php if(count($phcStaff_list) == 0) { ?>
+                <p id="user_msg">No Staff Found! Create PHC Staff, First 
+                  <a href="<?=  base_url('addStaff'); ?>">Add PHC Staff</a>
+                </p>
+               <?php }?>
          </div>    
            
              
@@ -75,12 +90,11 @@
         <table class="table table-bordered">
  
         <tbody id="tbl_data"></tbody>
+        <tbody id="msg">
+          </tbody>
    
       </table>
-                <div id="no_data_found"></div>
- 
- 
-
+                <div id="no_toy_found"></div>
       </div>
 </body>
 
@@ -139,9 +153,9 @@
           window.location.href = "<?php echo base_url('assign-toyToPhcStaff')?>";
         }
        
-       
-        var phcCenterId = document.getElementById('phcStaffId');
-        
+        var phcCenterId = "";
+        phcCenterId = document.getElementById('phcStaffId');
+     //   alert(phcCenterId.value);
         phcCenterId.addEventListener('change',function(){
          
           phcCenterId = phcCenterId.value;
@@ -156,10 +170,10 @@
                   phcCenterId:phc_Center_Id, 
                 },
                 success: function(data, textStatus, jqXHR) {
-                  //  alert(data);  
+                  
                   console.log(data)  
                   var jsonData = JSON.parse(data);      
-                  console.log(jsonData)
+                  //console.log(jsonData)
                   var htmlTemp = '';
                   htmlTemp += `<thead>
                                 <tr>
@@ -168,17 +182,18 @@
                                   <th scope="col">Assign</th>
                                 </tr>
                               </thead>`;
-                              if(jsonData){
+              if(jsonData){
                   for (var i = 0; i <jsonData.length; i++){
                     htmlTemp += `<tr><td>${i+1}</td>`;
                     htmlTemp += `<td>${jsonData[i].ToyName}</td>`;
                     htmlTemp += `<td><input type="checkbox" id="ckboxToyId" value="${jsonData[i].zmq_toy_Id}"/></td></tr>`;
                   }
                 }else{
-                  document.getElementById('no_data_found').innerHTML = 
-                  `<card style="text-align: center;"><h2>No Data Found</h2></card>`;
+                  document.getElementById('no_toy_found').innerHTML = 
+                  `<card style="text-align: center;"><h4>No Toy Found! Add ZMQ-Toy, First <a href='<?= base_url('assign-ToysToPHC-Center');?>'>Add Toys</a></h4></card>`;
                 }
                   document.getElementById('tbl_data').innerHTML = htmlTemp;
+                  
                   
                   
                 },// Error handling 

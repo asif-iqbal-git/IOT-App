@@ -140,7 +140,7 @@
        //  Sending Health-Provider-id with Assign token-id and zmq-id
         $("#assign_toyid_to_phc_center").on('click',function(){
             var phcCenterId = document.getElementById('phcCenterId').value;
-                alert(phcCenterId)
+              //  alert(phcCenterId)
             $.ajax({
                 url: "<?= base_url('StaffController/assign_toys_To_phc_center') ?>",
                 type: 'POST',

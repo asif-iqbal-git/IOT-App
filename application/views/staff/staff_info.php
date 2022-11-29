@@ -5,7 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-  
+    <style type="text/css">
+            #title{
+                text-align: center;
+                font-size:2em;                
+            }  
+    </style>
     <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css"></style> -->
 
 <!-- <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script> -->
@@ -17,12 +22,15 @@
 
 </head>
 <body>
-    <h1>Staff Info</h1>
+    <p class="" id="title" >Staff Info</p>
     <!-- <//?php var_dump($staff_info[0]->level); ?> -->
    
      
      
     <div class="container">
+        <div class="mx-auto col-md-8 mb-4">
+            <!-- <input type="text" class="form-control"> -->
+        </div>
     <table id="example" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>

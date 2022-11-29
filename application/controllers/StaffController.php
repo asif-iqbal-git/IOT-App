@@ -443,7 +443,7 @@ class StaffController extends CI_Controller {
             $this->db->insert("toys_phcCenter_mapping", $data);
             //update toy status and PhcId
             $this->db->set('IsAssignedtoPhc',$updatedStatus)->set('PhcId',$data['phc_center_id'])->where('ToyId',$row)->update('tblToyRegistration');
-            print_r(json_encode($row));
+           // print_r(json_encode($row));
         }
 
 
@@ -504,7 +504,7 @@ class StaffController extends CI_Controller {
         $data['phc_list'] = $this->staff_model->getPhcCenterList();
         //fetch toy according to phc center
        // $data['toyListByphc']= $this->staff_model->getToyListAccordingToPHC($phc_id=1);
-        $data['phcStaff_list'] = $this->staff_model->getPHCStaffList($company_info[0]->company_uuid??'');
+        $data['phcStaff_list'] = $this->staff_model->getPHCStaffList($company_info[0]->company_uuid?? NULL);
         
         if($userData){
             $this->load->view('libs');                                     

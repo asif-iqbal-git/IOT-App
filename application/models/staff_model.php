@@ -216,7 +216,7 @@
                 return $q->result();       
            }   
            else {
-               return FALSE;
+               return (object)[];
            }    
     }
 
@@ -316,9 +316,7 @@
 
     public function getPHCStaffList($company_uuid)
     {
-       // var_dump($company_uuid);
-        
-       
+       // var_dump($company_uuid);               
         $query = "SELECT ms.staff_uuid,ms.emp_name,ms.designation_id,
                 ms.phc_id,tpg.PhcName,ms.isActive 
                 From master_staff As ms
@@ -340,7 +338,8 @@
                 return $q->result();       
         }   
         else {
-            return FALSE;
+            // return (object)[];
+            return array();
         }      
     }
 

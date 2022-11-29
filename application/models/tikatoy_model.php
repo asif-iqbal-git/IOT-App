@@ -750,7 +750,7 @@ where BlockId= ?",array($data['BlockId']));
              return $q->result();       
         }   
         else {
-            return FALSE;
+            return array();
         }   
     }
 
