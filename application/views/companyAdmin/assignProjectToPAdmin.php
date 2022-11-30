@@ -11,17 +11,21 @@
             #alert{
               display: none;
             }
+            #user_msg{
+              font-size:1.5rem;
+              padding: 1% 0 0 14%;
+            }
         </style>
     </head>
     <body>
-      <!-- <//?php var_dump($projectList);?> -->
+      <!-- <//?php var_dump(count($projectList));?> -->
      <h3>Assign Project To Project Admin</h3>
       <div class="alert  col-md-9 mx-auto" id="alert" role="alert"> 
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>   
       </div>
- 
+     
      <div class="Card mb-3">
       
          <!-- <//?php echo("<pre>");print_r(($assignedProjects??"None")); ?>    -->
@@ -45,9 +49,14 @@
                 </div>
             </div>      
       </div>
+      
+      <?php if(count($Padminlist) == 0) { ?>
+          <p id="user_msg">No Project Admin Found, First <a href="<?= base_url('addStaff'); ?>">Add Project Admin</a></p>
+         </div>  
+         <?php }?>
       <div class="col-md-9 mx-auto">
         <div id='showProjectList'></div>
-      
+     
     
          <?php if(isset($projectList) && !empty($projectList)){?> 
       
@@ -75,7 +84,11 @@
     </tr>
     <?php }?>
    
-    <?php }else{echo"<h3>No Project To Assign..</h3>";}?>
+    <?php }//else{echo"<h3>No Project To Assign..</h3>";}?>
+    <?php if(count($Padminlist) == 0) { ?>
+          <p id="user_msg">No Project Found, First <a href="<?= base_url('createProject'); ?>">Add Project</a></p>
+         </div>  
+         <?php }?>
     </tr>
   </tbody>
 </table>
@@ -109,7 +122,7 @@
       </td>
     </tr>
       <?php }?>   
-    <?php }else{ echo"<h3>No Project To Unassign..</h3>";} ?>
+    <?php }//else{ echo"<h3>No Project To Unassign..</h3>";} ?>
     </tr>
   </tbody>
 </table>

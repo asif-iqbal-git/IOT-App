@@ -74,9 +74,17 @@
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
                                                 name="password"
-                                                id="exampleInputPassword" placeholder="Password">
+                                                id="inputPassword" placeholder="Password">
                                                 <br>
                                                 <span id="passwordError" style="color:red;"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox small">
+                                                <input type="checkbox" class="custom-control-input"  
+                                                onclick="myFunction()" id="customCheck1">
+                                                <label class="custom-control-label" for="customCheck1">Show Password
+                                                    </label>
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
@@ -112,7 +120,7 @@
         function validate_login(){
 
             var username = document.getElementById("exampleInputEmail").value;
-            var inputPassword = document.getElementById("exampleInputPassword").value;
+            var inputPassword = document.getElementById("inputPassword").value;
         
             if(validateEmail(username)){
 
@@ -146,7 +154,7 @@
             }
             else{
                 document.getElementById('passwordError').innerHTML = "Password is not valid!";
-                document.getElementById('exampleInputPassword').focus();
+                document.getElementById('inputPassword').focus();
                 return false;
             }
 
@@ -194,6 +202,14 @@ function validate(e) {
         }
     }
     //document.getElementById('login').addEventListener('submit', validate);
+}
+function myFunction() {
+  var x = document.getElementById("inputPassword");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
 }
     </script>
 

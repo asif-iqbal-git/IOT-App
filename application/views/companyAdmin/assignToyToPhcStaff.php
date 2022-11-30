@@ -11,7 +11,7 @@
             }
             #user_msg{
               font-size:1.5rem;
-              padding: 0 0 0 10%;
+              padding: 0 0 0 10%;              
             }
     </style>
 </head>
@@ -60,7 +60,7 @@
                   </option>  
                <?php }  ?>
             
-               <?php }else{echo"asd";} ?>   
+               <?php }else{echo"No Data Found";} ?>   
                </select>
               
              </div>
@@ -71,14 +71,15 @@
                  </span>&nbsp;<strong>Assign Toy</strong>
              </button> 
              </div>
-
+ 
              <?php if(count($phcStaff_list) == 0) { ?>
-                <p id="user_msg">No Staff Found! Create PHC Staff, First 
+               
+                <p id="user_msg" class="">No Staff Found! Create PHC Staff, First 
                   <a href="<?=  base_url('addStaff'); ?>">Add PHC Staff</a>
                 </p>
                <?php }?>
-         </div>    
-           
+               
+         </div>            
              
    </div>
 
@@ -106,7 +107,7 @@
         $(document).on('change','input[type=checkbox]' ,function(){
         // checkedVal={};
         all=[];
-       
+        
         $('input[type=checkbox]:checked').each(function(){             
             //push all checked value to all(array)
             
@@ -122,8 +123,8 @@
           
             phcStaffId = phcStaffId_phcId.split(',')[0];
             phcCenterId = phcStaffId_phcId.split(',')[1];
-            console.log(phcStaffId);
-            console.log(phcCenterId);
+            // console.log(phcStaffId);
+            // console.log(phcCenterId);
             
                
              
@@ -140,8 +141,8 @@
                     document.getElementById('alert').style.display = 'block';
                     document.getElementById('alert').classList.add("alert-primary");
                     document.getElementById('alert').innerHTML = data;
-                    setTimeout(refresh, 5000);
-                    console.log(data) 
+                    setTimeout(refresh, 3000);
+                  //  console.log(data) 
                    
                    // var json = JSON.parse(data);      
                    //console.log((json.checked_id))
@@ -202,7 +203,5 @@
                 }
             })
         })
-        
-
 </script>
 </html>

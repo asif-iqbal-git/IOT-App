@@ -29,8 +29,9 @@
      
     <div class="container">
         <div class="mx-auto col-md-8 mb-4">
-            <!-- <input type="text" class="form-control"> -->
+            <!-- <input id="search_bar"  type="text" class="form-control"> -->
         </div>
+        <div id="table_data">
     <table id="example" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
@@ -74,10 +75,6 @@
                         echo "--";
                     }
                 }
-                    //   if($staff_info[$i]->level==0){echo("Super Admin")??'--';} 
-                    //   if($staff_info[$i]->level==1){echo("Company Admin")??'--';}
-                    //   if($staff_info[$i]->level==2){echo("Project Admin")??'--';}
-                    //   if($staff_info[$i]->level==3){echo("PHC Field Worker")??'--';} 
                       ?>
                 </td>
                 <td>   
@@ -94,10 +91,49 @@
          
     </table>
     </div>
+    <div id="result"></div>
+    </div>
 </body>
 <script>
-    $(document).ready(function () {
-   // $('#example').DataTable();
-});
+      
+
+   var search_bar_elem = document.getElementById('search_bar');
+   search_bar_elem.addEventListener('change',function(){
+   var key =  search_bar_elem.value;        
+
+    $.ajax({
+        url: "<?= base_url('StaffController/getAllStaffDetails_ajax'); ?>",
+        type: 'POST',
+        data:{},
+        success: function(data, textStatus, jqXHR) {
+            var name = "";
+            data = JSON.parse(data);
+            name = (data[0].emp_name.trim()).split("");
+            for(var i=0; i < name.length; i++){
+                if(name[i] == key){
+                    alert(name[i])
+                }else{
+                    console.log("not found")
+                }
+            }
+            console.log(name);
+            if(key == data[0].emp_name){
+                document.getElementById('table_data').style.display = 'none';
+                document.getElementById('result').innerHTML = "Found";
+            }else{
+                document.getElementById('table_data').style.display = 'none';
+                document.getElementById('result').innerHTML = "Not Found";
+            }
+    
+          
+
+           console.log(data[0].emp_name)
+        },
+        error: function (jqXHR, exception) {
+            console.log(exception);
+        }
+    })
+   });
+   
 </script>
 </html>

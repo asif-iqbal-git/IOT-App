@@ -244,7 +244,7 @@ class StaffController extends CI_Controller {
         $msg  = "Project Admin Already Exits";
         $msg2 = "This Project is Assigned Successfully";
         $msg3 = "This Project is already assigned to Selected Project Admin, Please Select New";        
-        $msg4 = "Empty String Or Array";
+        $msg4 = "Please Select Admin Or Project, First";
         $msg5 = "Admin Found & Project Not Found";
         $msg6 = "Assigned Updated Successfully";
 
@@ -585,21 +585,21 @@ class StaffController extends CI_Controller {
         $str = substr($last_inserted_id,8);
         $last_inserted_id = (int)$str;
 
-        // for($i = $last_inserted_id+1; $i <= $last_inserted_id+10; $i++)
-        // {
-        //     $data = array(
-        //         'ToyName' => 'ZMQ_TOY_0'.$i,
-        //         'PhcId' => '0',
-        //         'IsInitialized' => '0',
-        //         'IsAssignedtoPhc' => '0',
-        //         'isAssignedToPhcStaff' => '0',
-        //         'No_Of_Tokens' => '0',
-        //         'projectid' => '0',
-        //         'isActive' => '1'
-        // );
+        for($i = $last_inserted_id+1; $i <= $last_inserted_id+10; $i++)
+        {
+            $data = array(
+                'ToyName' => 'ZMQ_TOY_0'.$i,
+                'PhcId' => '0',
+                'IsInitialized' => '0',
+                'IsAssignedtoPhc' => '0',
+                'isAssignedToPhcStaff' => '0',
+                'No_Of_Tokens' => '0',
+                'projectid' => '0',
+                'isActive' => '1'
+        );
         
-        // $this->db->insert('tblToyRegistration', $data);
-        // }        
+     //   $this->db->insert('tblToyRegistration', $data);
+        }        
 
         if($flag){
             $getLastTenRecords = $this->staff_model->getLastTenRecords();
@@ -658,6 +658,11 @@ class StaffController extends CI_Controller {
         
     }
 
+    public function getAllStaffDetails_ajax()
+    {
+        $staff_info = $this->staff_model->getAllStaffDetails();
+        return print_r(json_encode($staff_info));
+    }
     
 } //class-end
 ?>

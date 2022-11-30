@@ -102,6 +102,8 @@ class loginmodel extends CI_Model {
             if ($query->num_rows() > 0) {
             $this->result = $query->result();
             $this->result = $this->result[0];
+            }else{
+                return (object)[];
             }
 
             $data = $this->result;

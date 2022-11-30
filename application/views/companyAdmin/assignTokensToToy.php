@@ -9,6 +9,10 @@
           #alert{
               display: none;
             }
+            #user_msg{
+              font-size:1.5rem;
+              padding: 1% 0 0 14%;
+            }
     </style>
 </head>
 <body>
@@ -21,8 +25,8 @@
       <div class="Card mb-3">
       
       <!-- <//?php echo("<pre>");print_r(($toy_list??"None")); ?>    -->
-        
-         <div class="row">
+        <!-- </?php var_dump(count($assignToyList)); ?> -->
+         <div class="row mb-4">
              <div class="col-md-2"><label class="control-label"></label></div>
              <div class="col-md-4">
                <select required  id="zmqToyId" name="zmqToyId" class="form-control" >
@@ -39,7 +43,12 @@
                  </span>&nbsp;<strong>Assign Tokens</strong>
              </button> 
              </div>
-         </div>      
+         </div>    
+         <div>
+         <?php if(count($assignToyList) == 0) { ?>
+          <p id="user_msg">No Toy Found, Assign Toy to Phc Center First, <a href="<?= base_url('assign-ToysToPHC-Center'); ?>">Assign Toy TO PHC</a></p>
+         </div>  
+         <?php }?>
    </div>
 
    <!-- Toy  Table -->
