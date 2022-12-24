@@ -750,8 +750,24 @@ where BlockId= ?",array($data['BlockId']));
              return $q->result();       
         }   
         else {
-            return array();
+            return (object)[];
         }   
+    }
+
+    public function getCompanyLoginId($company_admin_staff_id){
+       
+       $query = "SELECT staff_uuid FROM tblLogin WHERE login_id='$company_admin_staff_id'";
+
+       $q = $this->db->query($query);
+       
+       //  print_r($q->result());die();
+         
+          if ($q->num_rows() > 0) {
+                 return $q->result();       
+            }   
+            else {
+                return (object)[];
+            }   
     }
 
     public function getLevelByDesignation($designation_id)

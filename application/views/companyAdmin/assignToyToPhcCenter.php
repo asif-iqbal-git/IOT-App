@@ -142,7 +142,7 @@
             var phcCenterId = document.getElementById('phcCenterId').value;
               //  alert(phcCenterId)
             $.ajax({
-                url: "<?= base_url('StaffController/assign_toys_To_phc_center') ?>",
+                url: "<?= base_url('StaffController/assign_toys_To_phc_center_ajax') ?>",
                 type: 'POST',
                 data: {
                     phcCenterId:phcCenterId,
@@ -153,7 +153,7 @@
                     document.getElementById('alert').style.display = 'block';
                     document.getElementById('alert').classList.add("alert-primary");
                     document.getElementById('alert').innerHTML = data;
-                   setTimeout(refresh, 5000);
+                   setTimeout(refresh, 15000);
                     //console.log(data) 
                    
                    // var json = JSON.parse(data);      

@@ -56,10 +56,13 @@ class StaffController extends CI_Controller {
 
     public function saveStaffInfo()
     {
-        $userData = $this->session->userdata('userData');     
+        $userData = $this->session->userdata('userData');  
+     //  var_dump($userData);   
         $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
-       
-       // var_dump($company_info);
+        $created_by = $this->staff_model->getLoggedInUUID($userData['login_id']);
+        $created_by =  $created_by->staff_uuid;
+        
+    //    var_dump(($company_info==(object)[]));die();
         /*
         //using phpmailer         
         // Load PHPMailer library
@@ -139,7 +142,7 @@ class StaffController extends CI_Controller {
         // Set to, from, message, etc.https://www.codexworld.com/codeigniter-send-email-gmail-smtp-server/
         //https://www.formget.com/codeigniter-gmail-smtp/
 */
-
+         if($company_info!=(object)[]){
         $staff_data['company_uuid'] = $company_info[0]->company_uuid;       
         
         $staff_data['login_id'] = $this->input->post('staff_email');       
@@ -158,7 +161,7 @@ class StaffController extends CI_Controller {
         $staff_data['level'] = $level[0]->level;
        
         $staff_data['isActive'] = 1;
-        $staff_data['created_by'] = $company_info[0]->created_by;
+        $staff_data['created_by'] = $created_by;
          
         //Generate Random String And Send it to Users Email Id
         $staff_login_data['login_id'] = $this->input->post('staff_email');
@@ -172,7 +175,10 @@ class StaffController extends CI_Controller {
         $this->tikatoy_model->storeMasterStaffInfo($staff_data, $staff_login_data);
         $this->session->set_flashdata('add_company_admin_staff', 'Staff has been Created & Credentials send to Staff Email');
 
-        redirect(base_url('addStaff')); 
+        redirect(base_url('addStaff'));
+    }else{
+        echo("Company admin id is invalid...Create Company First");
+    } 
         // echo("<pre>");
         // var_dump($staff_data);die();
     }
@@ -217,16 +223,20 @@ class StaffController extends CI_Controller {
             $this->load->view('Ug/universalmainbody');
 
             $data['Padminlist'] = $this->staff_model->fetchPAdminByCompany                  ($company_uuid);
+            $data['PHCHeadList'] = $this->staff_model->fetchPHCHeadByCompany                  ($company_uuid);
+            $data['FieldWorkerList'] = $this->staff_model->fetchFieldWorkerByCompany          ($company_uuid);
             
             $data['projectStatus'] = $this->staff_model->fetchProjectStatus($company_uuid);
            
             $projectStatus = $data['projectStatus'];
             // echo("<pre>");
             // var_dump($projectStatus);
-            $data['projectList'] = $this->staff_model->fetchProjectByCompany($company_uuid,$projectStatus);
-         
-            $data['assignedProjects'] = $this->staff_model->fetchAssignedProjects($company_uuid,$projectStatus);
+            // $data['projectList'] = $this->staff_model->fetchProjectByCompany($company_uuid,$projectStatus);
+            $data['projectList'] = $this->staff_model->getProjectListByCompany($company_uuid);
 
+            $data['assignedProjects'] = $this->staff_model->fetchAssignedProjects($company_uuid,$projectStatus);
+//             echo("<pre>");
+// var_dump($data['assignedProjects']);die();
             $this->load->view('companyAdmin/assignProjectToPAdmin', $data);
             // $this->load->view('Ug/universalfooter');
         }else{
@@ -234,8 +244,225 @@ class StaffController extends CI_Controller {
             $this->load->view('welcome_message'); 
         }
     }
- 
+    
+    public function displayDeAssignProjectToPAdmin()
+    {
+        $userData = $this->session->userdata('userData');
+        if($userData != NULL){
+        // $data['staff'] = $this->loginmodel->get_staff_info();
+        $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
+        
+            $company_uuid = $company_info[0]->company_uuid??'';
+        }
+        
+        $data['staff_designation'] = $this->getStaffDesignation();
+
+        if($userData){  
+            $this->load->view('libs');                                     
+            $this->load->view('Ug/universalmainbody');
+
+            
+            
+            $data['projectStatus'] = $this->staff_model->fetchProjectStatus($company_uuid);
+           
+            $projectStatus = $data['projectStatus'];
+          
+            $data['projectList'] = $this->staff_model->getProjectListByCompany($company_uuid);
+
+            $data['assignedProjects'] = $this->staff_model->fetchAssignedProjects($company_uuid,$projectStatus);
+
+            $this->load->view('companyAdmin/deassignedProjectFromPAdmin', $data);
+            // $this->load->view('Ug/universalfooter');
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message'); 
+        }
+    }
+
     public function assign_Project_To_PAdmin()
+    {
+        /*
+        Rules:If we Insert New Project(Not in DB) with Old Project(Present in DB)
+        Then It gives msg='msg3';
+        Rules:One Admin Can get Two or more Projects But Same Project not assign to two Admin.
+        */
+
+        $userData = $this->session->userdata('userData');         
+        $created_by = $this->staff_model->getLoggedInUUID($userData['login_id']);
+        $created_by =  $created_by->staff_uuid;
+
+        $msg  = "Project Admin Already Exits";
+        $msg2 = "This Project is Assigned Successfully";
+        $msg3 = "This Project is already assigned to Selected Project Admin, Please Select New";        
+        $msg4 = "Please Select Project-Admin or Phc-staff or Field-Worker Or Project, First";
+        $msg5 = "Admin Found & Project Not Found";
+        $msg6 = "Assigned Updated Successfully";
+
+        $data['project_admin_uuid'] = $this->input->post('projectAdmin_id'); //[]
+        
+        $data['project_uuid'] = $this->input->post('checked_id'); //[]
+        
+        //flags
+        $project_found = 0;
+        $project_admin_found = 0;
+        $is_Assigned = 0;
+
+    //    var_dump($data['project_uuid'] );
+    //    var_dump($data['project_admin_uuid']);
+    //    die();
+
+        if(empty($data['project_admin_uuid'])){           
+            return print_r(json_encode($msg4));
+        }       
+
+        if(empty($data['project_uuid'])){
+           
+            return print_r(json_encode($msg4));
+        }
+
+        
+        
+        $project_projectAdmin_mapping = $this->staff_model->getMappedData();
+        // var_dump($project_projectAdmin_mapping);  
+        // echo('<pre/>');die();
+        if(($project_projectAdmin_mapping)!= (object)[]){
+
+        for($k=0 ; $k < count($project_projectAdmin_mapping);  $k++)
+        {
+            for($p=0; $p < count($data['project_admin_uuid']); $p++){
+
+                if($data['project_admin_uuid'][$p] == $project_projectAdmin_mapping[$k]->project_admin_uuid)
+                    {
+                        // echo "Found Admin already exist But Project Not assiged";
+                        $project_admin_found = 1;
+                        foreach($data['project_uuid'] as $row){
+                            
+                            if($row == $project_projectAdmin_mapping[$k]->project_uuid){
+                                //  echo "Admin Found-Project Found - And Assigned (is already exist)";
+                                $project_found = 1;                        
+                            }
+                            // echo "Admin-Found & Project-Found & Assigned to Admin";
+                            if($project_projectAdmin_mapping[$k]->status == 1 && 
+                                $row == $project_projectAdmin_mapping[$k]->project_uuid){
+                                $is_Assigned = 1;
+                            }        
+                        }
+                    }
+                }
+            }
+    }
+    else{
+    //    echo"empty obj";     
+      //insertion for first time in project_projectAdmin_mapping-tbl        
+
+      for($i=0; $i < count($data['project_admin_uuid']); $i++){
+        for($j=0; $j < count($data['project_uuid']); $j++){
+         
+            // echo($data['project_admin_uuid'][$i]."=>".$data['project_uuid'][$j]);
+            // echo("<br>");
+
+            $dataToInsert = array();
+
+            $dataToInsert['project_admin_uuid'] = $data['project_admin_uuid'][$i];
+            $dataToInsert['project_uuid'] = $data['project_uuid'][$j];
+            $dataToInsert['status'] = 1;
+            $dataToInsert['isActive'] = 1;
+            $dataToInsert['created_By'] = $created_by;
+            
+           $this->db->insert("project_projectAdmin_mapping", $dataToInsert); 
+           
+           //update project uuid           
+           $this->db->where('project_uuid', $dataToInsert['project_uuid']);
+           $this->db->update('master_project', ['isAssignedToPAdmin'=>'1']); 
+        }
+      }
+      print_r(json_encode($msg2));
+      exit();
+    }
+        
+       
+
+        if($project_admin_found && $project_found && $is_Assigned){                         
+                print_r(json_encode($msg3));            
+        }
+
+        if($project_admin_found!=1 && $project_found!=1 || 
+            $project_admin_found == 1 && $project_found!=1 && $is_Assigned == 0){
+
+                for($i=0; $i < count($data['project_admin_uuid']); $i++){
+                    for($j=0; $j < count($data['project_uuid']); $j++){
+                     
+                        // echo($data['project_admin_uuid'][$i]."=>".$data['project_uuid'][$j]);
+                        // echo("<br>");
+            
+                        $dataToInsert = array();
+            
+                        $dataToInsert['project_admin_uuid'] = $data['project_admin_uuid'][$i];
+                        $dataToInsert['project_uuid'] = $data['project_uuid'][$j];
+                        $dataToInsert['status'] = 1;
+                        $dataToInsert['isActive'] = 1;
+                        $dataToInsert['created_By'] = $created_by;
+                        
+                       $this->db->insert("project_projectAdmin_mapping", $dataToInsert); 
+                       
+                       //update project uuid           
+                       $this->db->where('project_uuid', $dataToInsert['project_uuid']);
+                       $this->db->update('master_project', ['isAssignedToPAdmin'=>'1']); 
+                    }
+                  }  
+            print_r(json_encode($msg2));
+        } 
+             
+        // if admin found - update
+        if($project_admin_found == 1 && $project_found == 1 && $is_Assigned != 1){
+
+            // foreach($data['project_uuid'] as $row){
+               
+            //     $data['project_uuid'] = $row;
+                
+            //     $query = "UPDATE project_projectAdmin_mapping SET status = '1' WHERE 
+            //     project_uuid = '$row'";
+            //     $q = $this->db->query($query);  
+            //      //update project uuid           
+            //     $this->db->where('project_uuid', $row);
+            //     $this->db->update('master_project', ['isAssignedToPAdmin'=>'1']);                                      
+            // }     
+
+            for($i=0; $i < count($data['project_admin_uuid']); $i++){
+                for($j=0; $j < count($data['project_uuid']); $j++){
+                 
+                     
+                   
+                    // $dataToInsert['project_admin_uuid'] = $data['project_admin_uuid'][$i];
+                    // $dataToInsert['project_uuid'] = $data['project_uuid'][$j];
+                     
+                    
+                    
+                // $query = "UPDATE project_projectAdmin_mapping SET status = '1' WHERE 
+                // project_uuid = $data['project_uuid'][$j]";
+                if($data['project_uuid'] != 0){
+                    $this->db->where('project_uuid', $data['project_uuid'][$j]);
+                    $this->db->update('project_projectAdmin_mapping', ['status'=>'1']);  
+                }
+                
+                
+               // $q = $this->db->query($query);  
+                 //update project uuid    
+                 if($data['project_uuid'] != 0){       
+                    $this->db->where('project_uuid', $data['project_uuid'][$j]);
+                    $this->db->update('master_project', ['isAssignedToPAdmin'=>'1']);  
+                 }
+                }
+            }
+            print_r(json_encode($msg6));
+        } 
+    }
+    
+
+
+//Rule: In this function we can assign one project to multiple admin and one admin can get multiple projects [many-to-many relationship]
+
+    public function assign_Project_To_PAdmin_notUsing()
     {
         /*
         Rules:If we Insert New Project(Not in DB) with Old Project(Present in DB)
@@ -349,12 +576,17 @@ class StaffController extends CI_Controller {
 
     public function unAssign_Project_To_PAdmin()
     {
+        $msg = "UnAssigned is done successfully";
+
         $project_uuid = $this->input->post('project_uuid');
-        $projectAdminId = $this->input->post('projectAdminId');
+        $projectAdminId = $this->input->post('projectAdminId');                
 
         $this->staff_model->updateProjectStatus($project_uuid, $projectAdminId);
         
-        $msg = "UnAssigned is done successfully";
+        // Also update Master Project Table
+        $project_uuid= trim($project_uuid);
+        $this->db->where('project_uuid', $project_uuid);
+        $this->db->update('master_project', ['isAssignedToPAdmin'=>'0']);        
 
         print_r(json_encode($msg));
     }
@@ -365,7 +597,7 @@ class StaffController extends CI_Controller {
         $userData = $this->session->userdata('userData');
         // $data['staff'] = $this->loginmodel->get_staff_info();
        // $data['staff_designation'] = $this->getStaffDesignation();
-        $data['project_list_by_company'] = ['Project-Alpha'];
+        $data['project_list_by_company'] = ['Demo-project'];
         
         if($userData){
             $this->load->view('libs');                                     
@@ -423,13 +655,40 @@ class StaffController extends CI_Controller {
         } 
     }
 
-    public function assign_toys_To_phc_center()
+    public function displayProjectToPHC(){
+        $userData = $this->session->userdata('userData');
+        
+        if($userData != NULL){
+           
+            $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
+            
+                $company_uuid = $company_info[0]->company_uuid??'';
+            }
+        $data['projectList'] = $this->staff_model->getProjectListByCompany($company_uuid);
+        $data['phc_list'] = $this->staff_model->getPhcCenterList();         
+        
+        if($userData){
+            $this->load->view('libs');                                     
+            $this->load->view('Ug/universalmainbody');
+            $this->load->view('companyAdmin/assignProjectToPHC', $data);
+            // $this->load->view('Ug/universalfooter');
+        }else{
+            $this->load->view('libs');
+            $this->load->view('welcome_message'); 
+        } 
+    }
+
+    public function assign_toys_To_phc_center_ajax()
     {
         $msg = "Toys are assigned to phc-Center";
 
         $userData = $this->session->userdata('userData');
-        $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
-        // var_dump($company_info[0]->created_by);die();
+      //  $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
+      //  $created_by = $this->tikatoy_model->getCompanyLoginId($userData['login_id']);
+ 
+        $created_by = $this->staff_model->getLoggedInUUID($userData['login_id']);
+        $created_by =  $created_by->staff_uuid;
+
         $data['phc_center_id'] = $this->input->post('phcCenterId');
         $data['zmq_toy_Id'] = $this->input->post('checked_id');
         $updatedStatus = 1;
@@ -437,13 +696,14 @@ class StaffController extends CI_Controller {
         foreach($data['zmq_toy_Id'] as $row){
             $data['phc_center_id'] = $this->input->post('phcCenterId');
             $data['zmq_toy_Id'] = $row;
-            $data['created_by'] =  $company_info[0]->created_by;
+            $data['created_by'] =  $created_by;
             $data['status'] = 1;
             $data['isActive'] = 1;
+            //Insert 
             $this->db->insert("toys_phcCenter_mapping", $data);
             //update toy status and PhcId
             $this->db->set('IsAssignedtoPhc',$updatedStatus)->set('PhcId',$data['phc_center_id'])->where('ToyId',$row)->update('tblToyRegistration');
-           // print_r(json_encode($row));
+           //print_r(json_encode($row));
         }
 
 
@@ -472,8 +732,14 @@ class StaffController extends CI_Controller {
         $msg = "Tokens are assigned to selected Toy";
 
         $userData = $this->session->userdata('userData');
-        $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
-        // var_dump($company_info[0]->created_by);die();
+        $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']); 
+       // $created_by=$company_info[0]->created_by;
+       
+        $created_by = $this->staff_model->getLoggedInUUID($userData['login_id']);
+        
+        // print_r(gettype(json_encode($created_by)));
+      //var_dump($created_by->staff_uuid);die();
+        
         $data['zmq_toy_Id'] = $this->input->post('zmqToyId');
         $data['zmq_token_Id'] = $this->input->post('checked_id');
         $updatedStatus = 1;
@@ -481,16 +747,14 @@ class StaffController extends CI_Controller {
         foreach($data['zmq_token_Id'] as $row){
             $data['zmq_toy_Id'] = $this->input->post('zmqToyId');
             $data['zmq_token_Id'] = $row;
-            $data['created_by'] =  $company_info[0]->created_by;
+            $data['created_by'] =  $created_by->staff_uuid; //company admin
             $data['status'] = 1;
             $data['isActive'] = 1;
-            $this->db->insert("tokens_toy_mapping", $data);
+           $this->db->insert("tokens_toy_mapping", $data);
             //update toy status and PhcId
-            $this->db->set('isAssignedtoToy',$updatedStatus)->set('ToyId',$data['zmq_toy_Id'])->where('TokenId',$row)->update('tblTokenMaster');
-            print_r(json_encode($row));
+           $this->db->set('isAssignedtoToy',$updatedStatus)->set('ToyId',$data['zmq_toy_Id'])->where('TokenId',$row)->update('tblTokenMaster');
+           // print_r(json_encode($row));
         }
-
-
         print_r(json_encode($msg));
     }
 
@@ -505,6 +769,7 @@ class StaffController extends CI_Controller {
         //fetch toy according to phc center
        // $data['toyListByphc']= $this->staff_model->getToyListAccordingToPHC($phc_id=1);
         $data['phcStaff_list'] = $this->staff_model->getPHCStaffList($company_info[0]->company_uuid?? NULL);
+        $data['toyWithToken'] = $this->staff_model->getToyWithTokens($phc_center_id=2);
         
         if($userData){
             $this->load->view('libs');                                     
@@ -522,7 +787,12 @@ class StaffController extends CI_Controller {
         $data['phcCenterId'] = $this->input->post('phcCenterId');
         $phc_id = $data['phcCenterId'];
         $data['toyListByphc'] = $this->staff_model->getToyListAccordingToPHC($phc_id);
-        print_r(json_encode($data['toyListByphc']));
+        if($data['toyListByphc'] != (object)[]){
+            print_r(json_encode($data['toyListByphc']));
+        }else{
+            print_r(json_encode("Error in fetching toy list"));
+        }
+        
     }
 
     public function assign_toy_To_phcStaff()
@@ -531,6 +801,9 @@ class StaffController extends CI_Controller {
 
         $userData = $this->session->userdata('userData');
         $company_info = $this->tikatoy_model->getCompanyNameByCAdmin($userData['login_id']);
+        
+        $created_by = $this->staff_model->getLoggedInUUID($userData['login_id']);
+        $created_by =  $created_by->staff_uuid;
         // var_dump($company_info[0]->created_by);die();
 
         $data['zmq_toy_Id'] = $this->input->post('checked_id');
@@ -538,7 +811,7 @@ class StaffController extends CI_Controller {
             $data['phc_center_id'] = $this->input->post('phcCenterId');
             $data['zmq_toy_Id'] = $row;
             $data['phc_staff_id'] = $this->input->post('phcStaffId');    
-            $data['created_by'] =  $company_info[0]->created_by;
+            $data['created_by'] = $created_by;
             $data['status'] = 1;
             $data['isActive'] = 1;
             //insert mapping details

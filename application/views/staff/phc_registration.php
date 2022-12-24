@@ -11,6 +11,7 @@
         #alert{
               display: none;
             }
+           
     </style>
     <title>Document</title>
 </head>
@@ -60,9 +61,10 @@
 </table>
    
   
-   
-  
+ 
        </div>
+
+       
 </body>
  <script>
      $("#submit_phc_name").on('click',function(){

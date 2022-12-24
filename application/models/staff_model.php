@@ -34,6 +34,40 @@
        // return $company_uuid;
     }
 
+    public function fetchPHCHeadByCompany($company_uuid)
+    { 
+        $query = "SELECT staff_uuid,emp_name
+        FROM master_staff 
+        WHERE company_uuid ='$company_uuid' AND level='3'" ;
+   
+          $q = $this->db->query($query);
+         
+         if ($q->num_rows() > 0) {
+                return $q->result();       
+           }   
+           else {
+               return NULL;
+           }  
+       // return $company_uuid;
+    }
+
+    public function fetchFieldWorkerByCompany($company_uuid)
+    { 
+        $query = "SELECT staff_uuid,emp_name
+        FROM master_staff 
+        WHERE company_uuid ='$company_uuid' AND level='4'" ;
+   
+          $q = $this->db->query($query);
+         
+         if ($q->num_rows() > 0) {
+                return $q->result();       
+           }   
+           else {
+               return NULL;
+           }  
+       // return $company_uuid;
+    }
+
     public function fetchProjectStatus($company_uuid)
     {
         // var_dump($company_uuid);
@@ -65,6 +99,7 @@
     {
       //  var_dump(count( ($projectStatus)));
         try {
+           
             $project_uuid = "";
         
             if(isset($projectStatus) || !empty($projectStatus)){
@@ -78,24 +113,25 @@
    
             $project_uuid = trim($project_uuid,",");
             // var_dump($project_uuid);
-
+ 
    
-            $query = "SELECT DISTINCT project_uuid,project_name
-                FROM master_project 
-                WHERE company_uuid ='$company_uuid'"; 
+            // $query = "SELECT DISTINCT project_uuid,project_name
+            //     FROM master_project 
+            //     WHERE company_uuid ='$company_uuid' AND "; 
                 
-            // if($project_uuid != ""){}
+          //  if($project_uuid != NULL){
             // $query = "SELECT project_uuid,project_name
             // FROM master_project 
             // WHERE company_uuid ='$company_uuid' 
             // AND            
             // project_uuid  NOT IN ($project_uuid)"; 
 
-            // $query = "SELECT DISTINCT mp.project_uuid,mp.project_name From master_project as mp
-            // INNER JOIN project_projectAdmin_mapping as ppm 
-            // ON mp.project_uuid = ppm.project_uuid
-            // AND mp.company_uuid='$company_uuid'"; 
-                // And ppm.status = '0' 
+            $query = "SELECT DISTINCT mp.project_uuid,mp.project_name 
+            From master_project as mp
+            INNER JOIN project_projectAdmin_mapping as ppm 
+            ON mp.project_uuid = ppm.project_uuid
+            AND mp.company_uuid='$company_uuid' AND ppm.status = '0'"; 
+                // And  
 
           
 
@@ -106,18 +142,43 @@
             //   var_dump($q->result());die();
             
             if ($q->num_rows() > 0) {
-                    return $q->result();       
-                }   
-                else {
-                    return array();
-                } 
-            } 
+                    return $q->row();       
+                    }   
+                    else {
+                        return [];
+                    } 
+               //} 
+            }
         }
         catch (Exception $e) {
             echo $e->getMessage();
         } 
     }
     
+    public function getProjectListByCompany($company_uuid)
+    {
+        /*
+        $query1 = "SELECT mp.project_uuid,mp.project_name FROM `master_project` AS mp
+        INNER JOIN `project_projectAdmin_mapping` AS ppm
+        ON mp.project_uuid = ppm.project_uuid 
+        AND mp.company_uuid ='$company_uuid'";
+        //AND ppm.status = 0 
+        */
+        $query = "SELECT project_uuid,project_name FROM `master_project`        
+        WHERE company_uuid ='$company_uuid'";
+        //  AND isAssignedToPAdmin = '0' 
+
+        $q = $this->db->query($query);
+            
+       
+        if ($q->num_rows() > 0) {
+                return $q->result();       
+                }   
+                else {
+                    return [];
+                } 
+    }
+
     public function fetchAssignedProjects($company_uuid, $projectStatus)
     {
         $project_uuid = "";   
@@ -138,6 +199,7 @@
         
             if(!empty($project_uuid)){
             //Mapping Projects to Project Admin
+           
             $query = "SELECT DISTINCT MS.emp_name,
                                       MP.project_name,
                                       PPM.project_admin_uuid,
@@ -151,6 +213,23 @@
             AND MP.project_uuid IN ($project_uuid) 
             AND PPM.status='1'"; 
 
+            /*
+            $query = "SELECT DISTINCT MS.emp_name,
+            MP.project_name,
+            PPM.project_admin_uuid,
+            PPM.phc_head_uuid,
+            PPM.field_worker_uuid,
+            PPM.project_uuid 
+            FROM project_projectAdmin_mapping As PPM 
+            INNER JOIN master_staff As MS 
+            ON (MS.staff_uuid = PPM.project_admin_uuid OR MS.staff_uuid = PPM.phc_head_uuid OR MS.staff_uuid = PPM.field_worker_uuid) 
+            INNER JOIN master_project As MP 
+            ON MP.project_uuid = PPM.project_uuid 
+            WHERE MS.company_uuid ='$company_uuid' 
+            AND MP.project_uuid IN ($project_uuid) 
+            AND PPM.status='1'"; 
+                */
+                
         $q = $this->db->query($query);
 
                 if ($q->num_rows() > 0) {
@@ -160,7 +239,7 @@
                     return array();
                 } 
             }else{
-                echo "Empty Project UUID";
+               // echo "Empty Project UUID";
             }
         }
         catch (Exception $e) {
@@ -172,6 +251,14 @@
 
     public function updateProjectStatus($project_uuid, $projectAdminId)
     {
+        /*
+        UPDATE Books, Orders
+        SET Orders.Quantity = Orders.Quantity + 2,
+            Books.InStock = Books.InStock - 2
+        WHERE
+            Books.BookID = Orders.BookID
+            AND Orders.OrderID = 1002;
+        */
      
         $project_uuid= trim($project_uuid);
         $projectAdminId= trim($projectAdminId);
@@ -346,8 +433,15 @@
     // ------------------------------
     public function getToyListAccordingToPHC($phc_id)
     {
-        $query = "SELECT zmq_toy_Id,ToyName, phc_center_id,status FROM toys_phcCenter_mapping as tp INNER JOIN tblToyRegistration as tr ON tr.ToyId = tp.zmq_toy_Id         
-        WHERE tp.phc_center_id='$phc_id' AND isAssignedToPhcStaff='0'";
+        $query = "SELECT zmq_toy_Id,
+                         ToyName, 
+                         phc_center_id,
+                         status 
+                         FROM toys_phcCenter_mapping as tp 
+                         INNER JOIN tblToyRegistration as tr 
+                         ON tr.ToyId = tp.zmq_toy_Id         
+                WHERE tp.phc_center_id='$phc_id' 
+                AND isAssignedToPhcStaff='0'";
         
         $q = $this->db->query($query);
                 
@@ -357,7 +451,7 @@
                 return $q->result();       
         }   
         else {
-            return FALSE;
+            return (object)[];
         }      
     }
     public function getPhcStaffId($phc_login_id)
@@ -392,14 +486,14 @@
          
         $q = $this->db->query($query);
                 
-        //var_dump($q->result());die();
+        // var_dump($q->result());die();
         // var_dump($q->num_rows());
         
         if ((int)$q->num_rows() > 0) {
                 return $q->result();       
         }   
         else {            
-            return FALSE;
+            return (object)[];
         }    
     }
 
@@ -507,12 +601,41 @@
     */
     
     public function fetchAllPhcName(){
+        
         $query = "SELECT * FROM tblPhcRegister WHERE isActive = '1'";
         
         $q = $this->db->query($query);
        
         if ($q->num_rows() > 0) {
             return $q->result();       
+        }   
+        else {
+            return (object)[];
+        }  
+    }
+
+    public function getToyWithTokens($phc_center_id){
+        // echo($phc_center_id);die();
+        $query = "SELECT * FROM tblPhcRegister WHERE isActive = '1'";
+        
+        $q = $this->db->query($query);
+       
+        if ($q->num_rows() > 0) {
+            return $q->result();       
+        }   
+        else {
+            return (object)[];
+        }  
+    }
+
+    public function getLoggedInUUID($login_id)
+    {
+        $query = "SELECT staff_uuid FROM tblLogin WHERE login_id = '$login_id'";
+        
+        $q = $this->db->query($query);
+       
+        if ($q->num_rows() > 0) {
+            return $q->row();       
         }   
         else {
             return (object)[];

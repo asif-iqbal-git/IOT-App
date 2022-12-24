@@ -32,7 +32,7 @@
                <select required  id="zmqToyId" name="zmqToyId" class="form-control" >
                <option value="" disabled="" selected=""><span>Select ZMQ Toy</span></option>
                <?php if(isset($assignToyList) && !empty($assignToyList)){?>
-               <?php for($i = 0; $i < count($assignToyList); $i++) {?>
+               <?php for($i = 0; $i < count($assignToyList)??NULL; $i++) {?>
                    <option value="<?= $assignToyList[$i]->ToyId??"No Data Found" ?>">
                    <?= $assignToyList[$i]->ToyName??"No Project Admin Found" ?></option>  
                <?php } }?>
@@ -149,7 +149,7 @@
        //  Sending ZMQ Token id with zmq-toy
         $("#assign_toyid_to_phc_center").on('click',function(){
             var zmqToyId = document.getElementById('zmqToyId').value;
-                alert(zmqToyId)
+               // alert(zmqToyId)
             $.ajax({
                 url: "<?= base_url('StaffController/assign_token_To_toys') ?>",
                 type: 'POST',
@@ -162,7 +162,7 @@
                     document.getElementById('alert').style.display = 'block';
                     document.getElementById('alert').classList.add("alert-primary");
                     document.getElementById('alert').innerHTML = data;
-                    setTimeout(refresh, 5000);
+                    // setTimeout(refresh, 3000);
                     console.log(data) 
                    
                    // var json = JSON.parse(data);      
@@ -172,7 +172,7 @@
         });
 
         function refresh(){
-          window.location.href = "<?php echo base_url('assign-ToysToPHC-Center')?>";
+          window.location.href = "<?php echo base_url('assign-TokensToToy')?>";
         }
 
 </script>

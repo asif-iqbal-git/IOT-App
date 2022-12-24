@@ -8,6 +8,7 @@ class SuperAdminController extends CI_Controller {
         $this->base = $this->config->item('base_url');
         $this->load->helper('url');
         $this->load->model('loginmodel');
+        $this->load->model('staff_model');
         $this->load->model('tikatoy_model');
         //session data
        // $userData = $this->session->userdata('userData');
@@ -42,11 +43,14 @@ class SuperAdminController extends CI_Controller {
     public function createProject()
     {   
         $userData = $this->session->userdata('userData');
-        $current_logedIn_staffUuid = $this->loginmodel->fetchStaffUUID($userData['login_id']);  
- 
- 
-
+        // var_dump($userData);
         if($userData){
+        $current_logedIn_staffUuid = $this->loginmodel->fetchStaffUUID($userData['login_id']);  }
+        $data['phc_name'] = $this->staff_model->fetchAllPhcName();
+
+        //  var_dump($current_logedIn_staffUuid==[]);
+
+        if($userData && $current_logedIn_staffUuid !=[]){
             $this->load->view('libs');                                     
             $this->load->view('Ug/universalmainbody');
           
@@ -59,7 +63,7 @@ class SuperAdminController extends CI_Controller {
             // echo"<pre>";
             //  var_dump($data['projectAdminByCompany']);
 
-            $this->load->view('superAdmin/createProject');  
+            $this->load->view('superAdmin/createProject', $data);  
             $this->load->view('Ug/universalfooter');
         }else{
             $this->load->view('libs');
@@ -94,6 +98,7 @@ class SuperAdminController extends CI_Controller {
         $data_project['company_uuid']     = $data[0]->company_uuid;
 
         $data_project['project_name']     = $this->input->post('project_name');
+        $data_project['phc_center']     = $this->input->post('phc_center');
         $data_project['project_location'] = $this->input->post('project_location');
         $data_project['isActive']         = 1;
        
@@ -244,6 +249,10 @@ class SuperAdminController extends CI_Controller {
     {
          //session data
        $userData = $this->session->userdata('userData');
+    
+        $created_by = $this->staff_model->getLoggedInUUID($userData['login_id']);
+        $created_by =  $created_by->staff_uuid;
+
        $company_admin_level = 1;
      
        $current_logedIn_staffUuid = $this->loginmodel->fetchStaffUUID($userData['login_id']);                      
@@ -257,7 +266,7 @@ class SuperAdminController extends CI_Controller {
         $data_company['company_location'] = $this->input->post('company_location');
          
         $data_company['isActive'] = 1;
-        $data_company['created_By'] = $current_logedIn_staffUuid;
+        $data_company['created_By'] = $created_by;
       
         //---------------------For master_staff----------------------------------
      
@@ -274,7 +283,7 @@ class SuperAdminController extends CI_Controller {
         $data_master_staff['level'] = $company_admin_level;
         $data_master_staff['designation_id'] = 3;
         $data_master_staff['isActive'] = "1";
-        $data_master_staff['created_By'] = $current_logedIn_staffUuid;
+        $data_master_staff['created_By'] = $created_by;
        
         //For tblLogin - for Company Admin
         $data_login['login_id'] =  $data_master_staff['emp_email'];

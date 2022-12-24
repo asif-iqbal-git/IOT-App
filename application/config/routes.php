@@ -82,13 +82,15 @@ $route['viewAssignToys'] = 'SuperAdminController/viewAssignToys';
 $route['projectStatus'] = 'SuperAdminController/projectStatus';
 
 $route['assign-project'] = 'StaffController/displayAssignProjectToPAdmin';
+$route['deassign-project'] = 'StaffController/displayDeAssignProjectToPAdmin';
+
 $route['project-list'] = 'StaffController/project_list';
 
 $route['toy-registration'] = 'StaffController/staff_registration';
 $route['assign-ToysToPHC-Center'] = 'StaffController/displayAssignToysToPhcCenter';
 
 $route['assign-TokensToToy'] = 'StaffController/displayAssignTokensToToy';
-
+$route['assign-ProjectToPHC'] = 'StaffController/displayProjectToPHC';
 $route['assign-toyToPhcStaff'] = 'StaffController/displayAssignToyTOPhcStaff';
 
 $route['show-toys-underphcstaff'] = 'StaffController/showToysUnderphcstaff';

@@ -61,20 +61,7 @@
                 Interface
             </div>
 
-              <!-- Nav Item - Assign Project To Staff -->
-              <?php 
-          
-          if (isset($userData['level'])){
-              if($userData['level'] == '1') {
-              ?>
-      <li class="nav-item">
-          <a class="nav-link" href="<?= base_url('Add-PHC'); ?>">
-              <i class="fas fa-fw fa-table"></i>
-              <span>Add PHC</span></a>
-      </li>
-      <?php
-           } }
-          ?> 
+               
 
 
                   <!-- Nav Item - - staff Setup -->
@@ -93,7 +80,7 @@
              <div class="bg-white py-2 collapse-inner rounded">
                  <!-- <h6 class="collapse-header">Custom Components:</h6> -->
                  <a class="collapse-item" href="<?= base_url('addStaff') ?>">Add Staff</a>
-                 <!-- <a class="collapse-item" href="<?= base_url('staff_details') ?>">Staff List</a> -->
+                 <!-- <a class="collapse-item" href="</?= base_url('staff_details') ?>">Staff List</a> -->
              </div>
          </div>
          <?php
@@ -157,8 +144,11 @@
                 <div id="collapse_company_admin" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <!-- <h6 class="collapse-header">Custom Components:</h6> -->
+                        <a class="collapse-item" href="<?= base_url('Add-PHC') ?>">Add PHC</a>
                         <a class="collapse-item" href="<?= base_url('createProject') ?>">Create Project</a>
-                        <!-- <a class="collapse-item" href="<//?= base_url('createProjectAdmin') ?>">Create Project Admin</a> -->
+                        <a class="collapse-item" href="<?= base_url('assign-project'); ?>">Assign Project</a>
+                        <a class="collapse-item" href="<?= base_url('deassign-project'); ?>">Deassign Project</a>
+                        <a class="collapse-item" href="<?= base_url('assign-ProjectToPHC'); ?>">Assign Project To PHC</a>
                     </div>
                 </div>
                 <?php
@@ -167,19 +157,16 @@
             </li>
 
                <!-- Nav Item - Assign Project To Staff -->
-               <?php 
-          
-          if (isset($userData['level'])){
-              if($userData['level'] == '1') {
-              ?>
+              
+          <!--
+               <//?php if (isset($userData['level'])){if($userData['level'] == '1') {?>
       <li class="nav-item">
-          <a class="nav-link" href="<?= base_url('assign-project'); ?>">
+          <a class="nav-link" href="<//?= base_url('assign-project'); ?>">
               <i class="fas fa-fw fa-table"></i>
               <span>Assign Project To Staff</span></a>
       </li>
-      <?php
-           } }
-          ?> 
+      <//?php} }?> 
+               -->
 
            <!-- Nav Item - Provider -->
            <?php 

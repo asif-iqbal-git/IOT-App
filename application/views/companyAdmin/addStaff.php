@@ -90,19 +90,19 @@
             <div id="err_company_type"></div>
          </div>
 
-         <div class="form-group" id="phc_name">
+         <!-- <div class="form-group" id="phc_name">
             <label for="">PHC</label>
             <select  name="phc_id" id="phc_id" class="form-control">
             <option value="0">Choose PHC</option>
-            <?php  for($i = 0; $i < count($phc_name); $i++){ ?>  
+            <//?php  for($i = 0; $i < count($phc_name); $i++){ ?>  
             
-                <option value="<?php echo($phc_name[$i]->PhcId); ?>"><?php echo($phc_name[$i]->PhcName); ?>
+                <option value="<//?php echo($phc_name[$i]->PhcId); ?>"><//?php echo($phc_name[$i]->PhcName); ?>
                 </option>
                  
-                <?php } ?>
+                <//?php } ?>
             </select>
             <div id="err_company_type"></div>
-         </div>
+         </div> -->
     
 
 
@@ -298,25 +298,17 @@ var staff_email = document.getElementById('staff_email').value;
             }
         }
 
-        $("#staff_desg_id").change(function () {
-        
-       
-
-            var e = document.getElementById('staff_desg_id');
-            var optionSelIndex = e.options[e.selectedIndex].value;
-            var optionSelectedText = e.options[e.selectedIndex].text;
-          
-                // alert(optionSelIndex) 
-                // alert(optionSelectedText)
-
-                if(optionSelIndex == 2){
-                    var phc_name = document.getElementById('phc_name');
-                    phc_name.style.display =  "block";
-                }
-           
-
-      
-     });
+    //     $("#staff_desg_id").change(function () {
+    //         var e = document.getElementById('staff_desg_id');
+    //         var optionSelIndex = e.options[e.selectedIndex].value;
+    //         var optionSelectedText = e.options[e.selectedIndex].text;
+    //             // alert(optionSelIndex) 
+    //             // alert(optionSelectedText)
+    //             if(optionSelIndex == 2){
+    //                 var phc_name = document.getElementById('phc_name');
+    //                 phc_name.style.display =  "block";
+    //             }
+    //  });
 
     
     </script>

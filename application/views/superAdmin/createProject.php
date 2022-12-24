@@ -67,6 +67,22 @@
         </div>
  
         <div class="form-group">
+             
+            <!-- <input type="text" class="form-control" id="" name="phc_center" placeholder="Eg. ZMQ PHC" required> -->          
+            <!-- <label for="">PHC</label>
+            <select  name="phc_center" id="phc_id" class="form-control">
+            <option value="0">Choose PHC</option>
+            </?php  for($i = 0; $i < count($phc_name); $i++){ ?>              
+                <option value="</?php echo($phc_name[$i]->PhcId); ?>">
+                    </?php echo($phc_name[$i]->PhcName); ?>
+                </option>                 
+            </?php } ?>
+            </select> -->
+         
+         
+        </div>
+
+        <div class="form-group">
             <label for="">Project Location</label>
             <textarea class="form-control" name="project_location" required></textarea>
         </div>

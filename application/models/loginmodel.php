@@ -110,7 +110,8 @@ class loginmodel extends CI_Model {
 
             return $data->staff_uuid; 
         }else{
-            echo "";
+            return array();
+            //echo "dd";
         }
         
     }

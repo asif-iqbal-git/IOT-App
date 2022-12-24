@@ -16,13 +16,13 @@
     </style>
 </head>
 <body>
-    <h2>Assign Toy To PHC-Staff</h2>
+    <h2>Assign Toy To PHC-Head</h2>
     <div class="alert  col-md-9 mx-auto" id="alert" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>   
       </div>
       <div class="alert alert-warning alert-dismissible fade show col-md-10 mx-auto" role="alert">
-      Multiple Toy is Assign To Single Phc-Staff for Single PHC.
+      Multiple Toy is Assign To Single Phc-Head for Single PHC.
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -50,7 +50,7 @@
              <div class="col-md-8">
               
                <select required  id="phcStaffId" name="phcStaffId" class="form-control" >
-               <option value="" disabled="" selected=""><span>Select -- PHC Staff | PHC</span></option>
+               <option value="" disabled="" selected=""><span>Select -- PHC-Head | PHC</span></option>
                 
                <?php if(isset($phcStaff_list) && !empty($phcStaff_list)){?>
                <?php for($i = 0; $i < count($phcStaff_list); $i++) {?>
@@ -74,8 +74,8 @@
  
              <?php if(count($phcStaff_list) == 0) { ?>
                
-                <p id="user_msg" class="">No Staff Found! Create PHC Staff, First 
-                  <a href="<?=  base_url('addStaff'); ?>">Add PHC Staff</a>
+                <p id="user_msg" class="">No PHC-Head Found! Create PHC-Head, First 
+                  <a href="<?=  base_url('addStaff'); ?>">Add PHC-Head</a>
                 </p>
                <?php }?>
                
@@ -194,9 +194,6 @@
                   `<card style="text-align: center;"><h4>No Toy Found! Add ZMQ-Toy, First <a href='<?= base_url('assign-ToysToPHC-Center');?>'>Add Toys</a></h4></card>`;
                 }
                   document.getElementById('tbl_data').innerHTML = htmlTemp;
-                  
-                  
-                  
                 },// Error handling 
                 error: function (error) {
                     console.log(`Error ${error}`);
